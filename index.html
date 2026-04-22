@@ -3,261 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Number 433 Premium 3D</title>
+    <title>NUM433 | MELLO</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Tajawal:wght@500;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg: #0b0d17;
-            --primary: #5c5ff5;
-            --accent: #ffcc00;
-            --glass: rgba(255, 255, 255, 0.05);
-            --card-3d-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.1);
+            --bg-color: #0d1121;
+            --card-bg: #1c2039;
+            --primary-blue: #545cf1;
+            --text-main: #ffffff;
+            --text-dim: #8e94bb;
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background: var(--bg);
-            background-image: radial-gradient(circle at top right, #1e214d, #0b0d17);
-            color: white; font-family: 'Tajawal', sans-serif;
-            margin: 0; padding: 20px 15px 120px;
-            overflow-x: hidden; perspective: 1000px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Tajawal', sans-serif;
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        /* 3D Header */
-        .header-3d {
-            text-align: center; margin-bottom: 30px;
-            transform: translateZ(50px);
+        /* Header Logo Section */
+        .header { text-align: center; margin-bottom: 30px; width: 100%; position: relative; }
+        .lang-btn { 
+            position: absolute; left: 0; top: 5px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-dim); padding: 4px 12px; border-radius: 12px; font-size: 10px;
+        }
+        .logo { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 900; letter-spacing: -1px; }
+        .logo span { color: #5c6fff; }
+        .logo-sub { font-size: 12px; color: #545cf1; font-weight: 800; margin-top: -5px; }
+
+        /* Main Card Style */
+        .card {
+            background: var(--card-bg);
+            width: 100%; border-radius: 40px;
+            padding: 30px 20px; margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* Glass Card with 3D depth */
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border-radius: 30px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: var(--card-3d-shadow);
-            transform-style: preserve-3d;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .card-label { color: var(--text-dim); font-size: 14px; margin-bottom: 15px; }
+
+        /* Balance Text - Exactly like image */
+        .balance {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 58px; font-weight: 900;
+            text-shadow: 0 0 30px rgba(92, 111, 255, 0.6);
+            margin: 10px 0;
         }
 
-        .glass-card:hover {
-            transform: rotateX(5deg) rotateY(-2deg) translateZ(10px);
+        /* 3D Button - Exactly like image */
+        .btn-main {
+            background: var(--primary-blue);
+            color: white; border: none; width: 100%;
+            padding: 22px; border-radius: 28px;
+            font-size: 18px; font-weight: 800;
+            box-shadow: 0 10px 0 #3a42c4; /* الظل السفلي السميك */
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: 0.1s; cursor: pointer;
+            margin-top: 10px;
         }
+        .btn-main:active { transform: translateY(6px); box-shadow: 0 4px 0 #3a42c4; }
+        .btn-main:disabled { background: #33395a; box-shadow: 0 6px 0 #1e223a; opacity: 0.7; }
 
-        /* 3D Buttons (Push-able) */
-        .btn-3d {
-            background: linear-gradient(145deg, #5c5ff5, #4346d1);
-            color: white; border: none; border-radius: 20px;
-            padding: 18px; font-weight: 900; cursor: pointer;
-            width: 100%; position: relative;
-            box-shadow: 0 8px 0 #2e31a3, 0 15px 25px rgba(92, 95, 245, 0.3);
-            transition: all 0.1s;
-            font-size: 16px;
+        /* Bottom Nav - Exactly like image */
+        .nav {
+            position: fixed; bottom: 30px; left: 20px; right: 20px;
+            background: #161a2e; border-radius: 35px;
+            display: flex; justify-content: space-around; padding: 15px 10px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
         }
-
-        .btn-3d:active {
-            transform: translateY(6px);
-            box-shadow: 0 2px 0 #2e31a3, 0 5px 10px rgba(0,0,0,0.5);
+        .nav-item { 
+            background: none; border: none; color: var(--text-dim);
+            font-size: 11px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 5px;
         }
+        .nav-item.active { color: var(--primary-blue); }
+        .nav-icon { font-size: 18px; }
 
-        .btn-3d:disabled {
-            background: #2a2d4a; box-shadow: 0 4px 0 #1a1c33; opacity: 0.6;
-        }
-
-        /* Task Item Design */
-        .task-item {
-            background: rgba(255,255,255,0.03);
-            margin-bottom: 15px; padding: 20px;
-            border-radius: 22px; display: flex; justify-content: space-between;
-            align-items: center; border-right: 5px solid var(--primary);
-            box-shadow: 8px 8px 20px rgba(0,0,0,0.3);
-        }
-
-        /* Bottom Nav */
-        .nav-bar {
-            position: fixed; bottom: 25px; left: 20px; right: 20px;
-            background: rgba(15, 17, 34, 0.95); backdrop-filter: blur(20px);
-            border-radius: 25px; display: flex; padding: 12px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.05);
-            z-index: 9999;
-        }
-
-        .nav-btn {
-            flex: 1; background: none; border: none; color: #6d73a8;
-            font-size: 11px; cursor: pointer; transition: 0.3s;
-        }
-
-        .nav-btn.active { color: var(--primary); transform: translateY(-5px); font-weight: bold; }
-
-        .page { display: none; animation: slideIn 0.5s ease-out; }
+        .page { display: none; width: 100%; }
         .page.active { display: block; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(30px) rotateX(-10deg); } to { opacity: 1; transform: translateY(0); } }
 
-        .lang-switch { position: absolute; left: 15px; top: 15px; z-index: 100; }
-        .l-btn { background: var(--glass); color: #fff; border: 1px solid var(--glass-border); padding: 5px 12px; border-radius: 10px; font-size: 11px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="lang-switch">
-    <button class="l-btn" onclick="toggleLang()">EN / AR</button>
-</div>
-
-<div class="header-3d">
-    <h2 style="font-family:'Syne'; margin:0; letter-spacing: 2px;">NUM<span style="color:var(--primary)">433</span></h2>
-    <div id="u_name" style="font-size:12px; color:var(--primary); font-weight:bold;">Loading...</div>
+<div class="header">
+    <button class="lang-btn">EN / AR</button>
+    <div class="logo">NUM<span>433</span></div>
+    <div class="logo-sub">🚀 . MELLO</div>
 </div>
 
 <div id="p-home" class="page active">
-    <div class="glass-card">
-        <p id="txt-balance-lbl" style="text-align:center; color:#9499c3; font-size:13px; margin-bottom:10px;">الرصيد الحالي</p>
-        <div style="font-size:45px; font-weight:900; text-align:center; font-family:'Syne'; text-shadow: 0 10px 20px rgba(92, 95, 245, 0.4);">
-            $<span id="balance">0.000</span>
-        </div>
+    <div class="card">
+        <div class="card-label">الرصيد الحالي</div>
+        <div class="balance">$<span id="bal-val">0.100</span></div>
     </div>
-    
-    <div class="glass-card" style="padding:15px; text-align:center;">
-        <p style="font-size:12px; margin-bottom:10px;" id="txt-quick-earn">كسب سريع من الإعلانات</p>
-        <button class="btn-3d" onclick="runAdTask(null)" id="main-ad-btn">▶️ <span id="txt-watch-btn">مشاهدة إعلان ($0.05)</span></button>
-    </div>
-</div>
 
-<div id="p-tasks" class="page">
-    <h3 id="txt-tasks-title" style="margin-bottom:20px; padding-right:10px;">المهام اليومية</h3>
-    <div id="tasks-container"></div>
-</div>
-
-<div id="p-refer" class="page">
-    <div class="glass-card">
-        <h4 id="txt-ref-title">ادعُ الأصدقاء واربح</h4>
-        <div id="ref-link" style="background:rgba(0,0,0,0.4); padding:15px; border-radius:15px; font-size:11px; word-break:break-all; margin:15px 0; color:var(--primary); border:1px dashed var(--primary);"></div>
-        <button class="btn-3d" onclick="copyRef()" id="txt-copy-btn">نسخ رابط الدعوة</button>
+    <div class="card">
+        <div class="card-label">كسب سريع من الإعلانات (<span id="ad-count">0</span>/10)</div>
+        <button class="btn-main" id="watch-btn" onclick="playAd()">
+            مشاهدة إعلان (0.05$) <span style="background:#ff9500; border-radius:5px; padding:2px;">▶️</span>
+        </button>
     </div>
 </div>
 
-<nav class="nav-bar">
-    <button class="nav-btn active" onclick="showTab('p-home', this)">🏠<br><span class="n-txt" data-ar="الرئيسية" data-en="Home">الرئيسية</span></button>
-    <button class="nav-btn" onclick="showTab('p-tasks', this)">🎯<br><span class="n-txt" data-ar="المهام" data-en="Tasks">المهام</span></button>
-    <button class="nav-btn" onclick="showTab('p-refer', this)">👥<br><span class="n-txt" data-ar="الدعوات" data-en="Refer">الدعوات</span></button>
+<nav class="nav">
+    <button class="nav-item" onclick="showTab('p-refer')">
+        <span class="nav-icon">👥</span> الدعوات
+    </button>
+    <button class="nav-item" onclick="showTab('p-tasks')">
+        <span class="nav-icon">🎯</span> المهام
+    </button>
+    <button class="nav-item active" onclick="showTab('p-home')">
+        <span class="nav-icon">🏠</span> الرئيسية
+    </button>
 </nav>
 
 <script>
     const tg = window.Telegram.WebApp;
-    tg.expand();
+    let balance = 0.100;
+    let ads = 0;
 
-    // الترجمات
-    const langData = {
-        ar: {
-            balanceLbl: "إجمالي الرصيد المتوفر",
-            quickEarn: "كسب سريع من الإعلانات",
-            watchBtn: "مشاهدة إعلان ($0.05)",
-            tasksTitle: "قائمة المهام اليومية",
-            refTitle: "نظام الإحالات والمكافآت",
-            copyBtn: "نسخ رابط الدعوة الخاص بك",
-            taskTxt: "مهمة رقم",
-            startBtn: "ابدأ المهمة",
-            success: "💰 مبروك! أضفت $0.05 لرصيدك",
-            fail: "⚠️ يجب إكمال الإعلان للحصول على المكافأة"
-        },
-        en: {
-            balanceLbl: "Current Total Balance",
-            quickEarn: "Quick Ad Earnings",
-            watchBtn: "Watch Ad ($0.05)",
-            tasksTitle: "Daily Task List",
-            refTitle: "Referral & Rewards System",
-            copyBtn: "Copy Your Referral Link",
-            taskTxt: "Task No.",
-            startBtn: "Start Task",
-            success: "💰 Congrats! $0.05 added",
-            fail: "⚠️ Watch the full ad to get reward"
-        }
-    };
-
-    let curLang = 'ar';
-    let balance = parseFloat(localStorage.getItem('n433_bal')) || 0.000;
-
-    // تحديث الرصيد في الواجهة
-    function updateBalanceUI() {
-        document.getElementById('balance').innerText = balance.toFixed(3);
-        localStorage.setItem('n433_bal', balance);
-    }
-
-    // تبديل اللغة
-    function toggleLang() {
-        curLang = curLang === 'ar' ? 'en' : 'ar';
-        document.documentElement.dir = curLang === 'ar' ? 'rtl' : 'ltr';
+    function playAd() {
+        if(ads >= 10) return;
         
-        document.getElementById('txt-balance-lbl').innerText = langData[curLang].balanceLbl;
-        document.getElementById('txt-quick-earn').innerText = langData[curLang].quickEarn;
-        document.getElementById('txt-watch-btn').innerText = langData[curLang].watchBtn;
-        document.getElementById('txt-tasks-title').innerText = langData[curLang].tasksTitle;
-        document.getElementById('txt-ref-title').innerText = langData[curLang].refTitle;
-        document.getElementById('txt-copy-btn').innerText = langData[curLang].copyBtn;
-
-        document.querySelectorAll('.n-txt').forEach(el => {
-            el.innerText = el.getAttribute('data-' + curLang);
-        });
-
-        renderTasks();
-    }
-
-    // منطق الإعلانات والربح
-    function runAdTask(btn) {
-        if(btn) {
-            btn.disabled = true;
-            btn.innerText = "...";
-        }
-
-        // استدعاء سكريبت الإعلانات
+        // محاكاة الإعلان
+        const btn = document.getElementById('watch-btn');
+        btn.disabled = true;
+        
         show_10908620().then(() => {
-            balance += 0.050;
-            updateBalanceUI();
-            tg.showAlert(langData[curLang].success);
-            if(btn) btn.innerText = "✅";
+            balance += 0.05;
+            ads += 1;
+            document.getElementById('bal-val').innerText = balance.toFixed(3);
+            document.getElementById('ad-count').innerText = ads;
+            btn.disabled = false;
+            if(ads >= 10) btn.innerText = "عد غداً (10/10)";
         }).catch(() => {
-            tg.showAlert(langData[curLang].fail);
-            if(btn) {
-                btn.disabled = false;
-                btn.innerText = langData[curLang].startBtn;
-            }
+            btn.disabled = false;
         });
     }
 
-    function renderTasks() {
-        const container = document.getElementById('tasks-container');
-        container.innerHTML = '';
-        for(let i=1; i<=8; i++) {
-            container.innerHTML += `
-                <div class="task-item">
-                    <div>
-                        <b style="font-size:14px;">${langData[curLang].taskTxt} ${i}</b><br>
-                        <small style="color:var(--primary); font-weight:bold;">+$0.05</small>
-                    </div>
-                    <button class="btn-3d" style="width:auto; padding:10px 20px; font-size:12px; margin:0;" 
-                            onclick="runAdTask(this)">${langData[curLang].startBtn}</button>
-                </div>
-            `;
-        }
+    function showTab(id) {
+        // منطق التبديل البسيط
+        tg.HapticFeedback.impactOccurred('light');
     }
-
-    function showTab(id, btn) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        btn.classList.add('active');
-    }
-
-    // إعدادات البداية
-    document.getElementById('u_name').innerText = tg.initDataUnsafe?.user?.first_name || "Premium User";
-    document.getElementById('ref-link').innerText = `https://t.me/Number433bot?start=${tg.initDataUnsafe?.user?.id || '6619233998'}`;
-    
-    updateBalanceUI();
-    renderTasks();
 </script>
 
 </body>
