@@ -57,21 +57,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* تعديل صفحة السحب - الأيقونات */
-        .method-item {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--glass-border);
-            padding: 12px;
-            border-radius: 15px;
-            text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .method-item.active {
-            border-color: var(--primary);
-            background: var(--primary-glow);
-        }
-
         .task-card {
             display: flex;
             align-items: center;
@@ -135,16 +120,22 @@
             border-radius: 12px; z-index: 2000; display: none; font-size: 14px;
         }
 
-        /* ستايل النشاط الأخير */
-        .live-activity {
-            font-size: 11px;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 10px;
-            justify-content: center;
+        /* ستايل النشاط الوهمي أسفل الصفحة */
+        .live-activity-footer {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            font-size: 12px;
         }
+        .dot {
+            height: 8px; width: 8px; background-color: #10b981;
+            border-radius: 50%; display: inline-block; margin-left: 8px;
+            box-shadow: 0 0 8px #10b981; animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
     </style>
 </head>
 <body>
@@ -162,10 +153,6 @@
     <div class="hero-section">
         <p class="balance-label">رصيدك الحالي</p>
         <div class="balance-amount">$<span id="balance">0.000</span></div>
-        <div class="live-activity">
-            <span style="width:6px; height:6px; background:var(--accent); border-radius:50%; display:inline-block; animation: pulse 1s infinite;"></span>
-            <span id="activity-text">مستخدم سحب 12.50$ عبر Vodafone Cash</span>
-        </div>
     </div>
 
     <div class="glass-card">
@@ -186,6 +173,13 @@
         <h4>ترقية الحساب</h4>
         <p style="font-size:12px; color:var(--text-dim); margin:8px 0 15px;">احصل على ضعف الأرباح من المهام والإحالات</p>
         <button class="btn-claim" style="width:100%">قريباً...</button>
+    </div>
+
+    <div class="live-activity-footer">
+        <div style="display: flex; align-items: center; justify-content: center; color: var(--text-dim);">
+            <span class="dot"></span>
+            <span id="activity-text">جاري جلب بيانات السحب...</span>
+        </div>
     </div>
 </div>
 
@@ -210,19 +204,8 @@
         <p style="font-size:12px; color:var(--text-dim)">المبلغ القابل للسحب</p>
         <h2 id="with-balance" style="font-family:'Syne';">$0.000</h2>
     </div>
-
-    <div class="glass-card">
-        <h4 style="margin-bottom:15px; font-size:13px;">اختر طريقة السحب:</h4>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
-            <div class="method-item" onclick="setMethod(this, 'Vodafone')">Vodafone</div>
-            <div class="method-item" onclick="setMethod(this, 'USDT')">USDT</div>
-        </div>
-        <input type="text" id="wallet-addr" placeholder="رقم الهاتف أو عنوان المحفظة" 
-               style="width:100%; background:rgba(0,0,0,0.2); border:1px solid var(--glass-border); padding:12px; border-radius:12px; color:white; outline:none; display:none;">
-    </div>
-
     <p style="font-size:12px; color:var(--accent); text-align:center; margin-bottom:15px;">الحد الأدنى للسحب هو $10.00</p>
-    <button class="btn-claim" id="btn-withdraw" style="width:100%; padding:18px;" onclick="requestWith()" disabled>طلب سحب الأرباح</button>
+    <button class="btn-claim" style="width:100%; padding:18px;" disabled>طلب سحب الأرباح</button>
 </div>
 
 <nav class="nav-bar">
@@ -250,121 +233,4 @@
 
     let S = JSON.parse(localStorage.getItem('n433_v3')) || {
         balance: 0.000,
-        tasksDone: 0,
-        lastTaskDate: null,
-        refCount: 0,
-        refEarned: 0.00
-    };
-
-    // منطق السحب الجديد
-    function setMethod(el, name) {
-        document.querySelectorAll('.method-item').forEach(i => i.classList.remove('active'));
-        el.classList.add('active');
-        document.getElementById('wallet-addr').style.display = 'block';
-        if(S.balance >= 10) document.getElementById('btn-withdraw').disabled = false;
-    }
-
-    function requestWith() {
-        const addr = document.getElementById('wallet-addr').value;
-        if(!addr) return showToast("⚠️ يرجى إدخال البيانات");
-        showToast("✅ تم إرسال طلب السحب للمراجعة");
-    }
-
-    // منطق النشاط الأخير (الرئيسية)
-    const activities = [
-        "مستخدم سحب 15.00$ عبر USDT",
-        "تم دفع 10.20$ لـ محمد أ.",
-        "مستحدم جديد انضم للمنصة مكافأة 0.50$",
-        "سحب جديد بقيمة 25.00$ عبر فودافون كاش"
-    ];
-    setInterval(() => {
-        const rand = activities[Math.floor(Math.random() * activities.length)];
-        document.getElementById('activity-text').innerText = rand;
-    }, 4000);
-
-    function save() {
-        localStorage.setItem('n433_v3', JSON.stringify(S));
-        updateUI();
-    }
-
-    function updateUI() {
-        document.getElementById('balance').innerText = S.balance.toFixed(3);
-        document.getElementById('with-balance').innerText = "$" + S.balance.toFixed(3);
-        document.getElementById('today-profit').innerText = "$" + (S.tasksDone * 0.05).toFixed(2);
-        checkTaskLimit();
-    }
-
-    function checkTaskLimit() {
-        const now = new Date();
-        const lastDate = S.lastTaskDate ? new Date(S.lastTaskDate) : null;
-        if (lastDate && now.toLocaleDateString() !== lastDate.toLocaleDateString()) {
-            S.tasksDone = 0;
-            save();
-        }
-        renderTasks();
-    }
-
-    function renderTasks() {
-        let html = '';
-        if(S.tasksDone >= 10) {
-            html = '<p style="text-align:center; color:var(--text-dim)">انتظر للمهام القادمة غداً</p>';
-        } else {
-            for(let i = S.tasksDone + 1; i <= 10; i++) {
-                html += `<div class="task-card">
-                    <div class="task-info"><h4>إعلان مميز #${i}</h4><p>+$0.050</p></div>
-                    <button class="btn-claim" onclick="runTask(this)">مشاهدة</button>
-                </div>`;
-            }
-        }
-        document.getElementById('tasks-list').innerHTML = html;
-    }
-
-    function runTask(btn) {
-        btn.disabled = true;
-        show_10908620().then(() => {
-            S.balance += 0.050;
-            S.tasksDone += 1;
-            S.lastTaskDate = new Date();
-            save();
-            showToast("💰 تمت إضافة $0.050");
-        }).catch(() => {
-            btn.disabled = false;
-        });
-    }
-
-    function showTab(id, btn) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        btn.classList.add('active');
-    }
-
-    function copyRef() {
-        navigator.clipboard.writeText(document.getElementById('ref-link').innerText);
-        showToast("🔗 تم النسخ");
-    }
-
-    function showToast(msg) {
-        const t = document.getElementById('toast');
-        t.innerText = msg; t.style.display = 'block';
-        setTimeout(() => t.style.display = 'none', 3000);
-    }
-
-    const user = tg.initDataUnsafe?.user;
-    if(user) {
-        document.getElementById('u_name').innerText = user.first_name;
-        document.getElementById('ref-link').innerText = `https://t.me/Number433bot?start=${user.id}`;
-    }
-
-    updateUI();
-</script>
-
-<style>
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.5); opacity: 0.5; }
-    100% { transform: scale(1); opacity: 1; }
-}
-</style>
-</body>
-</html>
+        tasksDone: 0
