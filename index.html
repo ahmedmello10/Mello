@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Number 433 Premium v3</title>
+    <title>Number 333 Premium </title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -52,8 +52,9 @@
             background: var(--primary); color: white; border: none;
             padding: 10px 20px; border-radius: 12px; font-weight: bold;
             box-shadow: 0 4px 15px var(--primary-glow); cursor: pointer;
+            font-family: 'Tajawal';
         }
-        .btn-claim:disabled { background: #334155; opacity: 0.5; }
+        .btn-claim:disabled { background: #334155; opacity: 0.5; cursor: not-allowed; }
 
         .nav-bar {
             position: fixed; bottom: 15px; left: 15px; right: 15px;
@@ -64,6 +65,7 @@
         .nav-item {
             flex: 1; background: none; border: none; color: var(--text-dim);
             font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+            cursor: pointer;
         }
         .nav-item.active { color: var(--primary); font-weight: bold; }
 
@@ -72,14 +74,14 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .live-activity-footer {
-            margin-top: 15px; padding: 12px; background: rgba(255, 255, 255, 0.02);
+            margin-top: 10px; padding: 12px; background: rgba(255, 255, 255, 0.02);
             border-radius: 15px; border: 1px solid var(--glass-border); text-align: center;
         }
 
         #toast {
             position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
             background: var(--primary); color: white; padding: 12px 24px;
-            border-radius: 12px; z-index: 2000; display: none;
+            border-radius: 12px; z-index: 2000; display: none; font-size: 14px;
         }
     </style>
 </head>
@@ -87,9 +89,16 @@
 
 <div id="toast"></div>
 
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <h2 style="font-family:'Syne';">NUM<span style="color:var(--primary)">433</span></h2>
+    <div style="background:var(--glass); padding:6px 12px; border-radius:50px; font-size:12px; border:1px solid var(--glass-border);">
+        👤 <span id="u_name">المستخدم</span>
+    </div>
+</div>
+
 <div id="p-home" class="page active">
     <div style="text-align: center; padding: 20px 0;">
-        <p style="color:var(--text-dim)">رصيدك الحالي</p>
+        <p style="color:var(--text-dim); font-size: 14px;">رصيدك الحالي</p>
         <div class="balance-amount">$<span id="balance">0.000</span></div>
     </div>
     
@@ -101,40 +110,42 @@
     </div>
 
     <div class="live-activity-footer">
-        <span style="height:8px; width:8px; background:#10b981; border-radius:50%; display:inline-block; margin-left:8px;"></span>
-        <span id="activity-text" style="font-size:11px; color:var(--accent)">جاري جلب عمليات السحب...</span>
+        <span style="height:7px; width:7px; background:#10b981; border-radius:50%; display:inline-block; margin-left:8px; box-shadow: 0 0 5px #10b981;"></span>
+        <span id="activity-text" style="font-size:11px; color:var(--accent)">جاري تحديث النشاط...</span>
     </div>
 </div>
 
 <div id="p-tasks" class="page">
-    <h3>المهام اليومية</h3>
-    <div id="tasks-list" style="margin-top:20px;"></div>
+    <h3 style="margin-bottom: 20px;">المهام المتاحة</h3>
+    <div id="tasks-list"></div>
 </div>
 
 <div id="p-refer" class="page">
     <div class="glass-card" style="text-align:center;">
-        <h3>ادعُ أصدقاءك</h3>
-        <div id="ref-link" style="padding:15px; background:rgba(0,0,0,0.2); border-radius:10px; font-size:11px; margin:15px 0; word-break:break-all;">...</div>
+        <div style="font-size:30px; margin-bottom:10px;">🎁</div>
+        <h3>نظام الإحالة</h3>
+        <p style="font-size:12px; color:var(--text-dim); margin: 10px 0;">انسخ رابطك وشاركه مع أصدقائك</p>
+        <div id="ref-link" style="padding:15px; background:rgba(0,0,0,0.2); border-radius:12px; font-size:11px; margin-bottom:15px; word-break:break-all;">...</div>
         <button class="btn-claim" style="width:100%" onclick="copyRef()">نسخ الرابط</button>
     </div>
 </div>
 
 <div id="p-wallet" class="page">
-    <h3>المحفظة</h3>
+    <h3>المحفظة والسحب</h3>
     <div class="glass-card" style="margin-top:15px;">
-        <p style="font-size:12px; color:var(--text-dim)">المبلغ القابل للسحب</p>
+        <p style="font-size:12px; color:var(--text-dim)">الرصيد المتاح</p>
         <h2 id="with-balance" style="font-family:'Syne';">$0.000</h2>
     </div>
 
     <div class="glass-card">
-        <h4 style="margin-bottom:15px; font-size:13px;">اختر وسيلة السحب:</h4>
+        <h4 style="margin-bottom:15px; font-size:13px;">طرق السحب المتاحة:</h4>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div style="padding:15px; border:1px solid var(--glass-border); border-radius:12px; text-align:center;">Binance</div>
-            <div style="padding:15px; border:1px solid var(--glass-border); border-radius:12px; text-align:center;">USDT</div>
+            <div style="padding:15px; border:1px solid var(--glass-border); border-radius:15px; text-align:center; background: rgba(255,255,255,0.02);">Binance</div>
+            <div style="padding:15px; border:1px solid var(--glass-border); border-radius:15px; text-align:center; background: rgba(255,255,255,0.02);">USDT (TRC20)</div>
         </div>
     </div>
 
-    <p style="color:var(--accent); text-align:center; font-size:12px; margin-bottom:15px;">الحد الأدنى للسحب هو $10.00</p>
+    <p style="color:var(--accent); text-align:center; font-size:12px; margin-bottom:15px;">الحد الأدنى لطلب السحب هو $10.00</p>
     <button class="btn-claim" style="width:100%; padding:18px;" disabled>طلب سحب الأرباح</button>
 </div>
 
@@ -149,19 +160,22 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
+    // استعادة البيانات أو الافتراضية
     let S = JSON.parse(localStorage.getItem('n433_v3')) || { balance: 0.0, tasksDone: 0, lastTaskDate: null };
 
-    // نظام السحب الوهمي بالأسفل
+    // نظام النشاط الوهمي (بالأسفل)
     const activities = [
-        "عميل سحب $15.50 عبر Binance",
-        "تم دفع $22.00 بنجاح (USDT)",
-        "عميل سحب $10.00 عبر Binance",
-        "تم تحويل $50.00 لعميل مميز"
+        "عميل سحب $14.20 عبر Binance",
+        "تم دفع $20.00 لمستخدم عبر USDT",
+        "سحب جديد بقيمة $10.50 من عميل",
+        "عملية سحب ناجحة بقيمة $35.00"
     ];
-    setInterval(() => {
-        const txt = activities[Math.floor(Math.random() * activities.length)];
-        document.getElementById('activity-text').innerText = txt;
-    }, 4000);
+    function updateActivity() {
+        const el = document.getElementById('activity-text');
+        if(el) el.innerText = activities[Math.floor(Math.random() * activities.length)];
+    }
+    setInterval(updateActivity, 5000);
+    updateActivity();
 
     function showTab(id, btn) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -174,17 +188,26 @@
         document.getElementById('balance').innerText = S.balance.toFixed(3);
         document.getElementById('with-balance').innerText = "$" + S.balance.toFixed(3);
         document.getElementById('today-profit').innerText = "$" + (S.tasksDone * 0.05).toFixed(2);
+        
+        // تصفير المهام اليومي
+        const today = new Date().toLocaleDateString();
+        if(S.lastTaskDate !== today) {
+            S.tasksDone = 0;
+            S.lastTaskDate = today;
+            localStorage.setItem('n433_v3', JSON.stringify(S));
+        }
         renderTasks();
     }
 
     function renderTasks() {
         let html = '';
         if(S.tasksDone >= 10) {
-            html = '<p style="text-align:center; color:gray;">انتهت مهام اليوم</p>';
+            html = '<p style="text-align:center; padding:20px; color:var(--text-dim);">انتهت مهامك لهذا اليوم، عد غداً!</p>';
         } else {
             for(let i = S.tasksDone + 1; i <= 10; i++) {
-                html += `<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:15px; border-radius:15px; margin-bottom:10px; border:1px solid rgba(255,255,255,0.05);">
-                    <span>مهمة #${i}</span>
+                html += `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:15px; border-radius:18px; margin-bottom:10px; border:1px solid rgba(255,255,255,0.05);">
+                    <div><b style="font-size:14px;">إعلان # ${i}</b><br><small style="color:var(--primary)">+$0.050</small></div>
                     <button class="btn-claim" onclick="runTask(this)">مشاهدة</button>
                 </div>`;
             }
@@ -195,25 +218,32 @@
     function runTask(btn) {
         btn.disabled = true;
         show_10908620().then(() => {
-            S.balance += 0.05; S.tasksDone += 1;
+            S.balance += 0.050;
+            S.tasksDone += 1;
             localStorage.setItem('n433_v3', JSON.stringify(S));
             updateUI();
-            showToast("💰 تم إضافة الربح");
-        }).catch(() => btn.disabled = false);
+            showToast("💰 تم إضافة الربح بنجاح");
+        }).catch(() => {
+            btn.disabled = false;
+            showToast("⚠️ حدث خطأ في عرض الإعلان");
+        });
     }
 
     function copyRef() {
-        navigator.clipboard.writeText(document.getElementById('ref-link').innerText);
+        const link = document.getElementById('ref-link').innerText;
+        navigator.clipboard.writeText(link);
         showToast("🔗 تم النسخ");
     }
 
     function showToast(m) {
         const t = document.getElementById('toast');
         t.innerText = m; t.style.display = 'block';
-        setTimeout(() => t.style.display='none', 2000);
+        setTimeout(() => t.style.display = 'none', 2500);
     }
 
-    if(tg.initDataUnsafe.user) {
+    // جلب بيانات التيليجرام
+    if(tg.initDataUnsafe?.user) {
+        document.getElementById('u_name').innerText = tg.initDataUnsafe.user.first_name;
         document.getElementById('ref-link').innerText = "https://t.me/Number433bot?start=" + tg.initDataUnsafe.user.id;
     }
 
