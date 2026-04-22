@@ -33,6 +33,7 @@
             overflow-x: hidden;
         }
 
+        /* المكونات الزجاجية المحسنة */
         .glass-card {
             background: var(--glass);
             backdrop-filter: blur(12px);
@@ -43,6 +44,7 @@
             margin-bottom: 16px;
         }
 
+        /* الصفحة الرئيسية */
         .hero-section {
             text-align: center;
             padding: 20px 0;
@@ -57,6 +59,7 @@
             -webkit-text-fill-color: transparent;
         }
 
+        /* المهام */
         .task-card {
             display: flex;
             align-items: center;
@@ -82,6 +85,7 @@
         }
         .btn-claim:disabled { background: #334155; box-shadow: none; opacity: 0.5; }
 
+        /* عداد الوقت */
         #timer-container {
             text-align: center;
             padding: 20px;
@@ -98,6 +102,7 @@
             margin-top: 10px;
         }
 
+        /* نظام الإحالات المحسن */
         .referral-box {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), transparent);
             border: 1px dashed var(--primary);
@@ -110,6 +115,7 @@
             text-align: center;
         }
 
+        /* التنقل */
         .nav-bar {
             position: fixed;
             bottom: 15px;
@@ -189,7 +195,10 @@
 
 <div id="p-tasks" class="page">
     <h3 style="margin-bottom:20px;">المهام اليومية</h3>
-    <div id="tasks-list"></div>
+    
+    <div id="tasks-list">
+        </div>
+
     <div id="timer-container">
         <p style="color:var(--text-dim)">لقد أكملت جميع مهام اليوم!</p>
         <p style="font-size:12px; margin-top:5px;">المهام القادمة خلال:</p>
@@ -202,9 +211,12 @@
         <div style="font-size:40px; margin-bottom:10px;">🎁</div>
         <h3>ادعُ أصدقاءك واربح</h3>
         <p style="font-size:13px; color:var(--text-dim); margin-top:8px;">ستحصل على $0.10 عن كل صديق يقوم بالتسجيل من خلالك</p>
+        
         <div class="referral-box" id="ref-link">https://t.me/Number433bot?start=user_id</div>
+        
         <button class="btn-claim" style="width:100%; margin-top:15px;" onclick="copyRef()">نسخ الرابط</button>
     </div>
+
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
         <div class="glass-card" style="margin-bottom:0; text-align:center;">
             <p style="font-size:11px; color:var(--text-dim)">الإحالات</p>
@@ -269,16 +281,20 @@
         document.getElementById('today-profit').innerText = "$" + (S.tasksDone * 0.05).toFixed(2);
         document.getElementById('ref-count').innerText = S.refCount;
         document.getElementById('ref-earned').innerText = "$" + S.refEarned.toFixed(2);
+        
         checkTaskLimit();
     }
 
     function checkTaskLimit() {
         const now = new Date();
         const lastDate = S.lastTaskDate ? new Date(S.lastTaskDate) : null;
+        
+        // إذا مر يوم جديد، نصفر المهام
         if (lastDate && now.toLocaleDateString() !== lastDate.toLocaleDateString()) {
             S.tasksDone = 0;
             save();
         }
+
         if (S.tasksDone >= 10) {
             document.getElementById('tasks-list').style.display = 'none';
             document.getElementById('timer-container').style.display = 'block';
@@ -308,6 +324,7 @@
     function runTask(btn) {
         btn.disabled = true;
         btn.innerText = 'جاري...';
+        
         show_10908620().then(() => {
             S.balance += 0.050;
             S.tasksDone += 1;
@@ -327,9 +344,11 @@
             const now = new Date();
             const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
             const diff = tomorrow - now;
+            
             const h = Math.floor(diff / 3600000);
             const m = Math.floor((diff % 3600000) / 60000);
             const s = Math.floor((diff % 60000) / 1000);
+            
             timerEl.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
         }
         setInterval(update, 1000);
@@ -356,6 +375,7 @@
         setTimeout(() => t.style.display = 'none', 3000);
     }
 
+    // تهيئة البيانات
     const user = tg.initDataUnsafe?.user;
     if(user) {
         document.getElementById('u_name').innerText = user.first_name;
@@ -364,5 +384,6 @@
 
     updateUI();
 </script>
+
 </body>
 </html>
