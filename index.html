@@ -2,203 +2,79 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earn Dashboard UI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Tajawal', sans-serif;
-        }
-
-        body {
-            background-color: #0d111b;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        /* الكارت الرئيسي */
-        .main-container {
-            width: 100%;
-            max-width: 380px;
-        }
-
-        .balance-card {
-            background: linear-gradient(180deg, #1e253a 0%, #131828 100%);
-            border-radius: 30px;
-            padding: 40px 20px;
+        body { background-color: #0b0e1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        
+        /* البطاقة الأساسية */
+        .main-card {
+            background: linear-gradient(145deg, #1a1f35, #121526);
+            border-radius: 25px;
+            padding: 30px;
+            width: 350px;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             border: 1px solid #2d3550;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        .balance-label {
-            color: #8e95ae;
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 10px;
-        }
-
-        .balance-amount {
-            color: #ffffff;
-            font-size: 65px;
-            font-weight: 900; /* الوزن العريض جداً مثل الصورة */
-            margin: 10px 0;
+        .title { color: #a0a6c0; font-size: 18px; margin-bottom: 10px; }
+        
+        .balance {
+            font-size: 55px;
+            font-weight: 900;
+            margin: 15px 0;
             letter-spacing: -2px;
-            font-family: sans-serif; /* للأرقام الإنجليزية العريضة */
+            text-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
 
-        .stats-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 25px;
-        }
+        .stats-container { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
 
-        .stat-item {
-            background: rgba(255, 255, 255, 0.05);
-            flex: 1;
+        .stat-box {
+            background-color: #1c213a;
             padding: 12px;
-            border-radius: 18px;
+            border-radius: 15px;
+            flex: 1;
             font-size: 14px;
-            color: #d1d5db;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            color: #e0e0e0;
         }
 
         /* زر كسب سريع */
-        .earn-btn {
-            background: #5d5fef;
-            width: 100%;
-            margin-top: 15px;
+        .quick-earn-btn {
+            background-color: #6366f1;
+            color: white;
+            width: 350px;
+            margin-top: 20px;
             padding: 18px;
             border-radius: 20px;
             border: none;
-            color: white;
             font-size: 20px;
-            font-weight: 700;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(93, 95, 239, 0.3);
-            transition: 0.3s;
-        }
-
-        .earn-btn:hover { background: #4e50d1; transform: translateY(-2px); }
-
-        .play-icon {
-            background: #ff9f43;
-            color: white;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        /* قسم السحب القديم بالايقونات */
-        .withdraw-section {
-            margin-top: 35px;
-            width: 100%;
-        }
-
-        .section-header {
-            color: #8e95ae;
             font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 16px;
-            padding-right: 5px;
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        .method-card {
-            background: #191f33;
-            border: 1px solid #2d3550;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            transition: 0.3s;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s;
         }
 
-        .method-card:hover {
-            border-color: #5d5fef;
-            background: #1e253d;
-        }
-
-        .method-card img {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 12px;
-            object-fit: contain;
-        }
-
-        .method-card p {
-            color: #fff;
-            font-size: 13px;
-            font-weight: 600;
-        }
+        .quick-earn-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <div class="balance-card">
-            <div class="balance-label">إجمالي الرصيد</div>
-            <div class="balance-amount">$0.100</div>
-            
-            <div class="stats-row">
-                <div class="stat-item">إعلانات اليوم: 2/10</div>
-                <div class="stat-item">إجمالي الربح: $0.10</div>
-            </div>
-        </div>
-
-        <button class="earn-btn">
-            <span class="play-icon">▶</span>
-            كسب سريع ($0.05)
-        </button>
-
-        <div class="withdraw-section">
-            <div class="section-header">طرق السحب المتاحة</div>
-            <div class="grid-layout">
-                
-                <div class="method-card">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Vodafone_Logo.png" alt="Vodafone">
-                    <p>فودافون كاش</p>
-                </div>
-
-                <div class="method-card">
-                    <img src="https://cdn-icons-png.flaticon.com/512/174/174861.png" alt="PayPal">
-                    <p>PayPal</p>
-                </div>
-
-                <div class="method-card">
-                    <img src="https://payeer.com/style/images/logo_p_og.jpg" alt="Payeer">
-                    <p>Payeer</p>
-                </div>
-
-                <div class="method-card">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Etisalat_Logo.svg" alt="Etisalat">
-                    <p>اتصالات كاش</p>
-                </div>
-
-            </div>
+    <div class="main-card">
+        <div class="title">إجمالي الرصيد</div>
+        <div class="balance">$0.100</div>
+        
+        <div class="stats-container">
+            <div class="stat-box">إعلانات اليوم: 2/10</div>
+            <div class="stat-box">إجمالي الربح: $0.10</div>
         </div>
     </div>
+
+    <button class="quick-earn-btn">
+        <span>▶</span>
+        كسب سريع ($0.05)
+    </button>
 
 </body>
 </html>
