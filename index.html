@@ -30,30 +30,22 @@
             min-height: 100vh;
             padding: 20px 16px 100px;
             direction: rtl;
-            overflow-x: hidden;
         }
 
         .glass-card {
             background: var(--glass);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             padding: 20px;
             margin-bottom: 16px;
         }
 
-        .hero-section { text-align: center; padding: 20px 0; }
         .balance-amount { 
             font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; 
             background: linear-gradient(to bottom, #fff, #94a3b8);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .task-card {
-            display: flex; align-items: center; justify-content: space-between;
-            background: rgba(255,255,255,0.02); border-radius: 18px;
-            padding: 15px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
         }
 
         .btn-claim {
@@ -61,7 +53,7 @@
             padding: 10px 20px; border-radius: 12px; font-weight: bold;
             box-shadow: 0 4px 15px var(--primary-glow); cursor: pointer;
         }
-        .btn-claim:disabled { background: #334155; box-shadow: none; opacity: 0.5; }
+        .btn-claim:disabled { background: #334155; opacity: 0.5; }
 
         .nav-bar {
             position: fixed; bottom: 15px; left: 15px; right: 15px;
@@ -74,84 +66,76 @@
             font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px;
         }
         .nav-item.active { color: var(--primary); font-weight: bold; }
-        .nav-item svg { width: 22px; height: 22px; fill: currentColor; }
 
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .live-activity-footer {
+            margin-top: 15px; padding: 12px; background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px; border: 1px solid var(--glass-border); text-align: center;
+        }
 
         #toast {
             position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
             background: var(--primary); color: white; padding: 12px 24px;
             border-radius: 12px; z-index: 2000; display: none;
         }
-
-        .live-activity-footer {
-            margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.02);
-            border-radius: 15px; border: 1px solid var(--glass-border); text-align: center;
-        }
-        .dot {
-            height: 8px; width: 8px; background-color: #10b981; border-radius: 50%;
-            display: inline-block; margin-left: 8px; box-shadow: 0 0 8px #10b981;
-            animation: blink 1.5s infinite;
-        }
-        @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div id="toast"></div>
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-    <h2 style="font-family:'Syne';">NUM<span style="color:var(--primary)">433</span></h2>
-    <div id="user-chip" style="background:var(--glass); padding:6px 12px; border-radius:50px; font-size:12px;">
-        👤 <span id="u_name">المستخدم</span>
-    </div>
-</div>
-
 <div id="p-home" class="page active">
-    <div class="hero-section">
+    <div style="text-align: center; padding: 20px 0;">
         <p style="color:var(--text-dim)">رصيدك الحالي</p>
         <div class="balance-amount">$<span id="balance">0.000</span></div>
     </div>
+    
     <div class="glass-card">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-            <div style="text-align:center;">
-                <p style="font-size:11px; color:var(--text-dim)">أرباح اليوم</p>
-                <b id="today-profit">$0.00</b>
-            </div>
-            <div style="text-align:center;">
-                <p style="font-size:11px; color:var(--text-dim)">إجمالي السحب</p>
-                <b>$0.00</b>
-            </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; text-align:center;">
+            <div><p style="font-size:11px; color:var(--text-dim)">أرباح اليوم</p><b id="today-profit">$0.00</b></div>
+            <div><p style="font-size:11px; color:var(--text-dim)">إجمالي السحب</p><b>$0.00</b></div>
         </div>
     </div>
+
     <div class="live-activity-footer">
-        <span class="dot"></span> <span id="activity-text" style="font-size:12px; color:var(--text-dim)">جاري التحديث...</span>
+        <span style="height:8px; width:8px; background:#10b981; border-radius:50%; display:inline-block; margin-left:8px;"></span>
+        <span id="activity-text" style="font-size:11px; color:var(--accent)">جاري جلب عمليات السحب...</span>
     </div>
 </div>
 
 <div id="p-tasks" class="page">
-    <h3 style="margin-bottom:20px;">المهام اليومية</h3>
-    <div id="tasks-list"></div>
+    <h3>المهام اليومية</h3>
+    <div id="tasks-list" style="margin-top:20px;"></div>
 </div>
 
 <div id="p-refer" class="page">
     <div class="glass-card" style="text-align:center;">
         <h3>ادعُ أصدقاءك</h3>
-        <div id="ref-link" style="margin:15px 0; font-size:12px; color:var(--primary); word-break:break-all;">...</div>
+        <div id="ref-link" style="padding:15px; background:rgba(0,0,0,0.2); border-radius:10px; font-size:11px; margin:15px 0; word-break:break-all;">...</div>
         <button class="btn-claim" style="width:100%" onclick="copyRef()">نسخ الرابط</button>
     </div>
 </div>
 
 <div id="p-wallet" class="page">
     <h3>المحفظة</h3>
-    <div class="glass-card">
+    <div class="glass-card" style="margin-top:15px;">
         <p style="font-size:12px; color:var(--text-dim)">المبلغ القابل للسحب</p>
-        <h2 id="with-balance">$0.000</h2>
+        <h2 id="with-balance" style="font-family:'Syne';">$0.000</h2>
     </div>
-    <p style="color:var(--accent); text-align:center; font-size:12px; margin-bottom:10px;">الحد الأدنى $10.00</p>
-    <button class="btn-claim" style="width:100%; padding:15px;" disabled>سحب الأرباح</button>
+
+    <div class="glass-card">
+        <h4 style="margin-bottom:15px; font-size:13px;">اختر وسيلة السحب:</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div style="padding:15px; border:1px solid var(--glass-border); border-radius:12px; text-align:center;">Binance</div>
+            <div style="padding:15px; border:1px solid var(--glass-border); border-radius:12px; text-align:center;">USDT</div>
+        </div>
+    </div>
+
+    <p style="color:var(--accent); text-align:center; font-size:12px; margin-bottom:15px;">الحد الأدنى للسحب هو $10.00</p>
+    <button class="btn-claim" style="width:100%; padding:18px;" disabled>طلب سحب الأرباح</button>
 </div>
 
 <nav class="nav-bar">
@@ -167,12 +151,16 @@
 
     let S = JSON.parse(localStorage.getItem('n433_v3')) || { balance: 0.0, tasksDone: 0, lastTaskDate: null };
 
-    // إصلاح السحب الوهمي
-    const activities = ["سحب $15.00 (فودافون)", "سحب $20.00 (USDT)", "سحب $10.50 (اتصالات)", "سحب $30.00 (بايبال)"];
+    // نظام السحب الوهمي بالأسفل
+    const activities = [
+        "عميل سحب $15.50 عبر Binance",
+        "تم دفع $22.00 بنجاح (USDT)",
+        "عميل سحب $10.00 عبر Binance",
+        "تم تحويل $50.00 لعميل مميز"
+    ];
     setInterval(() => {
         const txt = activities[Math.floor(Math.random() * activities.length)];
-        const el = document.getElementById('activity-text');
-        if(el) el.innerText = txt;
+        document.getElementById('activity-text').innerText = txt;
     }, 4000);
 
     function showTab(id, btn) {
@@ -192,10 +180,13 @@
     function renderTasks() {
         let html = '';
         if(S.tasksDone >= 10) {
-            html = '<p style="text-align:center; color:gray;">عد غداً للمزيد</p>';
+            html = '<p style="text-align:center; color:gray;">انتهت مهام اليوم</p>';
         } else {
             for(let i = S.tasksDone + 1; i <= 10; i++) {
-                html += `<div class="task-card"><span>إعلان #${i}</span><button class="btn-claim" onclick="runTask(this)">مشاهدة</button></div>`;
+                html += `<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:15px; border-radius:15px; margin-bottom:10px; border:1px solid rgba(255,255,255,0.05);">
+                    <span>مهمة #${i}</span>
+                    <button class="btn-claim" onclick="runTask(this)">مشاهدة</button>
+                </div>`;
             }
         }
         document.getElementById('tasks-list').innerHTML = html;
@@ -204,12 +195,11 @@
     function runTask(btn) {
         btn.disabled = true;
         show_10908620().then(() => {
-            S.balance += 0.05;
-            S.tasksDone += 1;
+            S.balance += 0.05; S.tasksDone += 1;
             localStorage.setItem('n433_v3', JSON.stringify(S));
             updateUI();
-            showToast("💰 تم الإضافة");
-        }).catch(() => { btn.disabled = false; });
+            showToast("💰 تم إضافة الربح");
+        }).catch(() => btn.disabled = false);
     }
 
     function copyRef() {
@@ -224,7 +214,6 @@
     }
 
     if(tg.initDataUnsafe.user) {
-        document.getElementById('u_name').innerText = tg.initDataUnsafe.user.first_name;
         document.getElementById('ref-link').innerText = "https://t.me/Number433bot?start=" + tg.initDataUnsafe.user.id;
     }
 
