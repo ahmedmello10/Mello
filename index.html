@@ -57,21 +57,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* تعديل صفحة السحب - الأيقونات */
-        .method-item {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--glass-border);
-            padding: 12px;
-            border-radius: 15px;
-            text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .method-item.active {
-            border-color: var(--primary);
-            background: var(--primary-glow);
-        }
-
         .task-card {
             display: flex;
             align-items: center;
@@ -94,6 +79,7 @@
             font-weight: bold;
             font-size: 13px;
             box-shadow: 0 4px 15px var(--primary-glow);
+            cursor: pointer;
         }
         .btn-claim:disabled { background: #334155; box-shadow: none; opacity: 0.5; }
 
@@ -135,15 +121,17 @@
             border-radius: 12px; z-index: 2000; display: none; font-size: 14px;
         }
 
-        /* ستايل النشاط الأخير */
         .live-activity {
             font-size: 11px;
             color: var(--accent);
             display: flex;
             align-items: center;
             gap: 6px;
-            margin-top: 10px;
+            margin-top: 15px;
             justify-content: center;
+            background: rgba(255,255,255,0.02);
+            padding: 10px;
+            border-radius: 15px;
         }
     </style>
 </head>
@@ -162,10 +150,6 @@
     <div class="hero-section">
         <p class="balance-label">رصيدك الحالي</p>
         <div class="balance-amount">$<span id="balance">0.000</span></div>
-        <div class="live-activity">
-            <span style="width:6px; height:6px; background:var(--accent); border-radius:50%; display:inline-block; animation: pulse 1s infinite;"></span>
-            <span id="activity-text">مستخدم سحب 12.50$ عبر Vodafone Cash</span>
-        </div>
     </div>
 
     <div class="glass-card">
@@ -187,6 +171,11 @@
         <p style="font-size:12px; color:var(--text-dim); margin:8px 0 15px;">احصل على ضعف الأرباح من المهام والإحالات</p>
         <button class="btn-claim" style="width:100%">قريباً...</button>
     </div>
+
+    <div class="live-activity">
+        <span style="width:6px; height:6px; background:var(--accent); border-radius:50%; display:inline-block; animation: pulse 1s infinite;"></span>
+        <span id="activity-text">مستخدم سحب 12.50$ عبر Binance</span>
+    </div>
 </div>
 
 <div id="p-tasks" class="page">
@@ -199,8 +188,8 @@
         <div style="font-size:40px; margin-bottom:10px;">🎁</div>
         <h3>ادعُ أصدقاءك واربح</h3>
         <p style="font-size:13px; color:var(--text-dim); margin-top:8px;">ستحصل على $0.10 عن كل صديق يسجل من خلالك</p>
-        <div class="referral-box" id="ref-link">...</div>
-        <button class="btn-claim" style="width:100%; margin-top:15px;" onclick="copyRef()">نسخ الرابط</button>
+        <div class="referral-box" id="ref-link" style="margin: 15px 0; font-size: 11px; word-break: break-all; color: var(--primary);">...</div>
+        <button class="btn-claim" style="width:100%;" onclick="copyRef()">نسخ الرابط</button>
     </div>
 </div>
 
@@ -212,17 +201,15 @@
     </div>
 
     <div class="glass-card">
-        <h4 style="margin-bottom:15px; font-size:13px;">اختر طريقة السحب:</h4>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
-            <div class="method-item" onclick="setMethod(this, 'Vodafone')">Vodafone</div>
-            <div class="method-item" onclick="setMethod(this, 'USDT')">USDT</div>
+        <h4 style="margin-bottom:15px; font-size:13px;">اختر وسيلة السحب:</h4>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div style="padding:15px; border:1px solid var(--glass-border); border-radius:15px; text-align:center; background: rgba(255,255,255,0.02);">Binance</div>
+            <div style="padding:15px; border:1px solid var(--glass-border); border-radius:15px; text-align:center; background: rgba(255,255,255,0.02);">USDT</div>
         </div>
-        <input type="text" id="wallet-addr" placeholder="رقم الهاتف أو عنوان المحفظة" 
-               style="width:100%; background:rgba(0,0,0,0.2); border:1px solid var(--glass-border); padding:12px; border-radius:12px; color:white; outline:none; display:none;">
     </div>
 
     <p style="font-size:12px; color:var(--accent); text-align:center; margin-bottom:15px;">الحد الأدنى للسحب هو $10.00</p>
-    <button class="btn-claim" id="btn-withdraw" style="width:100%; padding:18px;" onclick="requestWith()" disabled>طلب سحب الأرباح</button>
+    <button class="btn-claim" id="btn-withdraw" style="width:100%; padding:18px;" disabled>طلب سحب الأرباح</button>
 </div>
 
 <nav class="nav-bar">
@@ -251,36 +238,20 @@
     let S = JSON.parse(localStorage.getItem('n433_v3')) || {
         balance: 0.000,
         tasksDone: 0,
-        lastTaskDate: null,
-        refCount: 0,
-        refEarned: 0.00
+        lastTaskDate: null
     };
 
-    // منطق السحب الجديد
-    function setMethod(el, name) {
-        document.querySelectorAll('.method-item').forEach(i => i.classList.remove('active'));
-        el.classList.add('active');
-        document.getElementById('wallet-addr').style.display = 'block';
-        if(S.balance >= 10) document.getElementById('btn-withdraw').disabled = false;
-    }
-
-    function requestWith() {
-        const addr = document.getElementById('wallet-addr').value;
-        if(!addr) return showToast("⚠️ يرجى إدخال البيانات");
-        showToast("✅ تم إرسال طلب السحب للمراجعة");
-    }
-
-    // منطق النشاط الأخير (الرئيسية)
+    // نظام النشاط الوهمي بالأسفل
     const activities = [
-        "مستخدم سحب 15.00$ عبر USDT",
-        "تم دفع 10.20$ لـ محمد أ.",
-        "مستحدم جديد انضم للمنصة مكافأة 0.50$",
-        "سحب جديد بقيمة 25.00$ عبر فودافون كاش"
+        "مستخدم سحب 15.00$ عبر Binance",
+        "تم دفع 10.20$ لعميل مميز (USDT)",
+        "مستخدم جديد حصل على مكافأة تسجيل",
+        "سحب ناجح بقيمة 25.00$ عبر Binance"
     ];
     setInterval(() => {
         const rand = activities[Math.floor(Math.random() * activities.length)];
         document.getElementById('activity-text').innerText = rand;
-    }, 4000);
+    }, 4500);
 
     function save() {
         localStorage.setItem('n433_v3', JSON.stringify(S));
