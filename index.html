@@ -1,159 +1,99 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="mainHtml">
+<html lang="ar" dir="rtl" id="app">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&family=Inter:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #5d5fef;
-            --bg: #05070a;
-            --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
+        :root { --main: #5d5fef; --bg: #05070a; --glass: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.1); }
+        body { background: radial-gradient(circle at top, #1a1f35 0%, #05070a 100%); color: white; font-family: 'Tajawal', sans-serif; margin: 0; padding: 15px; min-height: 100vh; overflow-x: hidden; }
+
+        /* نظام الإعلانات القديم (النافذة المنبثقة للعد التنازلي) */
+        .ad-overlay {
+            display: none; position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center;
         }
+        .timer-circle { width: 100px; height: 100px; border: 5px solid var(--main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 0 20px var(--main); }
 
-        body {
-            background: radial-gradient(circle at top, #1a1f35 0%, #05070a 100%);
-            color: white; font-family: 'Tajawal', sans-serif;
-            margin: 0; padding: 15px; overflow-x: hidden;
-        }
+        /* ستايل Finova */
+        .main-card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 35px; padding: 40px 20px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .balance-val { font-family: 'Inter', sans-serif; font-size: 55px; font-weight: 900; margin: 10px 0; background: linear-gradient(180deg, #fff 30%, #5d5fef 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* نظام الإعلانات الخاص بك (Banner) */
-        .my-ad-container {
-            width: 100%;
-            background: linear-gradient(90deg, rgba(93,95,239,0.2), rgba(0,0,0,0));
-            border: 1px solid var(--primary);
-            border-radius: 15px;
-            padding: 12px;
-            margin-bottom: 20px;
-            display: flex; align-items: center; gap: 10px;
-            font-size: 13px;
-        }
+        /* نظام السحب (بينانس ودولار) */
+        .withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .method { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 20px; text-align: center; }
+        .method img { width: 50px; margin-bottom: 8px; }
 
-        /* بطاقة الرصيد (ستايل Finova الزجاجي) */
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 30px 15px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
-
-        .balance-num {
-            font-family: 'Inter', sans-serif; /* للأرقام فقط لتبدو احترافية */
-            font-size: 55px; font-weight: 900;
-            background: linear-gradient(to bottom, #fff, #888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* زر الإعلانات (Quick Earn) */
-        .earn-action {
-            width: 100%;
-            background: var(--primary);
-            border: none; padding: 18px;
-            border-radius: 20px;
-            color: white; font-size: 20px; font-weight: 900;
-            margin-top: 20px; cursor: pointer;
-            box-shadow: 0 0 20px rgba(93, 95, 239, 0.4);
-        }
-
-        /* نظام السحب (أيقونات فقط - بينانس ودولار) */
-        .withdraw-section {
-            margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
-        }
-
-        .method-item {
-            background: var(--glass);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 20px; text-align: center;
-        }
-
-        .method-item img { width: 45px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
-
-        /* شريط التنقل السفلي */
-        .nav-bottom {
-            position: fixed; bottom: 15px; left: 5%; width: 90%;
-            background: rgba(13, 17, 29, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 20px; border: 1px solid var(--border);
-            display: flex; justify-content: space-around; padding: 12px;
-        }
-        
-        .nav-icon { color: #555; text-decoration: none; font-weight: bold; font-size: 14px; }
-        .nav-icon.active { color: var(--primary); }
-
-        /* لغة إنجليزية */
-        [lang="en"] .tajawal { font-family: 'Inter', sans-serif; }
+        .btn-earn { width: 100%; background: var(--main); border: none; padding: 20px; border-radius: 22px; color: white; font-size: 20px; font-weight: 900; margin-top: 20px; box-shadow: 0 10px 20px rgba(93, 95, 239, 0.3); cursor: pointer; }
     </style>
 </head>
-<body id="bodyTag">
+<body>
 
-    <div style="text-align: left; margin-bottom: 10px;">
-        <button onclick="changeLang()" id="btnL" style="background:none; border:1px solid var(--border); color:white; padding:5px 10px; border-radius:10px;">English</button>
-    </div>
+    <button onclick="toggleLang()" style="background:var(--glass); color:white; border:1px solid var(--border); padding:5px 15px; border-radius:10px; margin-bottom:10px;" id="lBtn">English</button>
 
-    <div class="my-ad-container" onclick="window.open('لينك_اعلانك_هنا')">
-        <span style="background:var(--primary); padding:2px 8px; border-radius:5px; font-size:10px;">AD</span>
-        <marquee id="adText">إعلانك الخاص: اشترك الآن في قناة العروض الحصرية واربح مكافآت مضاعفة!</marquee>
-    </div>
-
-    <div class="glass-card">
-        <div style="color:#8e94a8; font-weight: bold;" id="txtBal">إجمالي الرصيد</div>
-        <div class="balance-num">$0.100</div>
-        
-        <div style="display:flex; justify-content: space-around; margin-top:20px;">
-            <div style="font-size:13px;"><span id="txtAds">إعلانات:</span> <b style="color:var(--primary)">2/10</b></div>
-            <div style="font-size:13px;"><span id="txtProfit">أرباح:</span> <b style="color:var(--primary)">$0.10</b></div>
+    <div class="main-card">
+        <div id="tTotal" style="color:#8e94a8; font-weight:bold">إجمالي الرصيد</div>
+        <div class="balance-val" id="balance">$0.100</div>
+        <div style="display:flex; justify-content:center; gap:20px; font-size:12px;">
+            <div><span id="tAds">إعلانات:</span> <span style="color:var(--main)">2/10</span></div>
+            <div><span id="tProfit">ربح اليوم:</span> <span style="color:var(--main)">$0.10</span></div>
         </div>
     </div>
 
-    <button class="earn-action" onclick="showMyAd()" id="btnEarn">
-        كسب سريع ($0.05)
-    </button>
+    <button class="btn-earn" onclick="startOldAdSystem()" id="bEarn">كسب سريع ($0.05)</button>
 
-    <div style="margin-top:25px; font-weight:bold; color:#8e94a8;" id="txtWith">نظام السحب</div>
-    <div class="withdraw-section">
-        <div class="method-item">
-            <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.png">
-            <div style="margin-top:10px; font-weight:900;">Binance</div>
-        </div>
-        <div class="method-item">
-            <img src="https://cryptologos.cc/logos/tether-usdt-logo.png">
-            <div style="margin-top:10px; font-weight:900;">USDT</div>
-        </div>
+    <div style="margin-top:30px; font-weight:900; color:#8e94a8;" id="tWith">وسائل السحب المتاحة</div>
+    <div class="withdraw-grid">
+        <div class="method"><img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.png"><div>Binance</div></div>
+        <div class="method"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png"><div>USDT</div></div>
     </div>
 
-    <div class="nav-bottom">
-        <a href="#" class="nav-icon active" id="n1">الرئيسية</a>
-        <a href="#" class="nav-icon" id="n2">المهام</a>
-        <a href="#" class="nav-icon" id="n3">الأصدقاء</a>
-        <a href="#" class="nav-icon" id="n4">الترتيب</a>
+    <div id="adOverlay" class="ad-overlay">
+        <div id="adSpace" style="margin-bottom: 20px; color: #5d5fef; font-weight: bold;">جاري تحميل إعلانك الخاص...</div>
+        <div class="timer-circle" id="timer">15</div>
+        <p id="adNotice">يرجى الانتظار للحصول على المكافأة</p>
+        <button id="collectBtn" onclick="collectReward()" style="display:none; background:#28a745; color:white; border:none; padding:15px 30px; border-radius:15px; font-weight:bold;">تأكيد المشاهدة وحصد الربح</button>
     </div>
 
     <script>
-        function changeLang() {
-            let b = document.getElementById('bodyTag');
-            let h = document.getElementById('mainHtml');
-            if(h.dir == "rtl") {
-                h.dir = "ltr"; h.lang = "en";
-                document.getElementById('btnL').innerText = "العربية";
-                document.getElementById('txtBal').innerText = "TOTAL BALANCE";
-                document.getElementById('btnEarn').innerText = "Quick Earn ($0.05)";
-                // تكملة باقي الترجمة...
-            } else {
-                h.dir = "rtl"; h.lang = "ar";
-                document.getElementById('btnL').innerText = "English";
-                document.getElementById('txtBal').innerText = "إجمالي الرصيد";
-                // ...
-            }
+        let balance = 0.100;
+        let timeLeft = 15;
+        let timerId;
+
+        // نظام الإعلانات القديم بالعد التنازلي
+        function startOldAdSystem() {
+            document.getElementById('adOverlay').style.display = 'flex';
+            timeLeft = 15;
+            document.getElementById('timer').innerText = timeLeft;
+            document.getElementById('collectBtn').style.display = 'none';
+            document.getElementById('adNotice').style.display = 'block';
+
+            timerId = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    document.getElementById('adNotice').style.display = 'none';
+                    document.getElementById('collectBtn').style.display = 'block';
+                }
+            }, 1000);
         }
 
-        function showMyAd() {
-            alert("هنا يتم تشغيل نظام إعلاناتك الخاص (Pop-up أو Redirect)");
+        function collectReward() {
+            balance += 0.05;
+            document.getElementById('balance').innerText = "$" + balance.toFixed(3);
+            document.getElementById('adOverlay').style.display = 'none';
+            alert("تمت إضافة $0.05 لرصيدك بنجاح!");
+        }
+
+        function toggleLang() {
+            let h = document.getElementById('app');
+            let isAr = h.dir == "rtl";
+            h.dir = isAr ? "ltr" : "rtl";
+            document.getElementById('lBtn').innerText = isAr ? "العربية" : "English";
+            document.getElementById('tTotal').innerText = isAr ? "TOTAL BALANCE" : "إجمالي الرصيد";
+            document.getElementById('bEarn').innerText = isAr ? "Quick Earn ($0.05)" : "كسب سريع ($0.05)";
+            // تكملة الترجمة...
         }
     </script>
 </body>
