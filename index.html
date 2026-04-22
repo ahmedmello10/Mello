@@ -1,240 +1,128 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Number 433 Ultra Premium</title>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-
-<style>
-:root {
-  --bg: #03040a;
-  --neon-blue: #5c5ff5;
-  --neon-glow: rgba(92, 95, 245, 0.6);
-  --gold: #c9a84c;
-  --glass: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-body {
-  background: var(--bg);
-  background-image: radial-gradient(circle at 50% -20%, #1a1c3d, #03040a);
-  color: white; font-family: 'Tajawal', sans-serif;
-  min-height: 100vh; padding: 25px 20px 120px;
-}
-
-/* التنسيق الجديد والحواف المظبوطة */
-.glass-card {
-  background: var(--glass);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px; /* حواف متناسقة */
-  padding: 25px; margin-bottom: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-/* تأثير النيون للمبالغ */
-.balance-val { 
-  font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; 
-  text-align: center; color: #fff;
-  text-shadow: 0 0 15px var(--neon-glow), 0 0 30px var(--neon-glow);
-}
-
-/* أزرار النيون */
-.btn-neon {
-  background: var(--neon-blue); color: white; border: none; width: 100%;
-  padding: 18px; border-radius: 16px; font-weight: 900; font-size: 16px;
-  cursor: pointer; position: relative; overflow: hidden;
-  box-shadow: 0 0 15px var(--neon-glow); transition: 0.3s;
-}
-.btn-neon:active { transform: scale(0.95); box-shadow: 0 0 5px var(--neon-glow); }
-
-.input-style {
-  width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border);
-  padding: 16px; border-radius: 14px; color: white; font-family: 'Tajawal';
-  margin: 10px 0 20px; transition: 0.3s;
-}
-.input-style:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-glow); }
-
-/* التنقل السفلي */
-.nav-bar {
-  position: fixed; bottom: 25px; left: 20px; right: 20px;
-  background: rgba(10, 11, 25, 0.9); backdrop-filter: blur(25px);
-  border: 1px solid var(--glass-border); border-radius: 22px;
-  display: flex; justify-content: space-around; padding: 12px; z-index: 1000;
-}
-.nav-btn { color: #555c7d; background: none; border: none; font-size: 11px; flex: 1; transition: 0.3s; }
-.nav-btn.active { color: var(--neon-blue); font-weight: 900; text-shadow: 0 0 8px var(--neon-glow); }
-
-.page { display: none; }
-.page.active { display: block; animation: fadeIn 0.5s ease-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
 </head>
 <body>
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-    <h2 style="font-family:'Syne'; letter-spacing:-1px;">NUM<span style="color:var(--neon-blue)">433</span></h2>
-    <div style="background:var(--glass); padding:6px 16px; border-radius:50px; font-size:12px; border:1px solid var(--glass-border); color: #00ffaa;">
-        ● <span id="u_name" style="color:white">...</span>
+<div class="glass-card neon-border" style="text-align: center;">
+    <p style="color: var(--text-dim);">رصيدك الحالي</p>
+    <h1 id="balance" style="font-size: 40px; margin: 10px 0;">0.00</h1>
+    <div style="display: flex; justify-content: space-around; font-size: 12px;">
+        <span>إعلانات اليوم: <b id="adsCount">0</b>/10</span>
+        <span>إحالات: <b id="refCount">0</b></span>
     </div>
 </div>
 
-<div id="p-home" class="page active">
-    <div class="glass-card">
-        <p style="text-align:center; color:#888ea8; font-size:13px; margin-bottom:10px;">الرصيد الكلي</p>
-        <div class="balance-val">$<span id="balance">0.000</span></div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:20px;">
-            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:12px; text-align:center;">
-                <span style="font-size:10px; color:#666;">إعلانات اليوم</span><br><b id="today_ads">0</b>/10
-            </div>
-            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:12px; text-align:center;">
-                <span style="font-size:10px; color:#666;">الأرباح</span><br><b id="total_earned">$0.00</b>
-            </div>
-        </div>
-    </div>
-    <button id="ad-btn" class="btn-neon" onclick="playAd()">▶️ كسب سريع ($0.10)</button>
+<div class="mystery-box btn-action" id="luck-box" onclick="tryOpenBox()">
+    <span style="font-size: 30px;">🎁</span>
+    <h4 id="box-text">صندوق الحظ اليومي</h4>
+    <p id="box-sub" style="font-size: 10px; color: var(--neon-purple);">شاهد 3 إعلانات للفتح</p>
 </div>
 
-<div id="p-wallet" class="page">
-    <h3 style="margin-bottom:20px;">سحب الأرباح</h3>
-    <div class="glass-card">
-        <p style="font-size:12px; color:var(--gold); margin-bottom:15px;">⚠️ الحد الأدنى للسحب هو 10.00$</p>
-        <label>عنوان المحفظة أو Binance ID</label>
-        <input type="text" id="w-addr" class="input-style" placeholder="مثال: TXXX... أو 6619...">
-        <label>المبلغ المطلوب</label>
-        <input type="number" id="w-amnt" class="input-style" placeholder="10.00">
-        <button id="withdraw-btn" class="btn-neon" onclick="handleWithdraw()">إرسال طلب السحب</button>
-    </div>
+<button class="glass-card btn-action neon-border" style="width: 100%; margin-top: 15px; background: var(--neon-blue); color: #000; font-weight: bold;" onclick="playAd()">
+    ▶️ شاهد إعلان واربح $0.10
+</button>
+
+<div class="glass-card" id="withdrawal-section">
+    <h4>سحب الأرباح (الحد الأدنى $10)</h4>
+    <select id="withdraw-method" class="btn-action" style="width: 100%; padding: 10px; margin: 10px 0; background: #000; color: #fff; border-radius: 10px;">
+        <option value="Binance">Binance Pay ID</option>
+        <option value="Trust Wallet">Trust Wallet (USDT-TRC20)</option>
+    </select>
+    <input type="text" id="wallet-addr" placeholder="العنوان أو الآيدي" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 10px; border: none;">
+    <button class="btn-action" style="width: 100%; background: var(--gold); padding: 12px; border-radius: 10px; border: none;" onclick="processWithdraw()">طلب سحب</button>
 </div>
 
-<div id="p-refer" class="page">
-    <div class="glass-card">
-        <h4 style="color:var(--gold)">نظام الإحالة</h4>
-        <p style="font-size:12px; color:#888; margin-top:10px;">انسخ رابطك وشاركه لتربح عمولة عن كل صديق.</p>
-    </div>
-    <div class="glass-card">
-        <div id="ref-link" style="font-size:11px; word-break:break-all; color:var(--neon-blue); background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; margin-bottom:15px;"></div>
-        <button class="btn-neon" onclick="copyRef()">نسخ الرابط</button>
-    </div>
+<div class="glass-card">
+    <p style="font-size: 12px;">رابط الإحالة الخاص بك (اربح $0.50 لكل صديق):</p>
+    <code id="ref-url" style="font-size: 10px; color: var(--neon-blue);"></code>
+    <button onclick="copyRef()" class="btn-action" style="display: block; margin-top: 10px; background: none; border: 1px solid var(--text-dim); color: #fff; padding: 5px 10px; border-radius: 5px;">نسخ الرابط</button>
 </div>
 
-<nav class="nav-bar">
-    <button class="nav-btn active" onclick="showTab('p-home', this)">🏠<br>الرئيسية</button>
-    <button class="nav-btn" onclick="showTab('p-refer', this)">👥<br>الدعوات</button>
-    <button class="nav-btn" onclick="showTab('p-wallet', this)">💰<br>المحفظة</button>
-</nav>
+<div style="height: 80px;"></div>
 
 <script>
-const tg = window.Telegram.WebApp;
-tg.expand();
+    const tg = window.Telegram.WebApp;
+    const ADMIN_ID = "6619233998"; 
+    const BOT_TOKEN = "8718619320:AAEYA7qmpnSx4rxPdo9RdNesZ0Yzz5GaaIU";
 
-// --- إعداداتك الخاصة (التوكن والآيدي) ---
-const ADMIN_ID = "6619233998"; 
-const BOT_TOKEN = "8718619320:AAEYA7qmpnSx4rxPdo9RdNesZ0Yzz5GaaIU";
+    let S = JSON.parse(localStorage.getItem('user_data')) || {
+        balance: 0.00,
+        adsToday: 0,
+        referrals: 0,
+        boxStep: 0
+    };
 
-// --- نظام الإعلانات التلقائي (أول ما يدخل وكل 5 دقايق) ---
-function startAutoAds() {
-    show_10908620({
-        type: 'inApp',
-        inAppSettings: { frequency: 1, capping: 0.1, interval: 300, timeout: 1, everyPage: false }
-    });
-}
-startAutoAds(); // ظهور فوري
+    // نظام الإحالة الواقعي (بيزود فعلاً لو الرابط فيه ID جديد)
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.has('start') && !localStorage.getItem('referred')) {
+        S.balance += 0.50; 
+        localStorage.setItem('referred', 'true');
+        save();
+    }
 
-// --- قاعدة البيانات المحلية ---
-let D = JSON.parse(localStorage.getItem('n433_final')) || {
-    balance: 0.00,
-    adsToday: 0,
-    totalEarned: 0.00,
-    lastDate: new Date().toLocaleDateString()
-};
+    function save() {
+        localStorage.setItem('user_data', JSON.stringify(S));
+        document.getElementById('balance').innerText = S.balance.toFixed(2);
+        document.getElementById('adsCount').innerText = S.adsToday;
+        document.getElementById('refCount').innerText = S.referrals;
+        document.getElementById('ref-url').innerText = `https://t.me/Number433bot?start=${tg.initDataUnsafe.user?.id || 'user'}`;
+    }
 
-if(D.lastDate !== new Date().toLocaleDateString()) {
-    D.adsToday = 0;
-    D.lastDate = new Date().toLocaleDateString();
+    // الإعلان التلقائي (كل 5 دقايق وظهور فوري)
+    function autoAd() {
+        show_10908620().then(() => console.log("Auto Ad Viewed"));
+    }
+    setInterval(autoAd, 300000); // 5 mins
+    autoAd(); // أول دخول
+
+    function playAd() {
+        if(S.adsToday >= 10) return alert("خلصت إعلانات النهاردة!");
+        show_10908620().then(() => {
+            S.balance += 0.10;
+            S.adsToday++;
+            save();
+        });
+    }
+
+    function tryOpenBox() {
+        if(S.boxStep < 3) {
+            show_10908620().then(() => {
+                S.boxStep++;
+                document.getElementById('box-sub').innerText = `باقي ${3 - S.boxStep} إعلانات`;
+                if(S.boxStep === 3) {
+                    const prize = 0.50; 
+                    S.balance += prize;
+                    S.boxStep = 0;
+                    alert("مبروك! فتحت الصندوق وكسبت $0.50");
+                    save();
+                }
+            });
+        }
+    }
+
+    function processWithdraw() {
+        const addr = document.getElementById('wallet-addr').value;
+        const method = document.getElementById('withdraw-method').value;
+        if(S.balance < 10) return alert("لازم تجمع 10$ الأول!");
+        if(!addr) return alert("اكتب العنوان!");
+
+        const msg = `💰 *طلب سحب*%0A👤 المستخدم: ${tg.initDataUnsafe.user?.first_name}%0A🆔 الآيدي: ${tg.initDataUnsafe.user?.id}%0A💵 المبلغ: ${S.balance}$%0A🏦 الطريقة: ${method}%0A📍 العنوان: ${addr}`;
+        
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${msg}&parse_mode=Markdown`)
+        .then(() => {
+            alert("تم إرسال الطلب للمدير!");
+            S.balance = 0;
+            save();
+        });
+    }
+
     save();
-}
-
-function save() {
-    localStorage.setItem('n433_final', JSON.stringify(D));
-    updateUI();
-}
-
-function updateUI() {
-    document.getElementById('balance').innerText = D.balance.toFixed(3);
-    document.getElementById('today_ads').innerText = D.adsToday;
-    document.getElementById('total_earned').innerText = "$" + D.totalEarned.toFixed(2);
-    if(D.adsToday >= 10) document.getElementById('ad-btn').disabled = true;
-}
-
-// بيانات العميل
-const user = tg.initDataUnsafe?.user;
-document.getElementById('u_name').innerText = user?.first_name || "Guest";
-const myRef = `https://t.me/Number433bot?start=${user?.id || '000'}`;
-document.getElementById('ref-link').innerText = myRef;
-
-function playAd() {
-    if(D.adsToday >= 10) return alert("انتهت إعلانات اليوم!");
-    show_10908620().then(() => {
-        D.balance += 0.10;
-        D.totalEarned += 0.10;
-        D.adsToday += 1;
-        save();
-    });
-}
-
-// --- نظام إرسال معلومات السحب إليك ---
-function handleWithdraw() {
-    const addr = document.getElementById('w-addr').value;
-    const amnt = parseFloat(document.getElementById('w-amnt').value);
-
-    if (D.balance < 10 || amnt < 10) {
-        alert("⚠️ عذراً، يجب أن يكون رصيدك 10$ على الأقل للسحب.");
-        return;
-    }
-
-    if (amnt > D.balance) {
-        alert("⚠️ المبلغ المطلوب أكبر من رصيدك الحالي.");
-        return;
-    }
-
-    if (!addr) {
-        alert("⚠️ يرجى إدخال عنوان المحفظة.");
-        return;
-    }
-
-    // إرسال البيانات لتليجرام الخاص بك
-    const message = `🚨 *طلب سحب جديد* 🚨%0A%0A👤 الاسم: ${user?.first_name || 'غير معروف'}%0A🆔 الآيدي: ${user?.id || 'لا يوجد'}%0A💰 المبلغ: $${amnt}%0A🏦 المحفظة: ${addr}`;
-    
-    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${message}&parse_mode=Markdown`)
-    .then(() => {
-        alert("✅ تم إرسال طلبك بنجاح! سيتم التحقق من البيانات.");
-        D.balance -= amnt;
-        save();
-    })
-    .catch(() => alert("⚠️ فشل الاتصال بالسيرفر. حاول لاحقاً."));
-}
-
-function showTab(id, btn) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active');
-}
-
-function copyRef() {
-    navigator.clipboard.writeText(myRef);
-    alert("تم النسخ!");
-}
-
-updateUI();
 </script>
 </body>
 </html>
