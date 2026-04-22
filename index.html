@@ -1,100 +1,281 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="app">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&family=Inter:wght@700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --main: #5d5fef; --bg: #05070a; --glass: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.1); }
-        body { background: radial-gradient(circle at top, #1a1f35 0%, #05070a 100%); color: white; font-family: 'Tajawal', sans-serif; margin: 0; padding: 15px; min-height: 100vh; overflow-x: hidden; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>EarnVault Premium</title>
 
-        /* نظام الإعلانات القديم (النافذة المنبثقة للعد التنازلي) */
-        .ad-overlay {
-            display: none; position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .timer-circle { width: 100px; height: 100px; border: 5px solid var(--main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 0 20px var(--main); }
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
 
-        /* ستايل Finova */
-        .main-card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 35px; padding: 40px 20px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .balance-val { font-family: 'Inter', sans-serif; font-size: 55px; font-weight: 900; margin: 10px 0; background: linear-gradient(180deg, #fff 30%, #5d5fef 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tajawal:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0b14;
+    --bg2: #0f1120;
+    --bg3: #141729;
+    --card: #181b2e;
+    --card2: #1e2238;
+    --purple: #5c5ff5;
+    --purple2: #7b7ef8;
+    --purple-glow: rgba(92,95,245,0.25);
+    --green: #00c48c;
+    --green2: #00e0a3;
+    --text: #ffffff;
+    --text2: #a0a8c0;
+    --text3: #5c6380;
+    --cyan: #00d4ff;
+    --border: rgba(255,255,255,0.06);
+    --radius: 16px;
+    --radius2: 12px;
+  }
 
-        /* نظام السحب (بينانس ودولار) */
-        .withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .method { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 20px; text-align: center; }
-        .method img { width: 50px; margin-bottom: 8px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-        .btn-earn { width: 100%; background: var(--main); border: none; padding: 20px; border-radius: 22px; color: white; font-size: 20px; font-weight: 900; margin-top: 20px; box-shadow: 0 10px 20px rgba(93, 95, 239, 0.3); cursor: pointer; }
-    </style>
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    min-height: 100vh;
+    max-width: 430px;
+    margin: 0 auto;
+    overflow-x: hidden;
+    position: relative;
+    direction: rtl;
+  }
+
+  /* Background orbs */
+  body::before {
+    content: ''; position: fixed; width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(92,95,245,0.15) 0%, transparent 70%);
+    top: -80px; right: -80px; pointer-events: none; z-index: 0;
+  }
+
+  /* ===== PAGES ===== */
+  .page { display: none; flex-direction: column; min-height: calc(100vh - 70px); padding: 20px 16px 24px; position: relative; z-index: 1; animation: fadeIn 0.3s ease; }
+  .page.active { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ===== NAV BAR ===== */
+  .navbar {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    background: rgba(15,17,32,0.95); backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 10px 0 16px; z-index: 100;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    cursor: pointer; padding: 4px 16px; border-radius: 12px;
+    transition: all 0.2s; color: var(--text3); font-size: 11px; font-weight: 500;
+  }
+  .nav-item svg { width: 22px; height: 22px; transition: all 0.2s; }
+  .nav-item.active { color: var(--purple2); }
+  .nav-item.active svg { filter: drop-shadow(0 0 6px var(--purple)); }
+
+  /* ===== BALANCE CARD ===== */
+  .balance-card {
+    background: linear-gradient(135deg, var(--purple) 0%, #4040c8 50%, #3535aa 100%);
+    border-radius: 20px; padding: 22px 20px 20px;
+    position: relative; overflow: hidden; margin-bottom: 14px;
+    box-shadow: 0 8px 32px rgba(92,95,245,0.35);
+  }
+  .balance-label { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 6px; }
+  .balance-amount { font-family: 'Syne', sans-serif; font-size: 38px; font-weight: 800; letter-spacing: -1px; direction: ltr; }
+  .balance-stats { display: flex; gap: 0; margin-top: 18px; }
+  .bstat { flex: 1; text-align: center; }
+  .bstat:not(:last-child) { border-left: 1px solid rgba(255,255,255,0.15); }
+  .bstat-val { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+  .bstat-label { font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+
+  /* ===== TASKS ===== */
+  .task-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius2); padding: 14px 14px;
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 10px; cursor: pointer; transition: all 0.2s;
+  }
+  .task-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, #1a2a40, #0d1e35);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .task-info { flex: 1; }
+  .task-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .task-reward { font-size: 12px; color: var(--green2); font-weight: 600; }
+  .btn-start { background: var(--purple); color: white; border: none; padding: 6px 15px; border-radius: 8px; font-size: 12px; font-weight: bold; }
+
+  /* ===== TOAST ===== */
+  #toast {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px);
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 20px; font-size: 14px; color: var(--text);
+    z-index: 999; transition: 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+</style>
 </head>
 <body>
 
-    <button onclick="toggleLang()" style="background:var(--glass); color:white; border:1px solid var(--border); padding:5px 15px; border-radius:10px; margin-bottom:10px;" id="lBtn">English</button>
+<div id="toast"></div>
 
-    <div class="main-card">
-        <div id="tTotal" style="color:#8e94a8; font-weight:bold">إجمالي الرصيد</div>
-        <div class="balance-val" id="balance">$0.100</div>
-        <div style="display:flex; justify-content:center; gap:20px; font-size:12px;">
-            <div><span id="tAds">إعلانات:</span> <span style="color:var(--main)">2/10</span></div>
-            <div><span id="tProfit">ربح اليوم:</span> <span style="color:var(--main)">$0.10</span></div>
-        </div>
+<div class="page active" id="page-home">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <div>
+      <h2 style="font-family:'Syne'">أهلاً، <span id="u_name" style="color:var(--purple2)">...</span> 🪽</h2>
+      <p style="color:var(--text2); font-size:13px;">جاهز لربح المال اليوم؟</p>
     </div>
+  </div>
 
-    <button class="btn-earn" onclick="startOldAdSystem()" id="bEarn">كسب سريع ($0.05)</button>
-
-    <div style="margin-top:30px; font-weight:900; color:#8e94a8;" id="tWith">وسائل السحب المتاحة</div>
-    <div class="withdraw-grid">
-        <div class="method"><img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.png"><div>Binance</div></div>
-        <div class="method"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png"><div>USDT</div></div>
+  <div class="balance-card">
+    <div class="balance-label">إجمالي الرصيد</div>
+    <div class="balance-amount">$<span id="home-balance">0.000</span></div>
+    <div class="balance-stats">
+      <div class="bstat"><div class="bstat-val" id="home-ads">0</div><div class="bstat-label">إعلانات اليوم</div></div>
+      <div class="bstat"><div class="bstat-val" id="home-refs">0</div><div class="bstat-label">إحالات</div></div>
     </div>
+  </div>
 
-    <div id="adOverlay" class="ad-overlay">
-        <div id="adSpace" style="margin-bottom: 20px; color: #5d5fef; font-weight: bold;">جاري تحميل إعلانك الخاص...</div>
-        <div class="timer-circle" id="timer">15</div>
-        <p id="adNotice">يرجى الانتظار للحصول على المكافأة</p>
-        <button id="collectBtn" onclick="collectReward()" style="display:none; background:#28a745; color:white; border:none; padding:15px 30px; border-radius:15px; font-weight:bold;">تأكيد المشاهدة وحصد الربح</button>
+  <h3 style="margin: 20px 0 10px; font-size: 16px;">مهام اليوم (10 متبقية)</h3>
+  <div id="home-task-list"></div>
+</div>
+
+<div class="page" id="page-tasks">
+  <h2 style="font-family:'Syne'; margin-bottom:20px;">المهام</h2>
+  <div id="main-task-list"></div>
+</div>
+
+<div class="page" id="page-refer">
+    <h2 style="font-family:'Syne'; margin-bottom:20px;">نظام الإحالة</h2>
+    <div style="background:var(--card); padding:20px; border-radius:20px; border:1px solid var(--border);">
+        <p style="font-size:14px; margin-bottom:10px;">رابط الدعوة الخاص بك:</p>
+        <div id="ref-link" style="background:var(--bg2); padding:15px; border-radius:10px; font-size:11px; word-break:break-all; margin-bottom:15px; color:var(--purple2)"></div>
+        <button onclick="copyRef()" style="width:100%; padding:15px; background:var(--purple); border:none; border-radius:12px; color:white; font-weight:bold;">نسخ الرابط</button>
     </div>
+</div>
 
-    <script>
-        let balance = 0.100;
-        let timeLeft = 15;
-        let timerId;
+<div class="page" id="page-wallet">
+    <h2 style="font-family:'Syne'; margin-bottom:20px;">المحفظة</h2>
+    <div class="balance-card" style="padding:15px;">
+        <p>الرصيد القابل للسحب: $<span id="wallet-balance">0.000</span></p>
+    </div>
+    <p style="color:var(--text3); font-size:12px; text-align:center; margin-top:20px;">الحد الأدنى للسحب هو 10$</p>
+</div>
 
-        // نظام الإعلانات القديم بالعد التنازلي
-        function startOldAdSystem() {
-            document.getElementById('adOverlay').style.display = 'flex';
-            timeLeft = 15;
-            document.getElementById('timer').innerText = timeLeft;
-            document.getElementById('collectBtn').style.display = 'none';
-            document.getElementById('adNotice').style.display = 'block';
+<div class="page" id="page-profile">
+    <h2 style="font-family:'Syne'; margin-bottom:20px;">الملف الشخصي</h2>
+    <div style="text-align:center; padding:30px; background:var(--card); border-radius:20px;">
+        <div style="width:80px; height:80px; background:var(--purple); border-radius:50%; margin:0 auto 15px; display:flex; align-items:center; justify-content:center; font-size:30px;">👤</div>
+        <h3 id="profile-name">User</h3>
+        <p style="color:var(--text3)" id="profile-id">ID: #000000</p>
+    </div>
+</div>
 
-            timerId = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer').innerText = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(timerId);
-                    document.getElementById('adNotice').style.display = 'none';
-                    document.getElementById('collectBtn').style.display = 'block';
-                }
-            }, 1000);
+<nav class="navbar">
+  <div class="nav-item active" onclick="goTo('home', this)">🏠<span>الرئيسية</span></div>
+  <div class="nav-item" onclick="goTo('tasks', this)">📋<span>المهام</span></div>
+  <div class="nav-item" onclick="goTo('refer', this)">👥<span>إحالة</span></div>
+  <div class="nav-item" onclick="goTo('wallet', this)">💰<span>المحفظة</span></div>
+  <div class="nav-item" onclick="goTo('profile', this)">👤<span>بروفايل</span></div>
+</nav>
+
+<script>
+// --- إعدادات الإعلانات ---
+show_10908620({ type: 'inApp', inAppSettings: { frequency: 2, interval: 30 } });
+
+// --- حالة المستخدم ---
+let S = JSON.parse(localStorage.getItem('earn_data_v3')) || {
+    balance: 0.000,
+    adsToday: 0,
+    lastDate: new Date().toLocaleDateString()
+};
+
+// تصفير كل 24 ساعة
+if (S.lastDate !== new Date().toLocaleDateString()) {
+    S.adsToday = 0;
+    S.lastDate = new Date().toLocaleDateString();
+    save();
+}
+
+function save() {
+    localStorage.setItem('earn_data_v3', JSON.stringify(S));
+    updateUI();
+}
+
+function updateUI() {
+    document.getElementById('home-balance').innerText = S.balance.toFixed(3);
+    document.getElementById('wallet-balance').innerText = S.balance.toFixed(3);
+    document.getElementById('home-ads').innerText = S.adsToday;
+    renderTasks();
+}
+
+function renderTasks() {
+    const containers = [document.getElementById('home-task-list'), document.getElementById('main-task-list')];
+    const remaining = 10 - S.adsToday;
+    
+    containers.forEach(c => {
+        if(!c) return;
+        c.innerHTML = '';
+        if(remaining <= 0) {
+            c.innerHTML = '<p style="text-align:center; color:var(--text3); padding:20px;">تم إكمال مهام اليوم ✅ عد غداً!</p>';
+            return;
         }
-
-        function collectReward() {
-            balance += 0.05;
-            document.getElementById('balance').innerText = "$" + balance.toFixed(3);
-            document.getElementById('adOverlay').style.display = 'none';
-            alert("تمت إضافة $0.05 لرصيدك بنجاح!");
+        for(let i=1; i<=remaining; i++) {
+            c.innerHTML += `
+                <div class="task-item" onclick="watchAd()">
+                    <div class="task-icon">💎</div>
+                    <div class="task-info">
+                        <div class="task-name">مشاهدة إعلان مكافأة #${S.adsToday + i}</div>
+                        <div class="task-reward">الربح: +$0.050</div>
+                    </div>
+                    <button class="btn-start">ابدأ</button>
+                </div>`;
         }
+    });
+}
 
-        function toggleLang() {
-            let h = document.getElementById('app');
-            let isAr = h.dir == "rtl";
-            h.dir = isAr ? "ltr" : "rtl";
-            document.getElementById('lBtn').innerText = isAr ? "العربية" : "English";
-            document.getElementById('tTotal').innerText = isAr ? "TOTAL BALANCE" : "إجمالي الرصيد";
-            document.getElementById('bEarn').innerText = isAr ? "Quick Earn ($0.05)" : "كسب سريع ($0.05)";
-            // تكملة الترجمة...
-        }
-    </script>
+function watchAd() {
+    if(S.adsToday >= 10) return showToast("وصلت للحد الأقصى اليوم");
+    
+    show_10908620().then(() => {
+        S.balance += 0.050;
+        S.adsToday += 1;
+        save();
+        showToast("💰 مبروك! ربحت $0.050");
+    }).catch(() => showToast("⚠️ يجب إكمال الإعلان"));
+}
+
+// تليجرام
+const tg = window.Telegram.WebApp;
+tg.expand();
+document.getElementById('u_name').innerText = tg.initDataUnsafe?.user?.first_name || "Guest";
+document.getElementById('profile-name').innerText = tg.initDataUnsafe?.user?.first_name || "Guest";
+document.getElementById('profile-id').innerText = "ID: #" + (tg.initDataUnsafe?.user?.id || "000000");
+
+const botLink = `https://t.me/Number433bot?start=${tg.initDataUnsafe?.user?.id || '6619233998'}`;
+document.getElementById('ref-link').innerText = botLink;
+
+function copyRef() {
+    navigator.clipboard.writeText(botLink);
+    showToast("🔗 تم نسخ الرابط");
+}
+
+function goTo(page, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+updateUI();
+</script>
 </body>
 </html>
