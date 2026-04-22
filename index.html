@@ -3,272 +3,249 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>EarnBot Pro</title>
+<title>Number 433 Premium</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --bg: #070912;
-  --bg-gradient: linear-gradient(180deg, #070912 0%, #0f1123 100%);
-  --card: #161a33;
-  --card-border: rgba(255,255,255,0.08);
-  --primary: #3b37ff;
-  --primary-light: #5c5ff5;
-  --gold: #c9a84c;
-  --gold-light: #f0c96a;
-  --success: #10b981;
-  --text-main: #ffffff;
-  --text-dim: #8e92b2;
+  --bg: #05060e;
+  --primary: #5c5ff5;
+  --primary-glow: rgba(92, 95, 245, 0.4);
+  --accent: #c9a84c;
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --text: #ffffff;
+  --text-dim: #9499c3;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
 body {
-  background: var(--bg-gradient);
-  color: var(--text-main);
+  background-color: var(--bg);
+  background-image: radial-gradient(circle at top right, #16183d, #05060e);
+  color: var(--text);
   font-family: 'Tajawal', sans-serif;
   min-height: 100vh;
-  max-width: 430px;
-  margin: 0 auto;
+  padding: 20px 15px 120px;
   overflow-x: hidden;
-  padding-bottom: 100px;
 }
 
-/* Header Style */
-.header {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(7, 9, 18, 0.8);
-  backdrop-filter: blur(12px);
-  padding: 15px 20px;
-  display: flex; justify-content: space-between; align-items: center;
-  border-bottom: 1px solid var(--card-border);
+/* Header */
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 0 5px; }
+.logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -1px; }
+.logo span { color: var(--primary); }
+.user-pill { background: var(--glass); border: 1px solid var(--glass-border); padding: 5px 12px; border-radius: 50px; font-size: 12px; display: flex; align-items: center; gap: 8px; }
+.dot { width: 6px; height: 6px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 10px #00ff88; }
+
+/* Dashboard Card */
+.main-card {
+  background: linear-gradient(145deg, rgba(92,95,245,0.15) 0%, rgba(0,0,0,0) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 32px; padding: 30px 20px;
+  margin-bottom: 25px; text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.balance-label { font-size: 13px; color: var(--text-dim); margin-bottom: 10px; display: block; letter-spacing: 1px; }
+.balance-val { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; text-shadow: 0 0 20px var(--primary-glow); }
+
+/* Quick Actions */
+.grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+.stat-box { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px; border-radius: 20px; text-align: center; }
+.stat-box span { font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 5px; }
+.stat-box b { font-family: 'Syne', sans-serif; color: var(--accent); }
+
+/* Buttons */
+.btn-premium {
+  background: var(--primary); color: white; border: none; width: 100%;
+  padding: 18px; border-radius: 20px; font-weight: 900; font-size: 16px;
+  cursor: pointer; box-shadow: 0 10px 20px var(--primary-glow);
+  transition: transform 0.2s;
+}
+.btn-premium:active { transform: scale(0.97); }
+
+/* Withdrawal Section - Real UI */
+.withdraw-form {
+  background: var(--glass); border: 1px solid var(--glass-border);
+  border-radius: 24px; padding: 20px; margin-top: 20px;
+  display: none; animation: slideIn 0.3s ease;
+}
+.input-group { margin-bottom: 15px; }
+.input-group label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 8px; }
+.input-group input {
+  width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
+  padding: 14px; border-radius: 12px; color: white; font-family: 'Tajawal';
 }
 
-.logo { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--gold-light); }
-.logo span { color: var(--primary-light); }
-
-/* User Profile Card */
-.user-card {
-  margin: 20px;
-  background: linear-gradient(135deg, #161a33 0%, #0b0e1f 100%);
-  border: 1px solid var(--card-border);
-  border-radius: 24px; padding: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+/* Nav Bar */
+.nav-bar {
+  position: fixed; bottom: 25px; left: 15px; right: 15px;
+  background: rgba(20, 22, 45, 0.85); backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border); border-radius: 25px;
+  display: flex; justify-content: space-around; padding: 10px; z-index: 1000;
 }
+.nav-btn { color: var(--text-dim); background: none; border: none; padding: 10px; font-size: 11px; cursor: pointer; transition: 0.3s; }
+.nav-btn.active { color: var(--primary); font-weight: 900; transform: translateY(-5px); }
 
-.user-flex { display: flex; justify-content: space-between; align-items: center; }
-.user-meta h4 { font-family: 'Syne', sans-serif; font-size: 16px; margin-bottom: 4px; }
-.user-meta p { font-size: 11px; color: var(--text-dim); }
-
-.balance-display { text-align: left; }
-.balance-display .label { font-size: 10px; color: var(--text-dim); display: block; }
-.balance-display .val { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--gold-light); }
-
-/* Navigation Bottom */
-.navbar {
-  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 100%; max-width: 430px;
-  background: rgba(22, 26, 51, 0.95);
-  backdrop-filter: blur(20px);
-  display: flex; justify-content: space-around;
-  padding: 12px 0 25px; border-top: 1px solid var(--card-border);
-  z-index: 200;
-}
-
-.nav-item { color: var(--text-dim); text-align: center; font-size: 10px; cursor: pointer; border: none; background: none; flex: 1; }
-.nav-item.active { color: var(--primary-light); font-weight: bold; }
-.nav-item svg { width: 22px; height: 22px; margin-bottom: 4px; }
-
-/* Content Pages */
-.page { display: none; padding: 0 20px; animation: slideUp 0.4s ease-out; }
-.page.active { display: block; }
-
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Ad & Task Boxes */
-.card-item {
-  background: var(--card);
-  border-radius: 20px; padding: 18px;
-  margin-bottom: 15px; border: 1px solid var(--card-border);
-  display: flex; justify-content: space-between; align-items: center;
-}
-
-.card-info h5 { font-size: 15px; margin-bottom: 5px; }
-.card-info p { font-size: 12px; color: var(--success); font-weight: 700; }
-
-.btn-main {
-  background: var(--primary);
-  color: white; border: none; padding: 10px 20px;
-  border-radius: 12px; font-weight: bold; font-family: 'Tajawal';
-}
-
-/* Toast Notification */
-.toast {
-  position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-  background: var(--card); border: 1px solid var(--gold);
-  padding: 12px 25px; border-radius: 15px; z-index: 1000;
-  transition: 0.5s; font-weight: bold;
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
+/* General */
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 </style>
 </head>
 <body>
 
-<div id="toast" class="toast">تمت العملية بنجاح!</div>
-
 <div class="header">
-    <div class="logo">Earn<span>Bot</span></div>
-    <div style="font-size: 12px; color: var(--text-dim);">V 2.0</div>
+    <div class="logo">NUM<span>433</span></div>
+    <div class="user-pill"><div class="dot"></div> <span id="u_name">Loading...</span></div>
 </div>
 
-<div class="user-card">
-    <div class="user-flex">
-        <div class="user-meta">
-            <h4 id="u_name">جاري التحميل...</h4>
-            <p id="u_id">ID: 000000000</p>
-        </div>
-        <div class="balance-display">
-            <span class="label">الرصيد المتاح</span>
-            <span class="val">$<span id="balance">0.000</span></span>
-        </div>
+<div id="p-home" class="page active">
+    <div class="main-card">
+        <span class="balance-label">رصيدك الحالي</span>
+        <div class="balance-val">$<span id="balance">0.000</span></div>
     </div>
-</div>
 
-<div id="page-home" class="page active">
-    <h3 style="margin-bottom:15px; font-size:16px;">إعلانات الفيديو</h3>
-    <div class="card-item">
-        <div class="card-info">
-            <h5>مشاهدة إعلان مكافأة</h5>
-            <p>+$0.20</p>
-        </div>
-        <button class="btn-main" onclick="playRewardedAd()">مشاهدة الآن</button>
+    <div class="grid-stats">
+        <div class="stat-box"><span>الإعلانات</span><b id="st-ads">0</b></div>
+        <div class="stat-box"><span>الإحالات</span><b id="st-ref">0</b></div>
     </div>
-    
-    <div style="display: flex; gap: 10px;">
-        <div class="card-item" style="flex:1; flex-direction:column; align-items:start;">
-            <span style="font-size:10px; color:var(--text-dim)">مشاهدات اليوم</span>
-            <b id="ads_count">0</b>
-        </div>
-        <div class="card-item" style="flex:1; flex-direction:column; align-items:start;">
-            <span style="font-size:10px; color:var(--text-dim)">إجمالي الربح</span>
-            <b id="total_earn">$0.00</b>
-        </div>
+
+    <button class="btn-premium" onclick="runRewardedAd()">▶️ كسب سريع ($0.10)</button>
+
+    <div style="margin-top: 30px;">
+        <h4 style="margin-bottom: 15px; font-size: 14px;">مهام الفيديو اليومية</h4>
+        <div id="tasks-container"></div>
     </div>
 </div>
 
-<div id="page-refer" class="page">
-    <h3 style="margin-bottom:15px;">إحالة الأصدقاء</h3>
-    <div class="card-item" style="background: var(--success); border:none; color:black; flex-direction:column; align-items:start; gap:10px;">
-        <b>اكسب $0.50 عن كل صديق ينضم!</b>
-        <p style="font-size:11px; color:rgba(0,0,0,0.6)">سيتم إضافة الرصيد فور تسجيل الصديق في البوت.</p>
-    </div>
-    <div class="card-item" style="flex-direction:column; align-items:start; gap:10px;">
-        <span style="font-size:12px; color:var(--text-dim)">رابط الدعوة الخاص بك:</span>
-        <div id="ref_link" style="font-size:11px; color:var(--primary-light); background:rgba(0,0,0,0.3); padding:10px; border-radius:10px; width:100%; word-break:break-all;">
-            https://t.me/Number433bot?start=...
+<div id="p-wallet" class="page">
+    <h3 style="margin-bottom: 20px;">سحب الأرباح</h3>
+    <div class="grid-stats" style="grid-template-columns: 1fr;">
+        <div class="stat-box" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="openWithdraw('Binance Pay')">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg" width="25">
+                <b>Binance Pay</b>
+            </div>
+            <span>إختر ❯</span>
         </div>
-        <button class="btn-main" style="width:100%" onclick="copyLink()">نسخ الرابط</button>
+        <div class="stat-box" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="openWithdraw('USDT (TRC20)')">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="25">
+                <b>USDT (TRC20)</b>
+            </div>
+            <span>إختر ❯</span>
+        </div>
+    </div>
+
+    <div id="withdraw-form" class="withdraw-form">
+        <h4 id="selected-method" style="color:var(--primary); margin-bottom:15px;"></h4>
+        <div class="input-group">
+            <label>عنوان المحفظة أو Binance ID</label>
+            <input type="text" id="w-address" placeholder="أدخل العنوان هنا...">
+        </div>
+        <div class="input-group">
+            <label>المبلغ المراد سحبه (بحد أدنى $10)</label>
+            <input type="number" id="w-amount" placeholder="0.00">
+        </div>
+        <button class="btn-premium" onclick="processWithdraw()">تأكيد طلب السحب</button>
     </div>
 </div>
 
-<div id="page-wallet" class="page">
-    <h3 style="margin-bottom:15px;">سحب الأرباح</h3>
-    <div class="card-item" onclick="selectMethod('Binance')">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg" width="25">
-        <div style="flex:1; margin-right:15px;">Binance Pay</div>
-        <span style="color:var(--text-dim)">❯</span>
+<div id="p-refer" class="page">
+    <div class="main-card" style="background: linear-gradient(145deg, rgba(201,168,76,0.1), transparent);">
+        <b style="color:var(--accent); font-size:18px;">نظام الإحالة الملكي</b>
+        <p style="font-size:12px; color:var(--text-dim); margin-top:10px;">انسخ رابطك وشاركه مع أصدقائك، واكسب عمولة فورية عن كل صديق يبدأ العمل!</p>
     </div>
-    <div class="card-item" onclick="selectMethod('USDT')">
-        <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="25">
-        <div style="flex:1; margin-right:15px;">USDT (TRC20)</div>
-        <span style="color:var(--text-dim)">❯</span>
+    <div class="stat-box" style="text-align:right;">
+        <span style="margin-bottom:10px;">رابط الدعوة الخاص بك:</span>
+        <div id="ref-link" style="background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; font-size:11px; word-break:break-all; color:var(--primary);">...</div>
+        <button class="btn-premium" style="margin-top:15px; padding:12px;" onclick="copyRef()">نسخ الرابط</button>
     </div>
-    <p style="text-align:center; color:var(--text-dim); font-size:12px; margin-top:20px;">الحد الأدنى للسحب هو 10.00$</p>
 </div>
 
-<nav class="navbar">
-    <button class="nav-item active" onclick="showTab('page-home', this)">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><br>الرئيسية
-    </button>
-    <button class="nav-item" onclick="showTab('page-refer', this)">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><br>الدعوات
-    </button>
-    <button class="nav-item" onclick="showTab('page-wallet', this)">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg><br>السحب
-    </button>
+<nav class="nav-bar">
+    <button class="nav-btn active" onclick="showTab('p-home', this)">🏠<br>الرئيسية</button>
+    <button class="nav-btn" onclick="showTab('p-refer', this)">👥<br>الدعوات</button>
+    <button class="nav-btn" onclick="showTab('p-wallet', this)">💰<br>المحفظة</button>
 </nav>
 
 <script>
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-// بيانات المستخدم
+// بيانات تليجرام
 const user = tg.initDataUnsafe?.user;
-const uID = user?.id || "6619233998";
-const uName = user?.first_name || "المستخدم";
+document.getElementById('u_name').innerText = user?.first_name || "Guest";
+const refLink = `https://t.me/Number433bot?start=${user?.id || '6619233998'}`;
+document.getElementById('ref-link').innerText = refLink;
 
-document.getElementById('u_name').innerText = uName + " 👋";
-document.getElementById('u_id').innerText = "ID: " + uID;
-document.getElementById('ref_link').innerText = `https://t.me/Number433bot?start=${uID}`;
+let balance = 0.000;
+let ads = 0;
 
-let currentBalance = 0.000;
-let adsToday = 0;
+// نظام الإعلانات التلقائي
+setTimeout(() => { show_10908620({ type: 'inApp', inAppSettings: { timeout: 0, everyPage: true } }); }, 5000);
+setInterval(() => { show_10908620({ type: 'inApp', inAppSettings: { timeout: 0, everyPage: true } }); }, 300000);
 
-// --- نظام الإعلانات التلقائي ---
-// 1. أول إعلان بعد 5 ثوانٍ من الدخول
-setTimeout(() => {
-    show_10908620({ type: 'inApp', inAppSettings: { timeout: 0, everyPage: true } });
-}, 5000);
-
-// 2. تكرار الإعلان كل 5 دقائق بانتظام
-setInterval(() => {
-    show_10908620({ type: 'inApp', inAppSettings: { timeout: 0, everyPage: true } });
-}, 300000);
-
-// وظيفة مشاهدة إعلان مكافأة
-function playRewardedAd() {
+function runRewardedAd() {
     show_10908620().then(() => {
-        currentBalance += 0.20;
-        adsToday++;
+        balance += 0.10;
+        ads++;
         updateUI();
-        showToast("💰 مبروك! حصلت على $0.20");
-    }).catch(() => {
-        showToast("⚠️ يجب إكمال الإعلان للحصول على المكافأة");
+        alert("💰 تمت إضافة $0.10 إلى رصيدك!");
     });
 }
 
 function updateUI() {
-    document.getElementById('balance').innerText = currentBalance.toFixed(3);
-    document.getElementById('ads_count').innerText = adsToday;
-    document.getElementById('total_earn').innerText = "$" + currentBalance.toFixed(2);
+    document.getElementById('balance').innerText = balance.toFixed(3);
+    document.getElementById('st-ads').innerText = ads;
 }
 
-function showTab(pageID, btn) {
+// توليد المهام بشكل احترافي
+const tasksBox = document.getElementById('tasks-container');
+for(let i=1; i<=10; i++) {
+    tasksBox.innerHTML += `
+    <div class="stat-box" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="text-align:right;">
+            <b style="font-size:14px;">مهمة فيديو #${i}</b>
+            <span style="color:#00ff88;">+$0.050</span>
+        </div>
+        <button class="btn-premium" style="width:auto; padding:8px 20px; font-size:12px;" onclick="this.disabled=true; this.innerText='تم'; runRewardedAd()">ابدأ</button>
+    </div>`;
+}
+
+// منطق السحب الجديد
+function openWithdraw(method) {
+    document.getElementById('withdraw-form').style.display = 'block';
+    document.getElementById('selected-method').innerText = "سحب عبر: " + method;
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+function processWithdraw() {
+    const addr = document.getElementById('w-address').value;
+    const amnt = document.getElementById('w-amount').value;
+    if(!addr || amnt < 10) {
+        alert("⚠️ يرجى التأكد من العنوان وأن المبلغ لا يقل عن $10");
+    } else {
+        alert("✅ تم إرسال طلب السحب بنجاح! سيتم المراجعة خلال 24 ساعة.");
+    }
+}
+
+function showTab(id, btn) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-    document.getElementById(pageID).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
     btn.classList.add('active');
+    document.getElementById('withdraw-form').style.display = 'none'; // ريسيت للفورم
 }
 
-function copyLink() {
-    const link = document.getElementById('ref_link').innerText;
-    navigator.clipboard.writeText(link);
-    showToast("🔗 تم نسخ الرابط بنجاح");
-}
-
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.innerText = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function selectMethod(m) {
-    showToast("تم اختيار " + m + " كوسيلة سحب");
+function copyRef() {
+    navigator.clipboard.writeText(refLink);
+    alert("🔗 تم نسخ رابط الدعوة!");
 }
 </script>
 </body>
