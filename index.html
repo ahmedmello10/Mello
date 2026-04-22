@@ -3,135 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Number 433 Bot - Earning</title>
+    <title>Number 433 Bot</title>
     <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
+    
     <style>
-        :root { --primary: #3b37ff; --bg: #0f1123; --card: #1a1c3a; --text-dim: #888; }
-        body { background-color: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 20px 20px 100px 20px; direction: rtl; }
+        :root {
+            --bg-color: #0f1123;
+            --card-color: #1a1c3a;
+            --primary-accent: #3b37ff;
+            --secondary-accent: #10b981;
+            --text-main: #ffffff;
+            --text-dim: #8e92b2;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px 20px 100px 20px;
+            direction: rtl;
+        }
+
+        /* الهيدر العلوي */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .user-meta div { font-weight: bold; font-size: 1.1rem; }
+        .user-meta span { color: var(--text-dim); font-size: 0.8rem; }
+        .avatar { width: 45px; height: 45px; background: var(--primary-accent); border-radius: 50%; border: 2px solid #2a2d4a; }
+
+        /* كارت الرصيد الأساسي (Finovaa Style) */
+        .balance-card {
+            background: linear-gradient(135deg, #3b37ff 0%, #2521cc 100%);
+            border-radius: 24px;
+            padding: 30px 20px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(59, 55, 255, 0.3);
+            margin-bottom: 25px;
+        }
+        .balance-card .label { font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px; }
+        .balance-card .amount { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; }
+        
+        .mini-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            margin-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+        }
+        .mini-stats div { text-align: center; }
+        .mini-stats div span { display: block; font-size: 0.75rem; opacity: 0.7; }
+        .mini-stats div b { font-size: 1rem; }
+
+        /* الأقسام (Tabs) */
         .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+        /* ستايل المهام */
+        .task-item {
+            background: var(--card-color);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #2a2d4a;
+        }
+        .task-info h4 { margin: 0; font-size: 0.95rem; }
+        .task-info p { margin: 4px 0 0; color: var(--secondary-accent); font-weight: bold; font-size: 0.85rem; }
         
-        /* كروت الإحصائيات والرصيد */
-        .card { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid #2a2d4a; }
-        .balance-card { background: var(--primary); }
-        .big-number { font-size: 2.2rem; font-weight: bold; margin: 10px 0; }
-        
-        /* ستايل أزرار المهام */
-        .task-item { display: flex; justify-content: space-between; align-items: center; background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #2a2d4a; }
-        .btn-main { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; cursor: pointer; font-weight: bold; }
-        .btn-task { background: #2a2d4a; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
-        .btn-task.done { opacity: 0.5; cursor: default; background: #111; }
+        .btn-start {
+            background: var(--primary-accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-start:disabled { background: #111; color: var(--text-dim); }
 
         /* صفحة السحب (Wallet) */
-        .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .method-item { background: var(--card); padding: 20px; border-radius: 15px; text-align: center; border: 2px solid transparent; cursor: pointer; }
-        .method-item.selected { border-color: var(--primary); }
-        .method-item img { width: 40px; margin-bottom: 10px; }
+        .wallet-option {
+            background: var(--card-color);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+        }
+        .wallet-option.active { border-color: var(--primary-accent); }
+        .wallet-option img { width: 35px; }
 
-        /* شريط التنقل */
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #2a2d4a; z-index: 100; }
-        .nav-item { color: var(--text-dim); text-decoration: none; font-size: 0.75rem; text-align: center; cursor: pointer; }
-        .nav-item.active { color: var(--primary); }
+        /* شريط التنقل السفلي */
+        .nav-bar {
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 100%;
+            background: rgba(26, 28, 58, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid #2a2d4a;
+            z-index: 1000;
+        }
+        .nav-item { color: var(--text-dim); text-align: center; font-size: 0.7rem; cursor: pointer; border: none; background: none; }
+        .nav-item.active { color: var(--primary-accent); font-weight: bold; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div id="home" class="tab-content active">
-        <h3>أهلاً بك في Number 433 👋</h3>
-        <div class="card balance-card">
-            <div style="opacity: 0.9;">إجمالي الرصيد</div>
-            <div class="big-number">$<span id="main-balance">1.310</span></div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-                <span>المسحوب: $0.000</span>
-                <span>الإحالات: 0</span>
+    <div class="header">
+        <div class="user-meta">
+            <div id="username">MELLO 👋</div>
+            <span id="userid">ID: 6619233998</span>
+        </div>
+        <div class="avatar"></div>
+    </div>
+
+    <div id="home-page" class="tab-content active">
+        <div class="balance-card">
+            <div class="label">إجمالي الرصيد المتاح</div>
+            <div class="amount">$<span id="balance">1.310</span></div>
+            <div class="mini-stats">
+                <div><b>$0.00</b><span>المسحوب</span></div>
+                <div><b id="ads-total">0</b><span>إعلانات</span></div>
+                <div><b>0</b><span>دعوات</span></div>
             </div>
         </div>
-        <button class="btn-main" onclick="watchAdMain()">▶️ شاهد إعلان واكسب ($0.05)</button>
+        <h3 style="font-size: 1rem; margin-bottom: 15px;">ربح سريع</h3>
+        <div class="task-item" style="background: #3b37ff11; border-color: var(--primary-accent);">
+            <div class="task-info">
+                <h4>مشاهدة إعلان عشوائي</h4>
+                <p>+$0.05</p>
+            </div>
+            <button class="btn-start" onclick="playRewardedAd(0.05, 'main')">مشاهدة</button>
+        </div>
     </div>
 
-    <div id="tasks" class="tab-content">
-        <h3>المهام اليومية</h3>
-        <div id="task-container">
+    <div id="tasks-page" class="tab-content">
+        <h3 style="margin-bottom: 20px;">المهام اليومية (10)</h3>
+        <div id="tasks-container">
             </div>
     </div>
 
-    <div id="refer" class="tab-content">
-        <h3>دعوة الأصدقاء</h3>
-        <div class="card" style="background: linear-gradient(135deg, #10b981, #059669);">
-            <p>اكسب عمولة عن كل صديق ينضم للبوت عن طريقك!</p>
-        </div>
-        <div style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 5px;">رابط الإحالة الخاص بك:</div>
-        <div class="card" id="ref-url" style="font-size: 0.8rem; word-break: break-all;">https://t.me/Number433bot?start=user123</div>
-        <button class="btn-main" onclick="copyRef()">نسخ الرابط</button>
-    </div>
-
-    <div id="wallet" class="tab-content">
+    <div id="wallet-page" class="tab-content">
         <h3>سحب الأرباح</h3>
-        <div class="method-grid">
-            <div class="method-item selected">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg" alt="Binance">
-                <div>Binance</div>
-            </div>
-            <div class="method-item selected">
-                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT">
-                <div>USDT</div>
-            </div>
+        <div class="wallet-option active">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg" alt="binance">
+            <div>Binance Pay</div>
         </div>
-        <div class="card" style="margin-top: 20px;">
-            <input type="text" placeholder="أدخل Binance ID أو عنوان USDT" style="width:100%; background:none; border:none; color:white; outline:none;">
+        <div class="wallet-option active">
+            <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="usdt">
+            <div>USDT (TRC20)</div>
         </div>
-        <button class="btn-main" onclick="alert('سيتم معالجة الطلب عند وصولك للحد الأدنى $5')">سحب الآن</button>
+        <p style="color: var(--text-dim); font-size: 0.8rem; text-align: center; margin-top: 20px;">الحد الأدنى للسحب هو 5.00$</p>
     </div>
 
     <div class="nav-bar">
-        <div class="nav-item active" onclick="switchTab('home', this)">🏠<br>الرئيسية</div>
-        <div class="nav-item" onclick="switchTab('tasks', this)">📋<br>المهام</div>
-        <div class="nav-item" onclick="switchTab('refer', this)">👥<br>الدعوات</div>
-        <div class="nav-item" onclick="switchTab('wallet', this)">💰<br>المحفظة</div>
+        <button class="nav-item active" onclick="showTab('home-page', this)">🏠<br>الرئيسية</button>
+        <button class="nav-item" onclick="showTab('tasks-page', this)">📋<br>المهام</button>
+        <button class="nav-item" onclick="showTab('wallet-page', this)">💰<br>المحفظة</button>
     </div>
 
     <script>
-        let balance = 1.310;
+        let currentBalance = 1.310;
+        let adsCount = 0;
 
-        function switchTab(id, el) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active');
+        // 1. إعلان التصفح التلقائي (كل 5 دقائق)
+        setInterval(() => {
+            console.log("Running Background Ad...");
+            show_10908620({ type: 'inApp', inAppSettings: { timeout: 0, everyPage: true } });
+        }, 300000); // 300000ms = 5 minutes
+
+        // 2. إعلان المكافأة (Rewarded)
+        function playRewardedAd(reward, type) {
+            // استخدام كود الـ Rewarded اللي إنت بعته
+            show_10908620().then(() => {
+                currentBalance += reward;
+                adsCount++;
+                document.getElementById('balance').innerText = currentBalance.toFixed(3);
+                document.getElementById('ads-total').innerText = adsCount;
+                alert(`مبروك! حصلت على $${reward}`);
+            }).catch(e => {
+                alert("يرجى مشاهدة الإعلان كاملاً للحصول على المكافأة");
+            });
         }
 
-        // توليد المهام
-        const container = document.getElementById('task-container');
+        // توليد 10 مهام
+        const container = document.getElementById('tasks-container');
         for(let i=1; i<=10; i++) {
             container.innerHTML += `
                 <div class="task-item">
-                    <div>مهمة رقم ${i} <br><small style="color:var(--primary)">+$0.10</small></div>
-                    <button class="btn-task" onclick="doTask(this)">ابدأ</button>
+                    <div class="task-info">
+                        <h4>مهمة مشاهدة #${i}</h4>
+                        <p>+$0.10</p>
+                    </div>
+                    <button class="btn-start" onclick="this.disabled=true; this.innerText='تم'; playRewardedAd(0.10, 'task')">Start</button>
                 </div>
             `;
         }
 
-        function watchAdMain() {
-            show_10908620({ type: 'inApp', inAppSettings: { timeout: 0, everyPage: true } });
-            balance += 0.05;
-            document.getElementById('main-balance').innerText = balance.toFixed(3);
-        }
-
-        function doTask(btn) {
-            show_10908620({ type: 'inApp', inAppSettings: { timeout: 0, everyPage: true } });
-            btn.innerText = "جاري...";
-            setTimeout(() => {
-                btn.innerText = "تم ✅";
-                btn.disabled = true;
-                btn.classList.add('done');
-                balance += 0.10;
-                document.getElementById('main-balance').innerText = balance.toFixed(3);
-            }, 5000);
-        }
-
-        function copyRef() {
-            navigator.clipboard.writeText(document.getElementById('ref-url').innerText);
-            alert("تم نسخ رابط الدعوة الخاص بك!");
+        // التنقل
+        function showTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
         }
     </script>
 </body>
