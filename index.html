@@ -33,7 +33,6 @@
             overflow-x: hidden;
         }
 
-        /* المكونات الزجاجية المحسنة */
         .glass-card {
             background: var(--glass);
             backdrop-filter: blur(12px);
@@ -44,7 +43,6 @@
             margin-bottom: 16px;
         }
 
-        /* الصفحة الرئيسية */
         .hero-section {
             text-align: center;
             padding: 20px 0;
@@ -59,7 +57,21 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* المهام */
+        /* تعديل صفحة السحب - الأيقونات */
+        .method-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            padding: 12px;
+            border-radius: 15px;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .method-item.active {
+            border-color: var(--primary);
+            background: var(--primary-glow);
+        }
+
         .task-card {
             display: flex;
             align-items: center;
@@ -85,37 +97,6 @@
         }
         .btn-claim:disabled { background: #334155; box-shadow: none; opacity: 0.5; }
 
-        /* عداد الوقت */
-        #timer-container {
-            text-align: center;
-            padding: 20px;
-            display: none;
-        }
-        .timer-box {
-            font-family: 'Syne';
-            font-size: 24px;
-            color: var(--accent);
-            background: rgba(251, 191, 36, 0.1);
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 50px;
-            margin-top: 10px;
-        }
-
-        /* نظام الإحالات المحسن */
-        .referral-box {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), transparent);
-            border: 1px dashed var(--primary);
-            padding: 15px;
-            border-radius: 15px;
-            margin-top: 15px;
-            word-break: break-all;
-            font-size: 12px;
-            color: var(--text-dim);
-            text-align: center;
-        }
-
-        /* التنقل */
         .nav-bar {
             position: fixed;
             bottom: 15px;
@@ -153,6 +134,17 @@
             background: var(--primary); color: white; padding: 12px 24px;
             border-radius: 12px; z-index: 2000; display: none; font-size: 14px;
         }
+
+        /* ستايل النشاط الأخير */
+        .live-activity {
+            font-size: 11px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -170,6 +162,10 @@
     <div class="hero-section">
         <p class="balance-label">رصيدك الحالي</p>
         <div class="balance-amount">$<span id="balance">0.000</span></div>
+        <div class="live-activity">
+            <span style="width:6px; height:6px; background:var(--accent); border-radius:50%; display:inline-block; animation: pulse 1s infinite;"></span>
+            <span id="activity-text">مستخدم سحب 12.50$ عبر Vodafone Cash</span>
+        </div>
     </div>
 
     <div class="glass-card">
@@ -195,37 +191,16 @@
 
 <div id="p-tasks" class="page">
     <h3 style="margin-bottom:20px;">المهام اليومية</h3>
-    
-    <div id="tasks-list">
-        </div>
-
-    <div id="timer-container">
-        <p style="color:var(--text-dim)">لقد أكملت جميع مهام اليوم!</p>
-        <p style="font-size:12px; margin-top:5px;">المهام القادمة خلال:</p>
-        <div class="timer-box" id="daily-timer">00:00:00</div>
-    </div>
+    <div id="tasks-list"></div>
 </div>
 
 <div id="p-refer" class="page">
     <div class="glass-card" style="text-align:center;">
         <div style="font-size:40px; margin-bottom:10px;">🎁</div>
         <h3>ادعُ أصدقاءك واربح</h3>
-        <p style="font-size:13px; color:var(--text-dim); margin-top:8px;">ستحصل على $0.10 عن كل صديق يقوم بالتسجيل من خلالك</p>
-        
-        <div class="referral-box" id="ref-link">https://t.me/Number433bot?start=user_id</div>
-        
+        <p style="font-size:13px; color:var(--text-dim); margin-top:8px;">ستحصل على $0.10 عن كل صديق يسجل من خلالك</p>
+        <div class="referral-box" id="ref-link">...</div>
         <button class="btn-claim" style="width:100%; margin-top:15px;" onclick="copyRef()">نسخ الرابط</button>
-    </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-        <div class="glass-card" style="margin-bottom:0; text-align:center;">
-            <p style="font-size:11px; color:var(--text-dim)">الإحالات</p>
-            <h4 id="ref-count">0</h4>
-        </div>
-        <div class="glass-card" style="margin-bottom:0; text-align:center;">
-            <p style="font-size:11px; color:var(--text-dim)">أرباحك</p>
-            <h4 id="ref-earned">$0.00</h4>
-        </div>
     </div>
 </div>
 
@@ -233,10 +208,21 @@
     <h3>المحفظة</h3>
     <div class="glass-card" style="margin-top:15px;">
         <p style="font-size:12px; color:var(--text-dim)">المبلغ القابل للسحب</p>
-        <h2 id="with-balance">$0.000</h2>
+        <h2 id="with-balance" style="font-family:'Syne';">$0.000</h2>
     </div>
+
+    <div class="glass-card">
+        <h4 style="margin-bottom:15px; font-size:13px;">اختر طريقة السحب:</h4>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
+            <div class="method-item" onclick="setMethod(this, 'Vodafone')">Vodafone</div>
+            <div class="method-item" onclick="setMethod(this, 'USDT')">USDT</div>
+        </div>
+        <input type="text" id="wallet-addr" placeholder="رقم الهاتف أو عنوان المحفظة" 
+               style="width:100%; background:rgba(0,0,0,0.2); border:1px solid var(--glass-border); padding:12px; border-radius:12px; color:white; outline:none; display:none;">
+    </div>
+
     <p style="font-size:12px; color:var(--accent); text-align:center; margin-bottom:15px;">الحد الأدنى للسحب هو $10.00</p>
-    <button class="btn-claim" style="width:100%; padding:18px;" disabled>طلب سحب الأرباح</button>
+    <button class="btn-claim" id="btn-withdraw" style="width:100%; padding:18px;" onclick="requestWith()" disabled>طلب سحب الأرباح</button>
 </div>
 
 <nav class="nav-bar">
@@ -270,6 +256,32 @@
         refEarned: 0.00
     };
 
+    // منطق السحب الجديد
+    function setMethod(el, name) {
+        document.querySelectorAll('.method-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('wallet-addr').style.display = 'block';
+        if(S.balance >= 10) document.getElementById('btn-withdraw').disabled = false;
+    }
+
+    function requestWith() {
+        const addr = document.getElementById('wallet-addr').value;
+        if(!addr) return showToast("⚠️ يرجى إدخال البيانات");
+        showToast("✅ تم إرسال طلب السحب للمراجعة");
+    }
+
+    // منطق النشاط الأخير (الرئيسية)
+    const activities = [
+        "مستخدم سحب 15.00$ عبر USDT",
+        "تم دفع 10.20$ لـ محمد أ.",
+        "مستحدم جديد انضم للمنصة مكافأة 0.50$",
+        "سحب جديد بقيمة 25.00$ عبر فودافون كاش"
+    ];
+    setInterval(() => {
+        const rand = activities[Math.floor(Math.random() * activities.length)];
+        document.getElementById('activity-text').innerText = rand;
+    }, 4000);
+
     function save() {
         localStorage.setItem('n433_v3', JSON.stringify(S));
         updateUI();
@@ -279,80 +291,45 @@
         document.getElementById('balance').innerText = S.balance.toFixed(3);
         document.getElementById('with-balance').innerText = "$" + S.balance.toFixed(3);
         document.getElementById('today-profit').innerText = "$" + (S.tasksDone * 0.05).toFixed(2);
-        document.getElementById('ref-count').innerText = S.refCount;
-        document.getElementById('ref-earned').innerText = "$" + S.refEarned.toFixed(2);
-        
         checkTaskLimit();
     }
 
     function checkTaskLimit() {
         const now = new Date();
         const lastDate = S.lastTaskDate ? new Date(S.lastTaskDate) : null;
-        
-        // إذا مر يوم جديد، نصفر المهام
         if (lastDate && now.toLocaleDateString() !== lastDate.toLocaleDateString()) {
             S.tasksDone = 0;
             save();
         }
-
-        if (S.tasksDone >= 10) {
-            document.getElementById('tasks-list').style.display = 'none';
-            document.getElementById('timer-container').style.display = 'block';
-            startTimer();
-        } else {
-            document.getElementById('tasks-list').style.display = 'block';
-            document.getElementById('timer-container').style.display = 'none';
-            renderTasks();
-        }
+        renderTasks();
     }
 
     function renderTasks() {
         let html = '';
-        for(let i = S.tasksDone + 1; i <= 10; i++) {
-            html += `
-            <div class="task-card">
-                <div class="task-info">
-                    <h4>مشاهدة إعلان مميز #${i}</h4>
-                    <p>+$0.050</p>
-                </div>
-                <button class="btn-claim" onclick="runTask(this)">مشاهدة</button>
-            </div>`;
+        if(S.tasksDone >= 10) {
+            html = '<p style="text-align:center; color:var(--text-dim)">انتظر للمهام القادمة غداً</p>';
+        } else {
+            for(let i = S.tasksDone + 1; i <= 10; i++) {
+                html += `<div class="task-card">
+                    <div class="task-info"><h4>إعلان مميز #${i}</h4><p>+$0.050</p></div>
+                    <button class="btn-claim" onclick="runTask(this)">مشاهدة</button>
+                </div>`;
+            }
         }
         document.getElementById('tasks-list').innerHTML = html;
     }
 
     function runTask(btn) {
         btn.disabled = true;
-        btn.innerText = 'جاري...';
-        
         show_10908620().then(() => {
             S.balance += 0.050;
             S.tasksDone += 1;
             S.lastTaskDate = new Date();
             save();
-            showToast("💰 تمت إضافة $0.050 لرصيدك");
+            showToast("💰 تمت إضافة $0.050");
         }).catch(() => {
             btn.disabled = false;
-            btn.innerText = 'مشاهدة';
-            showToast("⚠️ يجب إكمال الإعلان");
         });
-    }
-
-    function startTimer() {
-        const timerEl = document.getElementById('daily-timer');
-        function update() {
-            const now = new Date();
-            const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-            const diff = tomorrow - now;
-            
-            const h = Math.floor(diff / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
-            
-            timerEl.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-        }
-        setInterval(update, 1000);
-        update();
     }
 
     function showTab(id, btn) {
@@ -363,19 +340,16 @@
     }
 
     function copyRef() {
-        const link = document.getElementById('ref-link').innerText;
-        navigator.clipboard.writeText(link);
-        showToast("🔗 تم نسخ رابط الإحالة");
+        navigator.clipboard.writeText(document.getElementById('ref-link').innerText);
+        showToast("🔗 تم النسخ");
     }
 
     function showToast(msg) {
         const t = document.getElementById('toast');
-        t.innerText = msg;
-        t.style.display = 'block';
+        t.innerText = msg; t.style.display = 'block';
         setTimeout(() => t.style.display = 'none', 3000);
     }
 
-    // تهيئة البيانات
     const user = tg.initDataUnsafe?.user;
     if(user) {
         document.getElementById('u_name').innerText = user.first_name;
@@ -385,5 +359,12 @@
     updateUI();
 </script>
 
+<style>
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+</style>
 </body>
 </html>
