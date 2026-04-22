@@ -1,128 +1,265 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Number 433 VIP</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
+
+    <style>
+        :root {
+            --bg-dark: #080a0c;
+            --card-bg: #121519;
+            --neon-blue: #00d2ff;
+            --neon-purple: #a154ff;
+            --gold: #fbc531;
+            --text-main: #ffffff;
+            --text-dim: #9ca3af;
+            --success: #00ff88;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; padding: 0; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Tajawal', sans-serif;
+            line-height: 1.6;
+            padding: 20px 15px 100px;
+        }
+
+        /* كروت التصميم - Glassmorphism */
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* تأثيرات النيون الهادئة */
+        .neon-accent {
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.1);
+        }
+
+        /* أنيميشن الضغط الواقعي */
+        .btn-press {
+            transition: transform 0.1s ease, filter 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-press:active {
+            transform: scale(0.96);
+            filter: brightness(1.2);
+        }
+
+        /* الميستري بوكس */
+        .mystery-box {
+            background: linear-gradient(145deg, #1a1f25, #121519);
+            border: 2px dashed var(--neon-purple);
+            text-align: center;
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+
+        /* الرصيد الكبير */
+        .balance-display {
+            text-align: center;
+            padding: 10px 0;
+        }
+        .balance-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 45px;
+            font-weight: 700;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* المدخلات (Inputs) */
+        .custom-input {
+            width: 100%;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 8px 0;
+            font-family: 'Tajawal';
+        }
+
+        .withdraw-btn {
+            background: var(--neon-blue);
+            color: #000;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.03);
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 13px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="glass-card neon-border" style="text-align: center;">
-    <p style="color: var(--text-dim);">رصيدك الحالي</p>
-    <h1 id="balance" style="font-size: 40px; margin: 10px 0;">0.00</h1>
-    <div style="display: flex; justify-content: space-around; font-size: 12px;">
-        <span>إعلانات اليوم: <b id="adsCount">0</b>/10</span>
-        <span>إحالات: <b id="refCount">0</b></span>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="font-family: 'Syne';">NUM<span style="color:var(--neon-blue)">433</span></h2>
+        <div style="color: var(--success); font-size: 12px; background: rgba(0,255,136,0.1); padding: 5px 12px; border-radius: 20px;">
+            متصل: <span id="user-name" style="color: #fff;">...</span>
+        </div>
     </div>
-</div>
 
-<div class="mystery-box btn-action" id="luck-box" onclick="tryOpenBox()">
-    <span style="font-size: 30px;">🎁</span>
-    <h4 id="box-text">صندوق الحظ اليومي</h4>
-    <p id="box-sub" style="font-size: 10px; color: var(--neon-purple);">شاهد 3 إعلانات للفتح</p>
-</div>
+    <div class="glass-card neon-accent balance-display">
+        <p style="color: var(--text-dim); font-size: 14px;">رصيد حسابك</p>
+        <div class="balance-num">$<span id="balance">0.00</span></div>
+        <div class="stat-grid">
+            <div class="stat-item">إعلانات اليوم: <b id="ads-count" style="color: var(--neon-blue);">0</b>/10</div>
+            <div class="stat-item">إجمالي الإحالات: <b id="ref-count" style="color: var(--neon-purple);">0</b></div>
+        </div>
+    </div>
 
-<button class="glass-card btn-action neon-border" style="width: 100%; margin-top: 15px; background: var(--neon-blue); color: #000; font-weight: bold;" onclick="playAd()">
-    ▶️ شاهد إعلان واربح $0.10
-</button>
+    <button class="glass-card btn-press" style="width: 100%; background: var(--neon-blue); color: #000; font-weight: 800; font-size: 17px;" onclick="playAd()">
+        ▶️ مشاهدة إعلان ($0.10)
+    </button>
 
-<div class="glass-card" id="withdrawal-section">
-    <h4>سحب الأرباح (الحد الأدنى $10)</h4>
-    <select id="withdraw-method" class="btn-action" style="width: 100%; padding: 10px; margin: 10px 0; background: #000; color: #fff; border-radius: 10px;">
-        <option value="Binance">Binance Pay ID</option>
-        <option value="Trust Wallet">Trust Wallet (USDT-TRC20)</option>
-    </select>
-    <input type="text" id="wallet-addr" placeholder="العنوان أو الآيدي" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 10px; border: none;">
-    <button class="btn-action" style="width: 100%; background: var(--gold); padding: 12px; border-radius: 10px; border: none;" onclick="processWithdraw()">طلب سحب</button>
-</div>
+    <div class="mystery-box btn-press" onclick="handleBox()">
+        <div style="font-size: 40px; margin-bottom: 5px;">🎁</div>
+        <h3 style="color: var(--neon-purple);">صندوق المفاجآت اليومي</h3>
+        <p id="box-status" style="font-size: 12px; color: var(--text-dim);">شاهد 3 إعلانات لفتح الصندوق</p>
+    </div>
 
-<div class="glass-card">
-    <p style="font-size: 12px;">رابط الإحالة الخاص بك (اربح $0.50 لكل صديق):</p>
-    <code id="ref-url" style="font-size: 10px; color: var(--neon-blue);"></code>
-    <button onclick="copyRef()" class="btn-action" style="display: block; margin-top: 10px; background: none; border: 1px solid var(--text-dim); color: #fff; padding: 5px 10px; border-radius: 5px;">نسخ الرابط</button>
-</div>
+    <div class="glass-card" style="margin-top: 20px;">
+        <h4 style="margin-bottom: 15px; color: var(--gold);">💰 طلب سحب أرباح</h4>
+        <label style="font-size: 12px; color: var(--text-dim);">اختر وسيلة السحب:</label>
+        <select id="w-method" class="custom-input">
+            <option value="Binance Pay ID">Binance Pay ID</option>
+            <option value="Trust Wallet (USDT)">Trust Wallet (USDT-TRC20)</option>
+        </select>
+        <input type="text" id="w-address" class="custom-input" placeholder="أدخل الآيدي أو العنوان هنا">
+        <button class="withdraw-btn btn-press" onclick="sendWithdraw()">سحب 10$ الآن</button>
+        <p style="font-size: 10px; color: #666; margin-top: 8px; text-align: center;">* الحد الأدنى للسحب هو 10 دولار فقط</p>
+    </div>
 
-<div style="height: 80px;"></div>
+    <div class="glass-card">
+        <h4 style="font-size: 14px;">👥 شارك واربح</h4>
+        <p style="font-size: 11px; color: var(--text-dim); margin: 5px 0 10px;">انسخ الرابط وابعت لصحابك، هتاخد $0.50 على كل واحد يدخل!</p>
+        <div style="background: #000; padding: 10px; border-radius: 8px; font-size: 10px; color: var(--neon-blue); word-break: break-all;" id="ref-link">...</div>
+        <button class="btn-press" style="background: none; border: 1px solid #333; color: #fff; padding: 8px 20px; border-radius: 8px; margin-top: 10px; font-size: 12px;" onclick="copyRef()">نسخ الرابط</button>
+    </div>
 
-<script>
-    const tg = window.Telegram.WebApp;
-    const ADMIN_ID = "6619233998"; 
-    const BOT_TOKEN = "8718619320:AAEYA7qmpnSx4rxPdo9RdNesZ0Yzz5GaaIU";
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
 
-    let S = JSON.parse(localStorage.getItem('user_data')) || {
-        balance: 0.00,
-        adsToday: 0,
-        referrals: 0,
-        boxStep: 0
-    };
+        const ADMIN_ID = "6619233998"; 
+        const BOT_TOKEN = "8718619320:AAEYA7qmpnSx4rxPdo9RdNesZ0Yzz5GaaIU";
 
-    // نظام الإحالة الواقعي (بيزود فعلاً لو الرابط فيه ID جديد)
-    const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.has('start') && !localStorage.getItem('referred')) {
-        S.balance += 0.50; 
-        localStorage.setItem('referred', 'true');
-        save();
-    }
+        // قاعدة البيانات
+        let user = JSON.parse(localStorage.getItem('n433_v2')) || {
+            balance: 0.00,
+            adsToday: 0,
+            refs: 0,
+            boxProgress: 0,
+            lastDate: new Date().toLocaleDateString()
+        };
 
-    function save() {
-        localStorage.setItem('user_data', JSON.stringify(S));
-        document.getElementById('balance').innerText = S.balance.toFixed(2);
-        document.getElementById('adsCount').innerText = S.adsToday;
-        document.getElementById('refCount').innerText = S.referrals;
-        document.getElementById('ref-url').innerText = `https://t.me/Number433bot?start=${tg.initDataUnsafe.user?.id || 'user'}`;
-    }
+        // تصفير الإعلانات يومياً
+        if(user.lastDate !== new Date().toLocaleDateString()) {
+            user.adsToday = 0;
+            user.lastDate = new Date().toLocaleDateString();
+        }
 
-    // الإعلان التلقائي (كل 5 دقايق وظهور فوري)
-    function autoAd() {
-        show_10908620().then(() => console.log("Auto Ad Viewed"));
-    }
-    setInterval(autoAd, 300000); // 5 mins
-    autoAd(); // أول دخول
+        function updateUI() {
+            document.getElementById('balance').innerText = user.balance.toFixed(2);
+            document.getElementById('ads-count').innerText = user.adsToday;
+            document.getElementById('ref-count').innerText = user.refs;
+            document.getElementById('user-name').innerText = tg.initDataUnsafe.user?.first_name || "Guest";
+            document.getElementById('ref-link').innerText = `https://t.me/Number433bot?start=${tg.initDataUnsafe.user?.id || '433'}`;
+            localStorage.setItem('n433_v2', JSON.stringify(user));
+        }
 
-    function playAd() {
-        if(S.adsToday >= 10) return alert("خلصت إعلانات النهاردة!");
-        show_10908620().then(() => {
-            S.balance += 0.10;
-            S.adsToday++;
-            save();
-        });
-    }
+        // الإعلان التلقائي كل 5 دقائق
+        function runAutoAds() {
+            show_10908620().catch(e => console.log("Ad Blocked"));
+        }
+        setInterval(runAutoAds, 300000); 
+        setTimeout(runAutoAds, 2000); // إعلان أول ما يفتح
 
-    function tryOpenBox() {
-        if(S.boxStep < 3) {
+        function playAd() {
+            if(user.adsToday >= 10) return alert("حققت حد الإعلانات اليومي (10/10)");
             show_10908620().then(() => {
-                S.boxStep++;
-                document.getElementById('box-sub').innerText = `باقي ${3 - S.boxStep} إعلانات`;
-                if(S.boxStep === 3) {
-                    const prize = 0.50; 
-                    S.balance += prize;
-                    S.boxStep = 0;
-                    alert("مبروك! فتحت الصندوق وكسبت $0.50");
-                    save();
-                }
+                user.balance += 0.10;
+                user.adsToday++;
+                updateUI();
             });
         }
-    }
 
-    function processWithdraw() {
-        const addr = document.getElementById('wallet-addr').value;
-        const method = document.getElementById('withdraw-method').value;
-        if(S.balance < 10) return alert("لازم تجمع 10$ الأول!");
-        if(!addr) return alert("اكتب العنوان!");
+        function handleBox() {
+            if(user.boxProgress < 3) {
+                show_10908620().then(() => {
+                    user.boxProgress++;
+                    if(user.boxProgress === 3) {
+                        user.balance += 0.50;
+                        user.boxProgress = 0;
+                        alert("🔥 مبروك! كسبت 0.50$ من صندوق الحظ");
+                        document.getElementById('box-status').innerText = "شاهد 3 إعلانات لفتح الصندوق";
+                    } else {
+                        document.getElementById('box-status').innerText = `باقي ${3 - user.boxProgress} إعلانات للفتح`;
+                    }
+                    updateUI();
+                });
+            }
+        }
 
-        const msg = `💰 *طلب سحب*%0A👤 المستخدم: ${tg.initDataUnsafe.user?.first_name}%0A🆔 الآيدي: ${tg.initDataUnsafe.user?.id}%0A💵 المبلغ: ${S.balance}$%0A🏦 الطريقة: ${method}%0A📍 العنوان: ${addr}`;
-        
-        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${msg}&parse_mode=Markdown`)
-        .then(() => {
-            alert("تم إرسال الطلب للمدير!");
-            S.balance = 0;
-            save();
-        });
-    }
+        function sendWithdraw() {
+            const addr = document.getElementById('w-address').value;
+            const method = document.getElementById('w-method').value;
 
-    save();
-</script>
+            if(user.balance < 10) return alert("رصيدك أقل من 10$");
+            if(!addr) return alert("اكتب عنوان السحب!");
+
+            const text = `🚨 *طلب سحب جديد*%0A👤 الاسم: ${tg.initDataUnsafe.user?.first_name}%0A🆔 الآيدي: ${tg.initDataUnsafe.user?.id}%0A💰 المبلغ: $${user.balance.toFixed(2)}%0A🏦 الوسيلة: ${method}%0A📍 العنوان: ${addr}`;
+            
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${text}&parse_mode=Markdown`)
+            .then(() => {
+                alert("✅ تم الإرسال! سيتم مراجعة طلبك خلال 24 ساعة.");
+                user.balance = 0;
+                updateUI();
+            });
+        }
+
+        function copyRef() {
+            navigator.clipboard.writeText(document.getElementById('ref-link').innerText);
+            alert("تم نسخ رابط الإحالة");
+        }
+
+        updateUI();
+    </script>
 </body>
 </html>
