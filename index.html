@@ -3,175 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Number 433</title>
+    <title>NUM433 Original</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
 
     <style>
-        /* التنسيق القديم اللي حبيته */
+        :root {
+            --bg-color: #1a1b2e;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --btn-blue: #5c5ff5;
+            --text-dim: #8e8ea0;
+        }
+
         body {
-            background-color: #000;
-            color: #fff;
-            font-family: 'Tajawal', sans-serif;
-            margin: 0; padding: 20px;
+            background-color: var(--bg-color);
+            background: radial-gradient(circle at top, #25274d, #1a1b2e);
+            color: white; font-family: 'Tajawal', sans-serif;
+            margin: 0; padding: 20px 15px 100px;
+        }
+
+        /* الهيدر */
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .logo { font-family: 'Syne', sans-serif; font-size: 28px; }
+        .logo span { color: #5c5ff5; }
+
+        /* الكارت الرئيسي */
+        .main-card {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 30px 20px;
             text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
         }
 
-        .header-logo {
-            font-family: 'Syne', sans-serif;
-            font-size: 32px;
-            margin-bottom: 25px;
-            letter-spacing: -1px;
+        .balance-label { color: var(--text-dim); font-size: 13px; margin-bottom: 10px; }
+        .balance-val { font-family: 'Syne', sans-serif; font-size: 50px; font-weight: 800; }
+
+        /* الأزرار الصغيرة تحت الرصيد */
+        .mini-stats { display: flex; gap: 10px; margin-top: 20px; }
+        .mini-btn {
+            background: rgba(0,0,0,0.3); flex: 1;
+            padding: 12px; border-radius: 15px; font-size: 11px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .header-logo span { color: #5c5ff5; }
-
-        /* الكروت البسيطة بدون تعقيد */
-        .card {
-            background: #111;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid #222;
+        /* زر الكسب الكبير */
+        .earn-btn {
+            background: var(--btn-blue);
+            color: white; border: none; width: 100%;
+            padding: 20px; border-radius: 20px;
+            font-weight: bold; font-size: 16px;
+            margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
 
-        .balance-title { color: #888; font-size: 14px; }
-        .balance-amount { 
-            font-family: 'Syne', sans-serif; 
-            font-size: 42px; 
-            margin: 5px 0; 
+        /* المهام السريعة (زي الصورة) */
+        .task-list-title { text-align: right; font-weight: bold; margin-bottom: 15px; font-size: 16px; }
+        .task-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .task-info h4 { margin: 0; font-size: 15px; }
+        .task-info span { color: var(--btn-blue); font-size: 12px; font-weight: bold; }
+        .start-btn {
+            background: var(--btn-blue); color: white; border: none;
+            padding: 8px 25px; border-radius: 12px; font-size: 13px;
         }
 
-        /* الأزرار الواضحة */
-        .main-btn {
-            background: #5c5ff5;
-            color: #fff;
-            border: none;
-            width: 100%;
-            padding: 18px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
+        /* شريط التنقل السفلي */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(26, 27, 46, 0.95);
+            display: flex; justify-content: space-around; padding: 15px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
         }
+        .nav-item { color: var(--text-dim); text-decoration: none; font-size: 11px; text-align: center; }
+        .nav-item.active { color: var(--btn-blue); }
 
-        .main-btn:active { transform: scale(0.98); }
-
-        /* الميزات الجديدة (بستايل قديم) */
-        .mystery-section {
-            border: 2px dashed #a154ff;
-            background: #0d001a;
-            padding: 15px;
-            border-radius: 15px;
-            margin: 15px 0;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: #000;
-            border: 1px solid #333;
-            color: #fff;
-            border-radius: 8px;
-            font-family: 'Tajawal';
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 10px;
-            font-size: 13px;
-            color: #888;
-        }
-
-        .withdraw-area {
-            background: #111;
-            padding: 15px;
-            border-radius: 15px;
-            margin-top: 20px;
-            text-align: right;
-        }
+        /* قسم السحب (مخفي وسيظهر عند الحاجة) */
+        .page { display: none; }
+        .page.active { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="header-logo">NUM<span>433</span></div>
+    <div id="home-page" class="page active">
+        <div class="top-nav">
+            <div class="logo">NUM<span>433</span></div>
+            <div style="font-size: 12px;">MELLO <span style="color:#00ffaa;">●</span></div>
+        </div>
 
-    <div class="card">
-        <div class="balance-title">رصيدك الحالي</div>
-        <div class="balance-amount">$<span id="bal">0.00</span></div>
-        <div class="stats">
-            <div>إعلانات: <b id="ads">0</b>/10</div>
-            <div>إحالات: <b id="refs">0</b></div>
+        <div class="main-card">
+            <div class="balance-label">إجمالي الرصيد</div>
+            <div class="balance-val">$<span id="bal">0.000</span></div>
+            <div class="mini-stats">
+                <div class="mini-btn">إعلانات اليوم: <b id="ads">0</b>/10</div>
+                <div class="mini-btn">إجمالي الربح: $<b id="earned">0.00</b></div>
+            </div>
+        </div>
+
+        <button class="earn-btn" onclick="playAd()">
+            <span>▶️</span> كسب سريع ($0.05)
+        </button>
+
+        <div class="task-list-title">المهام السريعة</div>
+
+        <div class="task-card">
+            <button class="start-btn" onclick="playAd()">ابدأ</button>
+            <div class="task-info">
+                <h4>مهمة #1</h4>
+                <span>+$0.05</span>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <button class="start-btn" onclick="playAd()">ابدأ</button>
+            <div class="task-info">
+                <h4>مهمة #2</h4>
+                <span>+$0.05</span>
+            </div>
+        </div>
+
+        <div class="task-card" style="border: 1px dashed #a154ff;" onclick="openBox()">
+            <span style="font-size: 20px;">🎁</span>
+            <div class="task-info" style="flex: 1; margin-right: 15px;">
+                <h4>صندوق الحظ</h4>
+                <span id="box-status" style="color: #a154ff;">شاهد 3 إعلانات للفتح</span>
+            </div>
         </div>
     </div>
 
-    <button class="main-btn" onclick="earn()">▶️ مشاهدة إعلان ($0.10)</button>
-
-    <div class="mystery-section" onclick="openBox()">
-        <div style="font-size: 30px;">🎁</div>
-        <div style="font-weight: bold; color: #a154ff;">صندوق الحظ</div>
-        <div id="box-status" style="font-size: 12px; color: #888;">شاهد 3 إعلانات للفتح</div>
+    <div id="wallet-page" class="page">
+        <h3 style="margin: 20px 0;">المحفظة والسحب</h3>
+        <div class="main-card">
+            <input type="text" id="address" placeholder="Binance ID أو العنوان" style="width:100%; padding:15px; border-radius:12px; border:none; margin-bottom:15px; background:#000; color:#fff;">
+            <button class="earn-btn" style="background:#f1c40f; color:#000;" onclick="withdraw()">طلب سحب (10$)</button>
+        </div>
     </div>
 
-    <div class="withdraw-area">
-        <label style="font-size: 14px;">طريقة السحب:</label>
-        <select id="method" class="input-field">
-            <option value="Binance Pay">Binance Pay ID</option>
-            <option value="Trust Wallet">Trust Wallet (USDT)</option>
-        </select>
-        <input type="text" id="address" class="input-field" placeholder="العنوان أو الآيدي">
-        <button class="main-btn" style="background: #f1c40f; color: #000;" onclick="withdraw()">سحب الأرباح (10$)</button>
-    </div>
-
-    <div style="margin-top: 20px; font-size: 12px; color: #666;">
-        رابط الإحالة الخاص بك:<br>
-        <span id="ref-link" style="color: #5c5ff5;">...</span>
-    </div>
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="showPage('home-page', this)">🏠<br>الرئيسية</a>
+        <a href="#" class="nav-item" onclick="alert('رابط الإحالة: ' + window.location.href)">👥<br>الدعوات</a>
+        <a href="#" class="nav-item" onclick="showPage('wallet-page', this)">💰<br>المحفظة</a>
+    </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         const ADMIN_ID = "6619233998"; 
         const BOT_TOKEN = "8718619320:AAEYA7qmpnSx4rxPdo9RdNesZ0Yzz5GaaIU";
 
-        let data = JSON.parse(localStorage.getItem('n433_v1')) || {
-            bal: 0.00, ads: 0, refs: 0, boxStep: 0
+        let user = JSON.parse(localStorage.getItem('n433_v_img')) || {
+            bal: 0.00, ads: 0, box: 0
         };
 
         function update() {
-            document.getElementById('bal').innerText = data.bal.toFixed(2);
-            document.getElementById('ads').innerText = data.ads;
-            document.getElementById('refs').innerText = data.refs;
-            document.getElementById('ref-link').innerText = `https://t.me/Number433bot?start=${tg.initDataUnsafe.user?.id || '433'}`;
-            localStorage.setItem('n433_v1', JSON.stringify(data));
+            document.getElementById('bal').innerText = user.bal.toFixed(3);
+            document.getElementById('ads').innerText = user.ads;
+            document.getElementById('earned').innerText = user.bal.toFixed(2);
+            localStorage.setItem('n433_v_img', JSON.stringify(user));
         }
 
-        // إعلان فوري عند الدخول
-        setTimeout(() => { show_10908620().catch(e => {}); }, 1500);
-
-        function earn() {
-            if(data.ads >= 10) return alert("انتهت محاولات اليوم");
+        function playAd() {
+            if(user.ads >= 10) return alert("خلصت إعلانات النهاردة");
             show_10908620().then(() => {
-                data.bal += 0.10;
-                data.ads++;
+                user.bal += 0.05;
+                user.ads++;
                 update();
             });
         }
 
         function openBox() {
-            if(data.boxStep < 3) {
+            if(user.box < 3) {
                 show_10908620().then(() => {
-                    data.boxStep++;
-                    if(data.boxStep === 3) {
-                        data.bal += 0.50;
-                        data.boxStep = 0;
-                        alert("مبروك! ربحت 0.50$");
+                    user.box++;
+                    if(user.box === 3) {
+                        user.bal += 0.50; user.box = 0; alert("مبروك! كسبت 0.50$");
                     }
-                    document.getElementById('box-status').innerText = `باقي ${3 - data.boxStep} إعلانات`;
+                    document.getElementById('box-status').innerText = `باقي ${3 - user.box} إعلانات`;
                     update();
                 });
             }
@@ -179,17 +193,17 @@
 
         function withdraw() {
             const addr = document.getElementById('address').value;
-            if(data.bal < 10) return alert("لازم تجمع 10$ الأول");
-            if(!addr) return alert("اكتب العنوان!");
+            if(user.bal < 10) return alert("الحد الأدنى 10$");
+            const msg = `💰 طلب سحب: $${user.bal}\nالعنوان: ${addr}`;
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(msg)}`)
+            .then(() => { alert("تم الطلب!"); user.bal = 0; update(); });
+        }
 
-            const msg = `💰 *طلب سحب جديد*%0A👤 المستخدم: ${tg.initDataUnsafe.user?.first_name}%0A🆔 الآيدي: ${tg.initDataUnsafe.user?.id}%0A💵 المبلغ: ${data.bal}$%0A🏦 الطريقة: ${document.getElementById('method').value}%0A📍 العنوان: ${addr}`;
-            
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${msg}&parse_mode=Markdown`)
-            .then(() => {
-                alert("تم الإرسال للمدير!");
-                data.bal = 0;
-                update();
-            });
+        function showPage(id, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active');
         }
 
         update();
