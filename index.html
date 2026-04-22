@@ -5,96 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NUM433 | MELLO</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Tajawal:wght@500;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-color: #0d1121;
-            --card-bg: #1c2039;
-            --primary-blue: #545cf1;
-            --text-main: #ffffff;
+            --bg: #0d1121;
+            --card: #1c2039;
+            --primary: #545cf1;
+            --shadow: #3a42c4;
             --text-dim: #8e94bb;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; margin: 0; padding: 20px 20px 120px; direction: rtl; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Tajawal', sans-serif;
-            margin: 0; padding: 20px;
-            display: flex; flex-direction: column; align-items: center;
-        }
+        /* Header */
+        .header { text-align: center; margin-bottom: 25px; }
+        .logo { font-family: 'Montserrat', sans-serif; font-size: 35px; font-weight: 900; }
+        .logo span { color: var(--primary); }
+        .sub-logo { color: var(--primary); font-size: 11px; font-weight: 800; margin-top: -5px; }
 
-        /* Header Logo Section */
-        .header { text-align: center; margin-bottom: 30px; width: 100%; position: relative; }
-        .lang-btn { 
-            position: absolute; left: 0; top: 5px;
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-dim); padding: 4px 12px; border-radius: 12px; font-size: 10px;
-        }
-        .logo { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 900; letter-spacing: -1px; }
-        .logo span { color: #5c6fff; }
-        .logo-sub { font-size: 12px; color: #545cf1; font-weight: 800; margin-top: -5px; }
+        /* Cards */
+        .card { background: var(--card); border-radius: 45px; padding: 30px 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .card-label { color: var(--text-dim); font-size: 13px; margin-bottom: 10px; }
+        .balance { font-family: 'Montserrat', sans-serif; font-size: 60px; font-weight: 900; text-shadow: 0 0 25px rgba(84, 92, 241, 0.5); }
 
-        /* Main Card Style */
-        .card {
-            background: var(--card-bg);
-            width: 100%; border-radius: 40px;
-            padding: 30px 20px; margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .card-label { color: var(--text-dim); font-size: 14px; margin-bottom: 15px; }
-
-        /* Balance Text - Exactly like image */
-        .balance {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 58px; font-weight: 900;
-            text-shadow: 0 0 30px rgba(92, 111, 255, 0.6);
-            margin: 10px 0;
-        }
-
-        /* 3D Button - Exactly like image */
-        .btn-main {
-            background: var(--primary-blue);
-            color: white; border: none; width: 100%;
-            padding: 22px; border-radius: 28px;
-            font-size: 18px; font-weight: 800;
-            box-shadow: 0 10px 0 #3a42c4; /* الظل السفلي السميك */
+        /* Buttons 3D */
+        .btn-3d {
+            background: var(--primary); color: white; border: none; width: 100%;
+            padding: 20px; border-radius: 30px; font-size: 18px; font-weight: 800;
+            box-shadow: 0 10px 0 var(--shadow); cursor: pointer; transition: 0.1s;
             display: flex; align-items: center; justify-content: center; gap: 10px;
-            transition: 0.1s; cursor: pointer;
-            margin-top: 10px;
         }
-        .btn-main:active { transform: translateY(6px); box-shadow: 0 4px 0 #3a42c4; }
-        .btn-main:disabled { background: #33395a; box-shadow: 0 6px 0 #1e223a; opacity: 0.7; }
+        .btn-3d:active { transform: translateY(6px); box-shadow: 0 4px 0 var(--shadow); }
+        .btn-3d:disabled { background: #33395a; box-shadow: 0 6px 0 #1e223a; opacity: 0.7; }
 
-        /* Bottom Nav - Exactly like image */
-        .nav {
-            position: fixed; bottom: 30px; left: 20px; right: 20px;
-            background: #161a2e; border-radius: 35px;
-            display: flex; justify-content: space-around; padding: 15px 10px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-        }
-        .nav-item { 
-            background: none; border: none; color: var(--text-dim);
-            font-size: 11px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 5px;
-        }
-        .nav-item.active { color: var(--primary-blue); }
-        .nav-icon { font-size: 18px; }
+        /* Nav Bar */
+        .nav { position: fixed; bottom: 25px; left: 20px; right: 20px; background: #161a2e; border-radius: 35px; display: flex; padding: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); z-index: 1000; }
+        .nav-item { flex: 1; background: none; border: none; color: var(--text-dim); font-size: 11px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item img { width: 22px; filter: grayscale(1); opacity: 0.6; }
+        .nav-item.active img { filter: grayscale(0); opacity: 1; }
 
-        .page { display: none; width: 100%; }
+        /* Pages */
+        .page { display: none; width: 100%; animation: slide 0.3s ease-out; }
         .page.active { display: block; }
+        @keyframes slide { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Form Inputs */
+        .input-box { width: 100%; background: #0d1121; border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; color: white; margin-bottom: 15px; font-family: 'Tajawal'; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <button class="lang-btn">EN / AR</button>
     <div class="logo">NUM<span>433</span></div>
-    <div class="logo-sub">🚀 . MELLO</div>
+    <div class="sub-logo">MELLO . 🚀</div>
 </div>
 
 <div id="p-home" class="page active">
@@ -102,56 +69,144 @@
         <div class="card-label">الرصيد الحالي</div>
         <div class="balance">$<span id="bal-val">0.100</span></div>
     </div>
-
     <div class="card">
         <div class="card-label">كسب سريع من الإعلانات (<span id="ad-count">0</span>/10)</div>
-        <button class="btn-main" id="watch-btn" onclick="playAd()">
-            مشاهدة إعلان (0.05$) <span style="background:#ff9500; border-radius:5px; padding:2px;">▶️</span>
+        <button class="btn-3d" id="watch-btn" onclick="playFastAd()">
+            مشاهدة إعلان (0.05$) <span style="background:#ff9500; border-radius:8px; padding:2px 6px;">▶️</span>
         </button>
     </div>
 </div>
 
+<div id="p-tasks" class="page">
+    <h3 style="margin-bottom:20px;">المهام اليومية</h3>
+    <div id="tasks-list"></div>
+</div>
+
+<div id="p-refer" class="page">
+    <div class="card">
+        <div class="card-label">رابط الدعوة الخاص بك</div>
+        <div id="ref-link" style="background:#0d1121; padding:15px; border-radius:15px; font-size:11px; word-break:break-all; margin-bottom:15px; border:1px dashed var(--primary);">جاري التحميل...</div>
+        <button class="btn-3d" onclick="copyLink()">نسخ الرابط</button>
+    </div>
+</div>
+
+<div id="p-wallet" class="page">
+    <h3 style="margin-bottom:20px;">سحب الأرباح</h3>
+    <div class="card" style="display:flex; gap:10px; padding:15px;">
+        <button class="btn-3d" style="font-size:12px; padding:10px;" onclick="setPay('Binance')">Binance</button>
+        <button class="btn-3d" style="font-size:12px; padding:10px;" onclick="setPay('USDT')">USDT</button>
+    </div>
+    <div id="wallet-form" class="card" style="display:none;">
+        <div class="card-label" id="pay-name">سحب عبر Binance</div>
+        <input type="text" class="input-box" id="wallet-addr" placeholder="العنوان أو المعرف (ID)">
+        <input type="number" class="input-box" id="wallet-amnt" placeholder="المبلغ (الحد الأدنى $10)">
+        <button class="btn-3d" onclick="requestWithdraw()">تأكيد السحب</button>
+    </div>
+</div>
+
 <nav class="nav">
-    <button class="nav-item" onclick="showTab('p-refer')">
-        <span class="nav-icon">👥</span> الدعوات
+    <button class="nav-item" onclick="showTab('p-refer', this)">
+        <span style="font-size:20px;">👥</span> الدعوات
     </button>
-    <button class="nav-item" onclick="showTab('p-tasks')">
-        <span class="nav-icon">🎯</span> المهام
+    <button class="nav-item" onclick="showTab('p-tasks', this)">
+        <span style="font-size:20px;">🎯</span> المهام
     </button>
-    <button class="nav-item active" onclick="showTab('p-home')">
-        <span class="nav-icon">🏠</span> الرئيسية
+    <button class="nav-item active" onclick="showTab('p-home', this)">
+        <span style="font-size:20px;">🏠</span> الرئيسية
     </button>
 </nav>
 
 <script>
     const tg = window.Telegram.WebApp;
-    let balance = 0.100;
-    let ads = 0;
+    tg.expand();
 
-    function playAd() {
-        if(ads >= 10) return;
-        
-        // محاكاة الإعلان
-        const btn = document.getElementById('watch-btn');
-        btn.disabled = true;
-        
+    // البيانات
+    let balance = parseFloat(localStorage.getItem('bal')) || 0.100;
+    let adsToday = parseInt(localStorage.getItem('ads')) || 0;
+    let taskTimes = JSON.parse(localStorage.getItem('tasks')) || {};
+
+    // تحديث الواجهة
+    function updateUI() {
+        document.getElementById('bal-val').innerText = balance.toFixed(3);
+        document.getElementById('ad-count').innerText = adsToday;
+        if(adsToday >= 10) document.getElementById('watch-btn').disabled = true;
+        localStorage.setItem('bal', balance);
+        localStorage.setItem('ads', adsToday);
+        localStorage.setItem('tasks', JSON.stringify(taskTimes));
+    }
+
+    // التنقل بين الصفحات
+    function showTab(id, btn) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(btn) btn.classList.add('active');
+        if(id === 'p-tasks') renderTasks();
+        tg.HapticFeedback.impactOccurred('light');
+    }
+
+    // الإعلانات
+    function playFastAd() {
         show_10908620().then(() => {
             balance += 0.05;
-            ads += 1;
-            document.getElementById('bal-val').innerText = balance.toFixed(3);
-            document.getElementById('ad-count').innerText = ads;
-            btn.disabled = false;
-            if(ads >= 10) btn.innerText = "عد غداً (10/10)";
-        }).catch(() => {
-            btn.disabled = false;
+            adsToday += 1;
+            updateUI();
+            tg.showAlert("✅ تمت إضافة 0.05$ لرصيدك!");
         });
     }
 
-    function showTab(id) {
-        // منطق التبديل البسيط
-        tg.HapticFeedback.impactOccurred('light');
+    // المهام
+    function renderTasks() {
+        const list = document.getElementById('tasks-list');
+        list.innerHTML = '';
+        for(let i=1; i<=5; i++) {
+            const last = taskTimes[i] || 0;
+            const isWait = (Date.now() - last) < 24*60*60*1000;
+            list.innerHTML += `
+                <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:15px 20px;">
+                    <div style="text-align:right;"><b>مهمة #${i}</b><br><small style="color:var(--primary)">+$0.05</small></div>
+                    ${isWait ? `<span style="font-size:10px; color:orange;">انتظر 24h</span>` : 
+                    `<button class="btn-3d" style="width:auto; padding:8px 15px; font-size:12px; margin:0;" onclick="doTask(${i}, this)">ابدأ</button>`}
+                </div>`;
+        }
     }
-</script>
 
+    function doTask(id, btn) {
+        btn.disabled = true;
+        show_10908620().then(() => {
+            balance += 0.05;
+            taskTimes[id] = Date.now();
+            updateUI();
+            renderTasks();
+        });
+    }
+
+    // المحفظة
+    function setPay(m) {
+        document.getElementById('wallet-form').style.display = 'block';
+        document.getElementById('pay-name').innerText = "سحب عبر " + m;
+        showTab('p-wallet'); // لضمان بقاء الصفحة
+    }
+
+    function requestWithdraw() {
+        const a = parseFloat(document.getElementById('wallet-amnt').value);
+        if(a < 10) return tg.showAlert("⚠️ الحد الأدنى للسحب هو 10$");
+        if(a > balance) return tg.showAlert("⚠️ رصيدك غير كافي");
+        balance -= a;
+        updateUI();
+        tg.showAlert("✅ تم إرسال طلب السحب للمراجعة!");
+        document.getElementById('wallet-form').style.display = 'none';
+    }
+
+    // الإحالات
+    const link = "https://t.me/Number433bot?start=" + (tg.initDataUnsafe?.user?.id || "12345");
+    document.getElementById('ref-link').innerText = link;
+    function copyLink() { navigator.clipboard.writeText(link); tg.showAlert("🔗 تم نسخ الرابط!"); }
+
+    // إضافة زر المحفظة في الملاحة (أضفت أيقونة رابعة)
+    document.querySelector('.nav').innerHTML += `<button class="nav-item" onclick="showTab('p-wallet', this)"><span style="font-size:20px;">💰</span> السحب</button>`;
+
+    updateUI();
+</script>
 </body>
 </html>
