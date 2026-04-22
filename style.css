@@ -1,0 +1,55 @@
+:root {
+  --main-bg: #0b0e11;
+  --card-bg: #161a1e;
+  --neon-blue: #00d2ff;
+  --neon-purple: #9d50bb;
+  --gold: #f1c40f;
+  --text-main: #ffffff;
+  --text-dim: #848d97;
+}
+
+body {
+  background-color: var(--main-bg);
+  color: var(--text-main);
+  font-family: 'Tajawal', sans-serif;
+  margin: 0; padding: 20px; direction: rtl;
+}
+
+/* تأثيرات الضغط الواقعية */
+.btn-action {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.btn-action:active {
+  transform: scale(0.92);
+  filter: brightness(1.2);
+}
+
+.glass-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* نيون هادي ومتناسق */
+.neon-border {
+  border: 1px solid var(--neon-blue);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
+}
+
+.mystery-box {
+  background: linear-gradient(135deg, #1e1e2f, #0b0e11);
+  border: 2px dashed var(--neon-purple);
+  text-align: center; padding: 15px; border-radius: 20px;
+}
+
+.nav-bar {
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  background: rgba(22, 26, 30, 0.95);
+  display: flex; justify-content: space-around; padding: 15px 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+}
