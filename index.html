@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Bot Ad Test</title>
+    
+    <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { color: #0088cc; }
+        p { font-size: 1.1rem; }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #e1f5fe;
+            color: #01579b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>تجربة إعلانات البوت 🚀</h1>
+        <p>لو كل حاجة صح، الإعلان هيظهر تلقائياً بعد 5 ثواني.</p>
+        
+        <div class="status">
+            حالة الإعلان: قيد الانتظار...
+        </div>
+    </div>
+
+    <script>
+        // تشغيل كود الإعلان بناءً على إعداداتك
+        // سيظهر الإعلان تلقائياً (Timeout: 5s)
+        show_10908620({ 
+            type: 'inApp', 
+            inAppSettings: { 
+                frequency: 2, 
+                capping: 0.1, 
+                interval: 30, 
+                timeout: 5, 
+                everyPage: false 
+            } 
+        });
+
+        // رسالة تأكيدية في الكونسول للتأكد من تشغيل الكود
+        console.log("Ad script has been initialized.");
+    </script>
+</body>
+</html>
