@@ -3,237 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NUM433 | MELLO NEON</title>
+    <title>NUM433 | MELLO PREMIUM</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Tajawal:wght@500;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg: #0d1121;
-            --card: #1c2039;
-            --neon-blue: #5c6fff;
-            --neon-glow: 0 0 15px rgba(92, 111, 255, 0.7);
-            --text-dim: #9499c3;
+            --bg-color: #0b0e1a;
+            --card-color: #161b33;
+            --neon-blue: #545cf1;
+            --neon-glow: 0 0 30px rgba(84, 92, 241, 0.4);
+            --text-gray: #8e94bb;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; margin: 0; padding: 20px 20px 120px; direction: rtl; overflow-x: hidden; }
-
-        /* Header like image */
-        .header { text-align: center; margin-bottom: 25px; }
-        .logo { font-family: 'Montserrat', sans-serif; font-size: 38px; font-weight: 900; text-shadow: var(--neon-glow); }
-        .logo span { color: var(--neon-blue); }
-        .sub-logo { font-size: 11px; color: var(--neon-blue); font-weight: 800; margin-top: -5px; text-transform: uppercase; }
-
-        /* Neon Card style */
-        .card-neon {
-            background: var(--card); border-radius: 40px; padding: 25px;
-            margin-bottom: 20px; text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        body { 
+            background: var(--bg-color); 
+            color: white; 
+            font-family: 'Tajawal', sans-serif; 
+            margin: 0; 
+            padding: 20px 20px 100px; 
+            direction: rtl;
         }
 
-        .card-label { color: var(--text-dim); font-size: 13px; margin-bottom: 10px; }
-        .balance { font-family: 'Montserrat', sans-serif; font-size: 65px; font-weight: 900; text-shadow: var(--neon-glow); line-height: 1; }
+        /* Header */
+        .header { text-align: center; margin-bottom: 30px; }
+        .logo { font-family: 'Montserrat', sans-serif; font-size: 35px; font-weight: 900; }
+        .logo span { color: var(--neon-blue); text-shadow: var(--neon-glow); }
+        .sub-logo { color: var(--neon-blue); font-size: 11px; font-weight: 800; margin-top: -5px; }
 
-        /* Fast Earn Button like image */
-        .btn-fast-earn {
-            background: var(--neon-blue); color: white; border: none; width: 100%;
-            padding: 22px; border-radius: 30px; font-size: 18px; font-weight: 800;
-            box-shadow: 0 10px 0 #3a42c4, var(--neon-glow); /* 3D effect + glow */
+        /* Card Style - Matches your Image */
+        .card-main {
+            background: var(--card-color);
+            border-radius: 45px;
+            padding: 35px 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .label-text { color: var(--text-gray); font-size: 14px; margin-bottom: 10px; }
+        
+        /* Digital Balance Style */
+        .balance-value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 65px;
+            font-weight: 900;
+            text-shadow: var(--neon-glow);
+            letter-spacing: -2px;
+            margin: 10px 0;
+        }
+
+        /* 3D Main Button */
+        .btn-action {
+            background: var(--neon-blue);
+            color: white; border: none; width: 100%;
+            padding: 22px; border-radius: 30px;
+            font-size: 18px; font-weight: 800;
+            box-shadow: 0 10px 0 #3239a8, var(--neon-glow);
             cursor: pointer; transition: 0.1s;
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .btn-fast-earn:active { transform: translateY(6px); box-shadow: 0 4px 0 #3a42c4; }
-        .btn-fast-earn:disabled { background: #33395a; box-shadow: 0 6px 0 #1e223a; opacity: 0.7; }
+        .btn-action:active { transform: translateY(6px); box-shadow: 0 4px 0 #3239a8; }
+        .btn-action:disabled { background: #2d325a; box-shadow: 0 5px 0 #1e223a; opacity: 0.6; }
 
-        /* Section Title */
-        .section-title { font-size: 16px; font-weight: 800; color: white; margin: 25px 10px 15px 0; text-align: right; }
-
-        /* Task Item like image */
-        .task-item {
-            background: rgba(255,255,255,0.03); border-radius: 20px;
-            padding: 15px 20px; margin-bottom: 12px; display: flex;
-            justify-content: space-between; align-items:center;
+        /* Task Item Design */
+        .task-row {
+            background: rgba(255,255,255,0.02);
+            border-radius: 25px;
+            padding: 18px 25px;
+            margin-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
             border: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Neon Small Button */
-        .btn-neon-sm {
+        .btn-small {
             background: var(--neon-blue); color: white; border: none;
-            padding: 8px 25px; border-radius: 12px; font-size: 12px; font-weight: 800;
-            cursor: pointer; transition: 0.2s; box-shadow: var(--neon-glow);
+            padding: 8px 20px; border-radius: 12px; font-size: 12px; font-weight: 800;
+            box-shadow: 0 4px 0 #3239a8; cursor: pointer;
         }
-        .btn-neon-sm:active { transform: scale(0.95); opacity: 0.8; }
 
-        /* Nav Bar like image */
-        .nav-neon {
+        /* Navigation Bar */
+        .bottom-nav {
             position: fixed; bottom: 25px; left: 20px; right: 20px;
-            background: #161a2e; border-radius: 35px; display: flex;
-            justify-content: space-around; padding: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            border: 1px solid rgba(255,255,255,0.05); z-index: 1000;
+            background: #14182e; border-radius: 35px;
+            display: flex; justify-content: space-around; padding: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.05);
         }
+        .nav-btn { background: none; border: none; color: var(--text-gray); font-size: 11px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .nav-btn.active { color: var(--neon-blue); text-shadow: var(--neon-glow); }
 
-        .nav-item { flex: 1; background: none; border: none; color: var(--text-dim); font-size: 11px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
-        .nav-item.active { color: var(--neon-blue); text-shadow: var(--neon-glow); }
-        .nav-icon { font-size: 18px; }
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Forms like image */
-        .input-neon {
+        /* Input Style */
+        .neon-input {
             width: 100%; background: #0d1121; border: 1px solid rgba(255,255,255,0.1);
             padding: 15px; border-radius: 15px; color: white; margin-bottom: 15px;
-            font-family: 'Tajawal'; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
         }
-
-        .page { display: none; width: 100%; animation: fadeIn 0.4s ease; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div class="header">
     <div class="logo">NUM<span>433</span></div>
-    <div class="sub-logo">🚀 . MELLO</div>
+    <div class="sub-logo">MELLO . 🚀</div>
 </div>
 
-<div id="p-home" class="page active">
-    <div class="card-neon">
-        <div class="card-label">إجمالي الرصيد</div>
-        <div class="balance">$<span id="bal-val">0.100</span></div>
+<div id="home-pg" class="page active">
+    <div class="card-main">
+        <div class="label-text">الرصيد المتوفر</div>
+        <div class="balance-value">$<span id="main-bal">0.100</span></div>
+        <div style="display:flex; justify-content:center; gap:20px; margin-top:15px; font-size:12px; color:var(--text-gray);">
+            <span>إعلانات اليوم: <b id="ad-count" style="color:white">0/10</b></span>
+            <span>الربح الإجمالي: <b id="total-earn" style="color:white">$0.10</b></span>
+        </div>
     </div>
-    
-    <button class="btn-fast-earn" id="watch-btn" onclick="playFastAd()">
+
+    <button class="btn-action" id="watch-ad-btn" onclick="handleAdClick()">
         كسب سريع (0.05$) <span style="background:#ff9500; border-radius:8px; padding:2px 6px;">▶️</span>
     </button>
-    <div style="color:var(--text-dim); font-size:11px; text-align:center; margin-top:10px;">إعلانات اليوم: <span id="ad-count">0</span>/10</div>
 
-    <div class="section-title">المهام السريعة</div>
-    <div id="daily-tasks-list"></div>
+    <h3 style="margin:30px 10px 15px 0; font-size:16px;">المهام السريعة</h3>
+    <div id="tasks-container"></div>
 </div>
 
-<div id="p-wallet" class="page">
-    <h3 style="margin-bottom:20px; text-align:right;">سحب الأرباح</h3>
-    <div class="card-neon" style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
-        <button class="btn-neon-sm" style="font-size:11px; padding:12px;" onclick="setPay('Binance')">Binance</button>
-        <button class="btn-neon-sm" style="font-size:11px; padding:12px;" onclick="setPay('USDT')">USDT</button>
+<div id="wallet-pg" class="page">
+    <h3 style="margin-bottom:20px;">سحب الأرباح</h3>
+    <div class="card-main" style="padding:20px;">
+        <p class="label-text">اختر وسيلة السحب</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+            <button class="btn-small" style="padding:15px;" onclick="initWithdraw('Binance')">Binance</button>
+            <button class="btn-small" style="padding:15px;" onclick="initWithdraw('USDT')">USDT (TRC20)</button>
+        </div>
     </div>
-    <div id="wallet-form" class="card-neon" style="display:none; animation: fadeIn 0.3s ease;">
-        <div class="card-label" id="pay-name">سحب عبر Binance</div>
-        <input type="text" class="input-neon" id="wallet-addr" placeholder="العنوان / المعرف">
-        <input type="number" class="input-neon" id="wallet-amnt" placeholder="المبلغ ($10 كحد أدنى)">
-        <button class="btn-fast-earn" style="font-size:15px; padding:15px;" onclick="requestWithdraw()">تأكيد السحب</button>
-    </div>
-</div>
 
-<div id="p-refer" class="page">
-    <div class="card-neon">
-        <div class="card-label">رابط الإحالة الخاص بك</div>
-        <div id="ref-link" style="font-size:11px; background:#0d1121; padding:15px; border-radius:15px; word-break:break-all; margin-bottom:15px; border:1px dashed var(--neon-blue);">جاري التحميل...</div>
-        <button class="btn-fast-earn" style="font-size:15px; padding:15px;" onclick="copyLink()">نسخ الرابط</button>
+    <div id="withdraw-form" class="card-main" style="display:none;">
+        <p id="method-title" style="color:var(--neon-blue); font-weight:800; margin-bottom:15px;"></p>
+        <input type="text" class="neon-input" id="wallet-id" placeholder="العنوان أو المعرف (ID)">
+        <input type="number" class="neon-input" id="wallet-amount" placeholder="المبلغ (الأدنى $10)">
+        <button class="btn-action" style="font-size:15px; padding:15px;" onclick="processWithdrawal()">تأكيد طلب السحب</button>
     </div>
 </div>
 
-<nav class="nav-neon">
-    <button class="nav-item" onclick="showTab('p-wallet', this)">
-        <span class="nav-icon">💰</span> المحفظة
-    </button>
-    <button class="nav-item" onclick="showTab('p-home', this)">
-        <span class="nav-icon">🎯</span> المهام
-    </button>
-    <button class="nav-item active" onclick="showTab('p-home', this)">
-        <span class="nav-icon">🏠</span> الرئيسية
-    </button>
+<div id="refer-pg" class="page">
+    <div class="card-main">
+        <p class="label-text">رابط الدعوة الخاص بك</p>
+        <div id="ref-url" style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; font-size:11px; border:1px dashed var(--neon-blue); margin-bottom:20px;"></div>
+        <button class="btn-action" style="font-size:14px; padding:15px;" onclick="copyRefLink()">نسخ الرابط</button>
+    </div>
+</div>
+
+<nav class="bottom-nav">
+    <button class="nav-btn" onclick="changeTab('wallet-pg', this)"><span>💰</span>المحفظة</button>
+    <button class="nav-btn" onclick="changeTab('refer-pg', this)"><span>👥</span>الدعوات</button>
+    <button class="nav-btn active" onclick="changeTab('home-pg', this)"><span>🏠</span>الرئيسية</button>
 </nav>
 
 <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    // البيانات
-    let balance = parseFloat(localStorage.getItem('b')) || 0.100;
-    let adsToday = parseInt(localStorage.getItem('a')) || 0;
-    let taskTimes = JSON.parse(localStorage.getItem('t')) || {};
+    // Data Management
+    let balance = parseFloat(localStorage.getItem('user_bal')) || 0.100;
+    let adsCount = parseInt(localStorage.getItem('daily_ads')) || 0;
+    let taskHistory = JSON.parse(localStorage.getItem('task_history')) || {};
 
-    // تحديث الواجهة
-    function updateUI() {
-        document.getElementById('bal-val').innerText = balance.toFixed(3);
-        document.getElementById('ad-count').innerText = adsToday;
-        if(adsToday >= 10) document.getElementById('watch-btn').disabled = true;
-        localStorage.setItem('b', balance);
-        localStorage.setItem('a', adsToday);
-        localStorage.setItem('t', JSON.stringify(taskTimes));
+    function syncUI() {
+        document.getElementById('main-bal').innerText = balance.toFixed(3);
+        document.getElementById('ad-count').innerText = adsCount + "/10";
+        document.getElementById('total-earn').innerText = "$" + balance.toFixed(2);
+        if(adsCount >= 10) document.getElementById('watch-ad-btn').disabled = true;
+        
+        localStorage.setItem('user_bal', balance);
+        localStorage.setItem('daily_ads', adsCount);
+        localStorage.setItem('task_history', JSON.stringify(taskHistory));
     }
 
-    // التنقل نيون
-    function showTab(id, btn) {
+    function changeTab(tabId, btn) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        if(btn) btn.classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
         tg.HapticFeedback.impactOccurred('light');
     }
 
-    // إعلانات النيون
-    function playFastAd() {
+    // Ad Logic
+    function handleAdClick() {
         show_10908620().then(() => {
-            balance += 0.05; adsToday += 1; updateUI();
-            tg.showAlert("💰 مبروك! أضفت 0.05$");
+            balance += 0.05;
+            adsCount += 1;
+            syncUI();
+            tg.showAlert("✅ تمت إضافة المكافأة!");
         });
     }
 
-    // المهام السريعة بنظام الـ 24 ساعة
+    // Tasks Logic (24H System)
     function renderTasks() {
-        const list = document.getElementById('daily-tasks-list'); list.innerHTML = '';
+        const container = document.getElementById('tasks-container');
+        container.innerHTML = '';
         for(let i=1; i<=4; i++) {
-            const lastTime = taskTimes[i] || 0;
-            const isWait = (Date.now() - lastTime) < 24*60*60*1000;
-            list.innerHTML += `<div class="task-item">
-                <div style="text-align:right;"><b>مهمة #${i}</b><br><small style="color:var(--neon-blue)">+$0.05</small></div>
-                ${isWait ? `<span style="font-size:10px; color:#ff9500;">انتظر 24h</span>` : 
-                `<button class="btn-neon-sm" onclick="doTask(${i}, this)">ابدأ</button>`}
-            </div>`;
+            const lastDone = taskHistory[i] || 0;
+            const isLocked = (Date.now() - lastDone) < 24*60*60*1000;
+            container.innerHTML += `
+                <div class="task-row">
+                    <div style="text-align:right"><b>مهمة #${i}</b><br><small style="color:var(--neon-blue)">+$0.05</small></div>
+                    ${isLocked ? `<span style="color:orange; font-size:10px;">انتظر 24 ساعة</span>` : 
+                    `<button class="btn-small" onclick="completeTask(${i})">ابدأ</button>`}
+                </div>`;
         }
     }
 
-    function doTask(id, btn) {
-        btn.disabled = true;
+    function completeTask(id) {
         show_10908620().then(() => {
-            balance += 0.05; taskTimes[id] = Date.now(); updateUI(); renderTasks();
+            balance += 0.05;
+            taskHistory[id] = Date.now();
+            syncUI(); renderTasks();
         });
     }
 
-    // المحفظة
-    function setPay(m) {
-        document.getElementById('wallet-form').style.display = 'block';
-        document.getElementById('pay-name').innerText = "سحب عبر " + m;
-        showTab('p-wallet');
+    // Wallet Logic (Old System)
+    function initWithdraw(method) {
+        document.getElementById('withdraw-form').style.display = 'block';
+        document.getElementById('method-title').innerText = "سحب عبر: " + method;
     }
 
-    function requestWithdraw() {
-        const a = parseFloat(document.getElementById('wallet-amnt').value);
-        if(a < 10) return tg.showAlert("⚠️ الحد الأدنى للسحب $10");
-        if(a > balance) return tg.showAlert("⚠️ رصيدك غير كافٍ");
-        balance -= a; updateUI();
-        tg.showAlert("✅ تم إرسال الطلب للمراجعة!");
-        document.getElementById('wallet-form').style.display = 'none';
+    function processWithdrawal() {
+        const amnt = parseFloat(document.getElementById('wallet-amount').value);
+        if(amnt < 10) return tg.showAlert("⚠️ الحد الأدنى للسحب هو 10$");
+        if(amnt > balance) return tg.showAlert("⚠️ رصيدك غير كافٍ");
+        
+        balance -= amnt;
+        syncUI();
+        tg.showAlert("✅ تم إرسال الطلب بنجاح!");
+        document.getElementById('withdraw-form').style.display = 'none';
     }
 
-    // الإحالات
-    const link = "https://t.me/Number433bot?start=" + (tg.initDataUnsafe?.user?.id || "12345");
-    document.getElementById('ref-link').innerText = link;
-    function copyLink() { navigator.clipboard.writeText(link); tg.showAlert("🔗 تم نسخ الرابط!"); }
+    // Referral
+    const myLink = "https://t.me/Number433bot?start=" + (tg.initDataUnsafe?.user?.id || "6619233998");
+    document.getElementById('ref-url').innerText = myLink;
+    function copyRefLink() { navigator.clipboard.writeText(myLink); tg.showAlert("🔗 تم النسخ!"); }
 
-    // إضافة زر الدعوات في الملاحة
-    document.querySelector('.nav-neon').innerHTML = `
-        <button class="nav-item" onclick="showTab('p-wallet', this)"><span class="nav-icon">💰</span> المحفظة</button>
-        <button class="nav-item" onclick="showTab('p-refer', this)"><span class="nav-icon">👥</span> الدعوات</button>
-        <button class="nav-item active" onclick="showTab('p-home', this)"><span class="nav-icon">🏠</span> الرئيسية</button>
-    `;
-
-    updateUI(); renderTasks();
+    syncUI();
+    renderTasks();
 </script>
+
 </body>
 </html>
