@@ -12,7 +12,7 @@
 
 <style>
 :root {
-  --bg: #070810;
+  --bg: #0d1117;
   --primary: #5c5ff5;
   --primary-glow: rgba(92, 95, 245, 0.4);
   --accent: #c9a84c;
@@ -20,53 +20,56 @@
   --glass-border: rgba(255, 255, 255, 0.1);
   --text-dim: #9499c3;
   --green-online: #4dff88;
-  --error: #ff4d4d;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; outline: none; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 body {
   background: var(--bg);
-  background-image: radial-gradient(circle at top right, #1a1c3d, #070810);
   color: white; font-family: 'Tajawal', sans-serif;
   min-height: 100vh; padding: 10px 15px 120px;
-  direction: rtl; overflow-x: hidden;
+  direction: rtl;
 }
 
 /* Header */
-.cool-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0 25px; border-bottom: 1px solid var(--glass-border); margin-bottom: 20px; }
-.logo-num433 { font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 800; color: white; text-shadow: 0 0 15px var(--primary-glow); }
-.logo-num433 span { color: var(--primary); }
-.logo-num433 b { color: var(--accent); font-size: 28px; }
-.user-status-card { display: flex; align-items: center; gap: 8px; background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 50px; padding: 8px 15px; }
-.online-dot { width: 9px; height: 9px; background-color: var(--green-online); border-radius: 50%; position: relative; box-shadow: 0 0 10px var(--green-online); }
-.online-dot::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--green-online); border-radius: 50%; animation: pulseOnline 2s infinite; }
+.cool-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin-bottom: 20px; }
+.logo-num433 { font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 800; color: white; }
+.logo-num433 b { color: #5c5ff5; }
+.user-status-card { display: flex; align-items: center; gap: 8px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; padding: 8px 15px; }
+.online-dot { width: 10px; height: 10px; background: var(--green-online); border-radius: 50%; box-shadow: 0 0 10px var(--green-online); animation: pulse 2s infinite; }
 
-/* Leaderboard */
-.leader-item { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 20px; margin-bottom: 10px; border: 1px solid transparent; }
-.leader-rank { font-family: 'Poppins'; font-weight: 800; width: 30px; font-size: 18px; }
-.leader-info { flex-grow: 1; margin-right: 15px; }
-.leader-name { font-weight: 700; font-size: 14px; display: block; }
-.leader-stats { font-size: 11px; color: var(--text-dim); }
-.leader-prize { font-family: 'Poppins'; font-weight: 800; color: var(--green-online); }
+/* Leaderboard - نفس الصورة بالظبط */
+.leader-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.leader-card.top-1 { border-color: var(--accent); background: rgba(201, 168, 76, 0.05); }
+.l-amount { color: var(--green-online); font-family: 'Poppins'; font-weight: 800; font-size: 18px; }
+.l-info { flex-grow: 1; text-align: center; }
+.l-name { display: block; font-weight: 900; font-size: 15px; margin-bottom: 4px; }
+.l-sub { font-size: 11px; color: var(--text-dim); }
+.l-rank { font-size: 22px; width: 40px; text-align: left; font-family: 'Poppins'; font-weight: 800; }
 
-/* Components */
-.glass-card { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 28px; padding: 25px 20px; margin-bottom: 20px; }
-.balance-val { font-family: 'Syne', sans-serif; font-size: 45px; font-weight: 800; text-align: center; text-shadow: 0 0 25px var(--primary-glow); }
-.btn-action { background: var(--primary); color: white; border: none; width: 100%; padding: 18px; border-radius: 18px; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 0 8px 20px var(--primary-glow); }
-.btn-action:disabled { background: #2a2d4a; box-shadow: none; opacity: 0.6; }
-
-.input-style { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); padding: 16px; border-radius: 15px; color: white; font-family: 'Tajawal'; margin: 10px 0; }
+/* Stats & Pages */
+.glass-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 25px; padding: 20px; margin-bottom: 20px; }
+.balance-val { font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800; text-align: center; margin: 10px 0; color: #5c5ff5; }
+.btn-action { background: var(--primary); color: white; border: none; width: 100%; padding: 18px; border-radius: 18px; font-weight: 900; font-size: 16px; cursor: pointer; }
 
 .nav-bar { position: fixed; bottom: 20px; left: 10px; right: 10px; background: rgba(20, 22, 45, 0.95); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 25px; display: flex; justify-content: space-around; padding: 10px; z-index: 1000; }
-.nav-btn { color: var(--text-dim); background: none; border: none; font-size: 10px; cursor: pointer; flex: 1; text-align: center; }
-.nav-btn.active { color: var(--primary); font-weight: 900; transform: translateY(-3px); }
+.nav-btn { color: var(--text-dim); background: none; border: none; font-size: 10px; flex: 1; text-align: center; }
+.nav-btn.active { color: var(--primary); font-weight: 900; }
 
 .page { display: none; }
-.page.active { display: block; animation: slideUp 0.4s ease; }
+.page.active { display: block; animation: fadeIn 0.4s ease; }
 
-@keyframes pulseOnline { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(2.2); opacity: 0; } }
-@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 #toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 12px 25px; border-radius: 15px; z-index: 10000; transition: 0.5s; font-weight: bold; }
 #toast.show { top: 30px; }
@@ -76,11 +79,10 @@ body {
 
 <div id="toast"></div>
 
-<div id="sub-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center;">
-    <div style="background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 35px; padding: 40px 20px; width: 100%; max-width: 400px;">
-        <div style="font-size: 50px; margin-bottom: 20px;">👑</div>
-        <h2 style="margin-bottom: 10px; font-family: Poppins;">انضم للنخبة</h2>
-        <p style="color: var(--text-dim); font-size: 14px; margin-bottom: 30px;">يجب عليك الاشتراك في القناة الرسمية لتفعيل حسابك.</p>
+<div id="sub-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center;">
+    <div class="glass-card" style="width: 100%; max-width: 350px;">
+        <h2 style="margin-bottom: 15px;">انضم للقناة 🚀</h2>
+        <p style="font-size: 13px; color: var(--text-dim); margin-bottom: 25px;">يجب الاشتراك في قناة البوت الرسمية لتفعيل المهام والسحب.</p>
         <button class="btn-action" style="background: #0088cc; margin-bottom: 10px;" onclick="window.open('https://t.me/Number433', '_blank')">🔗 اشترك الآن</button>
         <button class="btn-action" style="background: transparent; border: 1px solid var(--glass-border);" onclick="verifySub()">✅ تم الاشتراك</button>
     </div>
@@ -88,67 +90,86 @@ body {
 
 <div id="main-content" style="filter: blur(10px); pointer-events: none;">
     <header class="cool-header">
-        <div class="logo-num433"><span>NUM</span><b>433</b></div>
+        <div class="logo-num433">NUM<b>433</b></div>
         <div class="user-status-card">
-            <span style="font-size: 13px; font-weight: 700;" id="u_name">تحميل...</span>
             <span class="online-dot"></span>
+            <span id="u_name" style="font-size: 13px; font-weight: bold;">تحميل...</span>
         </div>
     </header>
 
     <div id="p-home" class="page active">
-        <div id="fake-notify-container"></div>
         <div class="glass-card">
-            <p style="text-align:center; color:var(--text-dim); font-size:13px; margin-bottom:10px;">الرصيد القابل للسحب</p>
+            <p style="text-align:center; color:var(--text-dim); font-size: 12px;">رصيدك الحالي</p>
             <div class="balance-val">$<span id="balance">0.000</span></div>
         </div>
         <div class="glass-card" style="text-align: center;">
-            <h4 style="color: var(--accent);">📊 إحصائياتك</h4>
-            <p style="font-size: 11px; margin-top: 5px;">أنت حالياً في المركز <b id="u-rank">#452</b> عالمياً</p>
+            <h4 style="color: var(--accent); margin-bottom: 5px;">📊 رتبتك الحالية</h4>
+            <p style="font-size: 14px;">المستوى: <b id="u-level" style="color: var(--primary);">VIP 1</b></p>
+            <div style="height: 5px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 10px; overflow: hidden;">
+                <div id="level-bar" style="height: 100%; background: var(--primary); width: 10%;"></div>
+            </div>
         </div>
     </div>
 
     <div id="p-leaders" class="page">
-        <h3 style="margin-bottom:20px; text-align: center;">🏆 قائمة المتصدرين</h3>
-        <div class="glass-card" style="padding: 15px;">
-            <div class="leader-item"><span class="leader-rank">👑</span><div class="leader-info"><span class="leader-name">أحمد المحمدي</span><span class="leader-stats">650 إحالة</span></div><span class="leader-prize">$142.50</span></div>
-            <div class="leader-item"><span class="leader-rank">🥈</span><div class="leader-info"><span class="leader-name">سارة خالد</span><span class="leader-stats">412 إحالة</span></div><span class="leader-prize">$90.15</span></div>
-            <div class="leader-item"><span class="leader-rank">🥉</span><div class="leader-info"><span class="leader-name">Mostafa VIP</span><span class="leader-stats">280 إحالة</span></div><span class="leader-prize">$56.80</span></div>
-        </div>
-    </div>
-
-    <div id="p-tasks" class="page">
-        <h3 style="margin-bottom:15px;">المهام اليومية (10/10)</h3>
-        <div id="tasks-list"></div>
-    </div>
-
-    <div id="p-refer" class="page">
-        <div class="glass-card">
-            <h4 style="color:var(--accent)">نظام الدعوات</h4>
-            <div id="ref-link" style="font-size:11px; word-break:break-all; color:var(--primary); background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; margin: 15px 0;"></div>
-            <button class="btn-action" onclick="copyRef()">نسخ الرابط</button>
-        </div>
-    </div>
-
-    <div id="p-wallet" class="page">
-        <h3 style="margin-bottom:20px;">سحب الأرباح</h3>
+        <h3 style="margin-bottom:20px; text-align: center;">أقوى 5 مستخدمين 🏆</h3>
         
-        <div class="glass-card" style="border: 1px solid rgba(201,168,76,0.3);">
-            <h4 style="color:var(--accent); font-size:14px; margin-bottom:10px;">⚠️ شروط السحب:</h4>
-            <ul style="font-size:12px; color:var(--text-dim); padding-right:15px; line-height:1.8;">
-                <li id="req-ref">دعوة 10 أشخاص (متبقي: <span id="rem-ref">10</span>)</li>
-                <li id="req-money">الحد الأدنى للسحب 10 دولار</li>
-            </ul>
+        <div class="leader-card top-1">
+            <span class="l-amount">$342.50</span>
+            <div class="l-info">
+                <span class="l-name">أحمد المحمدي</span>
+                <span class="l-sub">650 إحالة • 240 مهمة</span>
+            </div>
+            <span class="l-rank">👑</span>
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div class="glass-card" onclick="selectPay('Binance')" style="text-align:center; cursor:pointer; padding:15px;">Binance</div>
-            <div class="glass-card" onclick="selectPay('USDT')" style="text-align:center; cursor:pointer; padding:15px;">USDT</div>
+        <div class="leader-card">
+            <span class="l-amount">$210.15</span>
+            <div class="l-info">
+                <span class="l-name">سارة خالد</span>
+                <span class="l-sub">412 إحالة • 190 مهمة</span>
+            </div>
+            <span class="l-rank">🥈</span>
         </div>
 
-        <div id="w-form" class="glass-card" style="display:none; border-top: 2px solid var(--primary);">
-            <p id="pay-method" style="color:var(--primary); font-weight:bold; margin-bottom:10px;"></p>
-            <input type="text" id="w-addr" class="input-style" placeholder="أدخل العنوان أو ID">
-            <button class="btn-action" onclick="submitWithdraw()">تأكيد السحب</button>
+        <div class="leader-card">
+            <span class="l-amount">$156.80</span>
+            <div class="l-info">
+                <span class="l-name">Mostafa VIP</span>
+                <span class="l-sub">280 إحالة • 300 مهمة</span>
+            </div>
+            <span class="l-rank">🥉</span>
+        </div>
+
+        <div class="leader-card">
+            <span class="l-amount">$98.40</span>
+            <div class="l-info">
+                <span class="l-name">Laila_Ads</span>
+                <span class="l-sub">195 إحالة • 120 مهمة</span>
+            </div>
+            <span class="l-rank">4</span>
+        </div>
+
+        <div class="leader-card">
+            <span class="l-amount">$82.20</span>
+            <div class="l-info">
+                <span class="l-name">إسلام يحيى</span>
+                <span class="l-sub">140 إحالة • 450 مهمة</span>
+            </div>
+            <span class="l-rank">5</span>
+        </div>
+    </div>
+
+    <div id="p-tasks" class="page"><h3 style="margin-bottom:15px;">المهام اليومية</h3><div id="tasks-list"></div></div>
+    <div id="p-refer" class="page"><div class="glass-card"><h4>رابط الدعوة</h4><div id="ref-link" style="font-size:11px; word-break:break-all; color:var(--primary); background:rgba(0,0,0,0.2); padding:15px; border-radius:15px; margin: 15px 0;"></div><button class="btn-action" onclick="copyRef()">نسخ الرابط</button></div></div>
+    <div id="p-wallet" class="page">
+        <h3>سحب الأرباح</h3>
+        <div class="glass-card" style="border: 1px solid rgba(201,168,76,0.3); font-size: 12px; margin-top: 15px;">
+            ⚠️ السحب متاح بعد دعوة 10 أشخاص وجمع 10 دولار.
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top: 15px;">
+            <div class="glass-card" onclick="selectPay('Binance')" style="text-align:center;">Binance</div>
+            <div class="glass-card" onclick="selectPay('USDT')" style="text-align:center;">USDT</div>
         </div>
     </div>
 
@@ -163,70 +184,41 @@ body {
 
 <script>
 const tg = window.Telegram.WebApp; tg.expand();
-let S = JSON.parse(localStorage.getItem('n433_v2')) || { 
-    balance: 0.000, 
-    adsToday: 0, 
-    refCount: 0, 
-    isSubscribed: false,
-    lastResetTimestamp: 0 
-};
+let S = JSON.parse(localStorage.getItem('n433_v2')) || { balance: 0.000, adsToday: 0, refCount: 0, isSubscribed: false };
 
-function verifySub() { S.isSubscribed = true; save(); document.getElementById('sub-overlay').style.display = 'none'; document.getElementById('main-content').style.filter = 'none'; document.getElementById('main-content').style.pointerEvents = 'auto'; showToast("✅ تم التفعيل!"); }
-if (S.isSubscribed) { document.getElementById('sub-overlay').style.display = 'none'; document.getElementById('main-content').style.filter = 'none'; document.getElementById('main-content').style.pointerEvents = 'auto'; }
+function verifySub() { S.isSubscribed = true; save(); location.reload(); }
+if (S.isSubscribed) { 
+    document.getElementById('sub-overlay').style.display = 'none'; 
+    document.getElementById('main-content').style.filter = 'none'; 
+    document.getElementById('main-content').style.pointerEvents = 'auto'; 
+}
 
 function save() { localStorage.setItem('n433_v2', JSON.stringify(S)); updateUI(); }
 
 function updateUI() { 
     document.getElementById('balance').innerText = S.balance.toFixed(3);
     
-    // تحديث الشروط
-    const rem = 10 - S.refCount;
-    document.getElementById('rem-ref').innerText = rem > 0 ? rem : 0;
-    document.getElementById('req-ref').style.color = rem <= 0 ? "#4dff88" : "#ff4d4d";
-    document.getElementById('req-money').style.color = S.balance >= 10 ? "#4dff88" : "#ff4d4d";
+    // نظام المستويات التلقائي
+    let lvl = "VIP 1"; let progress = (S.balance / 10) * 100;
+    if(S.balance >= 10) { lvl = "VIP 2"; progress = 50; }
+    if(S.balance >= 50) { lvl = "VIP 3"; progress = 80; }
+    if(S.balance >= 100) { lvl = "Legend"; progress = 100; }
+    
+    document.getElementById('u-level').innerText = lvl;
+    document.getElementById('level-bar').style.width = progress + "%";
 
-    // تحديث المهام
     const list = document.getElementById('tasks-list');
-    if(S.adsToday >= 10) { 
-        list.innerHTML = `<div class="glass-card" style="text-align:center; color:var(--accent)">تم اكتمال مهام اليوم! عد بعد 24 ساعة.</div>`; 
-    } else { 
-        let h = ''; 
-        for(let i=S.adsToday+1; i<=10; i++) { 
-            h += `<div class="glass-card" style="display:flex; justify-content:space-between; align-items:center; padding:15px;">
-                <span>مهمة #${i} (+$0.010)</span>
-                <button class="btn-action" style="width:auto; padding:8px 15px; font-size:12px;" onclick="doTask(this)">مشاهدة</button>
-            </div>`; 
+    if(S.adsToday >= 10) { list.innerHTML = `<div class="glass-card" style="text-align:center;">تم اكتمال مهام اليوم!</div>`; } 
+    else { 
+        let h = ''; for(let i=S.adsToday+1; i<=10; i++) { 
+            h += `<div class="glass-card" style="display:flex; justify-content:space-between; align-items:center;"><span>مهمة #${i}</span><button class="btn-action" style="width:auto; padding:8px 15px; font-size:11px;" onclick="doTask(this)">بدء</button></div>`; 
         }
         list.innerHTML = h; 
     }
 }
 
 function doTask(btn) { 
-    btn.disabled = true; btn.innerText = "..."; 
-    show_10908620().then(() => { 
-        S.balance += 0.010; // السعر الجديد المخفض
-        S.adsToday += 1; 
-        if(S.adsToday >= 10) S.lastResetTimestamp = Date.now();
-        save(); 
-        showToast("💰 ربحت $0.010"); 
-    }).catch(() => { 
-        btn.disabled = false; btn.innerText = "فشل"; 
-        showToast("⚠️ شاهد الإعلان للنهاية");
-    });
-}
-
-function selectPay(m) { 
-    if(S.refCount < 10) return showToast("❌ يجب دعوة 10 أشخاص أولاً");
-    if(S.balance < 10) return showToast("❌ الحد الأدنى للسحب 10 دولار");
-    document.getElementById('w-form').style.display = 'block';
-    document.getElementById('pay-method').innerText = "وسيلة السحب: " + m;
-}
-
-function submitWithdraw() { 
-    if(S.balance < 10) return;
-    S.balance -= 10; save();
-    showToast("✅ تم إرسال طلب السحب للمراجعة");
-    document.getElementById('w-form').style.display = 'none';
+    btn.disabled = true; show_10908620().then(() => { S.balance += 0.010; S.adsToday += 1; save(); showToast("💰 +$0.010"); }).catch(() => { btn.disabled = false; });
 }
 
 function showTab(id, btn) { 
@@ -237,16 +229,11 @@ function showTab(id, btn) {
 
 function showToast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
 function copyRef() { navigator.clipboard.writeText(document.getElementById('ref-link').innerText); showToast("🔗 تم النسخ!"); }
+function selectPay(m) { if(S.refCount < 10 || S.balance < 10) return showToast("❌ لم تستوف الشروط"); }
 
 const user = tg.initDataUnsafe?.user;
 document.getElementById('u_name').innerText = user?.first_name || "Guest";
 document.getElementById('ref-link').innerText = `https://t.me/Number433bot?start=${user?.id || '6619233998'}`;
-
-// تصفير المهام كل 24 ساعة
-if(S.lastResetTimestamp > 0 && (Date.now() - S.lastResetTimestamp >= 86400000)) {
-    S.adsToday = 0; S.lastResetTimestamp = 0; save();
-}
-
 updateUI();
 </script>
 </body>
