@@ -31,7 +31,6 @@ body {
   direction: rtl;
 }
 
-/* Glass UI Components */
 .glass-card {
   background: var(--glass); backdrop-filter: blur(15px);
   border: 1px solid var(--glass-border); border-radius: 28px;
@@ -43,7 +42,7 @@ body {
 .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
 .small-stat { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 15px; text-align: center; font-size: 11px; }
 
-/* Fake Withdrawal Notification */
+/* إشعار سحب وهمي */
 .fake-withdraw {
     background: rgba(92, 95, 245, 0.15);
     border: 1px solid var(--primary);
@@ -57,7 +56,6 @@ body {
     animation: fadeIn 0.5s ease;
 }
 
-/* Buttons & Inputs */
 .btn-action {
   background: var(--primary); color: white; border: none; width: 100%;
   padding: 18px; border-radius: 18px; font-weight: 900; font-size: 16px;
@@ -70,7 +68,6 @@ body {
   padding: 16px; border-radius: 15px; color: white; font-family: 'Tajawal'; margin-top: 10px; margin-bottom: 15px;
 }
 
-/* Navigation */
 .nav-bar {
   position: fixed; bottom: 20px; left: 15px; right: 15px;
   background: rgba(20, 22, 45, 0.9); backdrop-filter: blur(20px);
@@ -80,26 +77,21 @@ body {
 .nav-btn { color: var(--text-dim); background: none; border: none; font-size: 11px; cursor: pointer; flex: 1; transition: 0.3s; }
 .nav-btn.active { color: var(--primary); font-weight: 900; transform: translateY(-3px); }
 
-/* Timer Style */
 #countdown-timer {
-    font-family: 'Syne';
-    font-size: 24px;
-    color: var(--accent);
-    text-align: center;
-    margin: 20px 0;
-    display: none;
+    font-family: 'Syne'; font-size: 20px; color: var(--accent);
+    text-align: center; margin: 20px 0; display: none; line-height: 1.5;
 }
 
-/* Pages */
 .page { display: none; }
 .page.active { display: block; animation: slideUp 0.4s ease; }
+
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
 #toast {
     position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
     background: var(--primary); color: white; padding: 12px 25px; border-radius: 15px;
-    z-index: 2000; transition: 0.5s; font-weight: bold;
+    z-index: 2000; transition: 0.5s; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 #toast.show { top: 30px; }
 </style>
@@ -111,13 +103,12 @@ body {
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
     <h2 style="font-family:'Syne'; letter-spacing:-1px;">NUM<span style="color:var(--primary)">433</span></h2>
     <div style="background:var(--glass); padding:5px 15px; border-radius:50px; font-size:12px; border:1px solid var(--glass-border);">
-        🟢 <span id="u_name">جاري...</span>
+        🟢 <span id="u_name">تحميل...</span>
     </div>
 </div>
 
 <div id="p-home" class="page active">
     <div id="fake-notify-container"></div>
-
     <div class="glass-card">
         <p style="text-align:center; color:var(--text-dim); font-size:13px; margin-bottom:10px;">إجمالي الرصيد</p>
         <div class="balance-val">$<span id="balance">0.000</span></div>
@@ -126,35 +117,31 @@ body {
             <div class="small-stat">المستوى: <b style="color:var(--accent)">VIP 1</b></div>
         </div>
     </div>
-    
     <div class="glass-card">
-        <h4>📢 أخبار المنصة</h4>
-        <p style="font-size:12px; color:var(--text-dim); margin-top:8px;">تم توزيع مكافآت اليوم لجميع المستخدمين النشطين بنجاح. استمر في إكمال المهام لزيادة دخلك!</p>
+        <h4>📢 تنبيه الأمان</h4>
+        <p style="font-size:12px; color:var(--text-dim); margin-top:8px;">لا تشارك بيانات محفظتك مع أي شخص. نظام السحب مؤمن بالكامل عبر Binance و USDT.</p>
     </div>
 </div>
 
 <div id="p-tasks" class="page">
     <h3 style="margin-bottom:15px;">المهام اليومية</h3>
-    <div class="glass-card" style="padding:15px;">
-        إعلانات اليوم المكتملة: <b id="today_ads">0</b>/10
+    <div class="glass-card" style="padding:15px; text-align:center;">
+        التقدم اليومي: <b id="today_ads">0</b> من <b>10</b>
     </div>
-
-    <div id="countdown-timer">00:00:00</div>
-    
-    <div id="tasks-list">
-        </div>
+    <div id="countdown-timer"></div>
+    <div id="tasks-list"></div>
 </div>
 
 <div id="p-refer" class="page">
     <div class="glass-card">
-        <h4 style="color:var(--accent)">نظام المكافآت</h4>
+        <h4 style="color:var(--accent)">شارك واربح</h4>
         <div class="stat-grid">
-            <div class="small-stat">عدد الإحالات: <b id="ref_count">0</b></div>
-            <div class="small-stat">أرباح الدعوات: <b id="ref_profit">$0.00</b></div>
+            <div class="small-stat">الإحالات: <b id="ref_count">0</b></div>
+            <div class="small-stat">الأرباح: <b id="ref_profit">$0.00</b></div>
         </div>
     </div>
     <div class="glass-card">
-        <p style="font-size:12px; color:var(--text-dim); margin-bottom:10px;">رابط الدعوة الخاص بك:</p>
+        <p style="font-size:12px; color:var(--text-dim); margin-bottom:10px;">رابطك الخاص:</p>
         <div id="ref-link" style="font-size:11px; word-break:break-all; color:var(--primary); background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; margin-bottom:15px;"></div>
         <button class="btn-action" onclick="copyRef()">نسخ الرابط</button>
     </div>
@@ -172,12 +159,11 @@ body {
             <p style="font-size:12px; margin-top:5px;">USDT</p>
         </div>
     </div>
-
     <div id="w-form" class="glass-card" style="display:none;">
         <p id="pay-method" style="color:var(--primary); font-weight:bold; margin-bottom:15px;"></p>
-        <input type="text" id="w-addr" class="input-style" placeholder="ID أو عنوان المحفظة">
+        <input type="text" id="w-addr" class="input-style" placeholder="ID الحساب أو العنوان">
         <input type="number" id="w-amnt" class="input-style" placeholder="المبلغ (الأدنى $10)">
-        <button class="btn-action" onclick="submitWithdraw()">تأكيد السحب</button>
+        <button class="btn-action" onclick="submitWithdraw()">إرسال طلب السحب</button>
     </div>
 </div>
 
@@ -192,7 +178,12 @@ body {
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-// --- إعدادات البيانات ---
+// تكوين إعلانات التنقل التلقائية
+show_10908620({
+  type: 'inApp',
+  inAppSettings: { frequency: 2, capping: 0.1, interval: 30, timeout: 5, everyPage: false }
+});
+
 let S = JSON.parse(localStorage.getItem('n433_v2')) || {
     balance: 0.000,
     adsToday: 0,
@@ -201,18 +192,6 @@ let S = JSON.parse(localStorage.getItem('n433_v2')) || {
     refProfit: 0.00,
     lastResetTimestamp: 0
 };
-
-// منطق إعادة تعيين المهام كل 24 ساعة
-function checkReset() {
-    const now = Date.now();
-    const twentyFourHours = 24 * 60 * 60 * 1000;
-    
-    if (now - S.lastResetTimestamp >= twentyFourHours && S.adsToday >= 10) {
-        S.adsToday = 0;
-        S.lastResetTimestamp = 0; // إعادة التصفير
-        save();
-    }
-}
 
 function save() {
     localStorage.setItem('n433_v2', JSON.stringify(S));
@@ -240,15 +219,13 @@ function updateUI() {
     }
 }
 
-// --- مؤقت 24 ساعة ---
+// مؤقت 24 ساعة
 function startTimer() {
-    if (S.lastResetTimestamp === 0) S.lastResetTimestamp = Date.now();
-    
     const interval = setInterval(() => {
         const now = Date.now();
         const distance = (24 * 60 * 60 * 1000) - (now - S.lastResetTimestamp);
         
-        if (distance < 0) {
+        if (distance <= 0) {
             clearInterval(interval);
             S.adsToday = 0;
             S.lastResetTimestamp = 0;
@@ -256,64 +233,56 @@ function startTimer() {
             return;
         }
 
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-        document.getElementById('countdown-timer').innerHTML = 
-            `المهمات القادمة خلال: <br>${hours}:${minutes}:${seconds}`;
+        const h = Math.floor(distance / 3600000);
+        const m = Math.floor((distance % 3600000) / 60000);
+        const s = Math.floor((distance % 60000) / 1000);
+        document.getElementById('countdown-timer').innerHTML = `عد بعد:<br>${h}س : ${m}د : ${s}ث`;
     }, 1000);
 }
 
-// --- توليد المهام في صفحة المهام ---
 function renderTasks() {
     let html = '';
     for(let i = S.adsToday + 1; i <= 10; i++) {
         html += `
         <div class="glass-card" style="display:flex; justify-content:space-between; align-items:center; padding:15px; margin-bottom:10px;">
-            <div><b>مهمة رقم ${i}</b><br><small style="color:var(--primary)">عائد: $0.050</small></div>
+            <div><b>مهمة #${i}</b><br><small style="color:var(--primary)">ربح +$0.050</small></div>
             <button class="btn-action" style="width:auto; padding:8px 18px; font-size:12px;" onclick="completeTask(this)">مشاهدة</button>
         </div>`;
     }
     document.getElementById('tasks-list').innerHTML = html;
 }
 
+// وظيفة الإعلانات الحقيقية
 function completeTask(btn) {
     btn.disabled = true;
     btn.innerText = "جاري...";
     
-    // محاكاة إعلان (يمكنك ربط SDK الإعلانات هنا)
-    setTimeout(() => {
+    // تشغيل إعلان SDK الحقيقي
+    show_10908620().then(() => {
         S.balance += 0.050;
         S.totalEarned += 0.050;
         S.adsToday += 1;
         if(S.adsToday >= 10) S.lastResetTimestamp = Date.now();
         save();
-        showToast("💰 مبروك! حصلت على $0.050");
-    }, 2000);
+        showToast("💰 مبروك! ربحت $0.050");
+    }).catch(() => {
+        btn.disabled = false;
+        btn.innerText = "فشل! أعد المحاولة";
+        showToast("⚠️ يجب مشاهدة الإعلان للنهاية");
+    });
 }
 
-// --- إشعارات سحب وهمية ---
-const names = ["أحمد", "سارة", "محمد", "علي", "فاطمة", "Omar", "Youssef", "Laila"];
-const amounts = [15, 22, 50, 10, 100, 35, 12, 60];
-
+// إشعارات وهمية
+const fakeNames = ["عمر", "ريم", "خالد", "ليان", "نور", "Saad", "Huda", "Fahad"];
 function showFakeWithdraw() {
-    const name = names[Math.floor(Math.random() * names.length)];
-    const amnt = amounts[Math.floor(Math.random() * amounts.length)];
+    const name = fakeNames[Math.floor(Math.random() * fakeNames.length)];
+    const amnt = [10, 15, 20, 50, 100][Math.floor(Math.random() * 5)];
     const container = document.getElementById('fake-notify-container');
-    
-    const div = document.createElement('div');
-    div.className = 'fake-withdraw';
-    div.innerHTML = `✅ قام <b>${name}</b> بسحب <b>$${amnt}.00</b> بنجاح!`;
-    
-    container.innerHTML = '';
-    container.appendChild(div);
-    
-    setTimeout(() => div.style.opacity = '0', 4000);
+    container.innerHTML = `<div class="fake-withdraw">✅ <b>${name}</b> سحب للتو <b>$${amnt}.00</b> بنجاح!</div>`;
+    setTimeout(() => container.innerHTML = '', 4000);
 }
-setInterval(showFakeWithdraw, 7000); // إشعار كل 7 ثوانٍ
+setInterval(showFakeWithdraw, 8000);
 
-// بقية وظائف التطبيق
 function showTab(id, btn) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -329,7 +298,7 @@ function showToast(msg) {
 
 function selectPay(m) {
     document.getElementById('w-form').style.display = 'block';
-    document.getElementById('pay-method').innerText = "وسيلة السحب: " + m;
+    document.getElementById('pay-method').innerText = "السحب عبر: " + m;
 }
 
 function copyRef() {
@@ -337,12 +306,15 @@ function copyRef() {
     showToast("🔗 تم النسخ!");
 }
 
-// التشغيل الأولي
 const user = tg.initDataUnsafe?.user;
 document.getElementById('u_name').innerText = user?.first_name || "Guest";
 document.getElementById('ref-link').innerText = `https://t.me/Number433bot?start=${user?.id || '6619233998'}`;
 
-checkReset();
+if (S.adsToday >= 10 && S.lastResetTimestamp !== 0) {
+    const passed = Date.now() - S.lastResetTimestamp;
+    if (passed >= 86400000) { S.adsToday = 0; S.lastResetTimestamp = 0; save(); }
+}
+
 updateUI();
 </script>
 </body>
