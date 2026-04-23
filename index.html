@@ -6,7 +6,9 @@
 <title>Number 433 Elite - Professional Edition</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="https://adsgram.ai/sdk-v1.js"></script>
+<script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
+<!-- Adsgram SDK -->
+<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
 
@@ -20,6 +22,7 @@
   --text-dim: #8489b2;
   --green: #4dff88;
   --red: #ff4d4d;
+  --orange: #ff9500;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -32,40 +35,202 @@ body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; 
 .user-status-card { display: flex; align-items: center; gap: 8px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; padding: 6px 12px; font-size: 12px; }
 .online-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); }
 
-/* Ads Section Style */
-.ads-banner {
-    background: linear-gradient(135deg, #5c5ff5 0%, #2a2d8a 100%);
+/* Task Cards */
+.task-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+    border: 1px solid var(--glass-border);
     border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: transform 0.2s;
+}
+.task-card:active { transform: scale(0.97); }
+.task-icon {
+    width: 45px;
+    height: 45px;
+    background: rgba(92, 95, 245, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--primary);
+}
+.task-info { flex-grow: 1; }
+.task-info h4 { font-size: 14px; margin-bottom: 4px; }
+.task-info p { font-size: 10px; color: var(--text-dim); }
+.reward-badge {
+    background: rgba(77, 255, 136, 0.1);
+    color: var(--green);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+.reward-badge-orange {
+    background: rgba(255, 149, 0, 0.1);
+    color: var(--orange);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+/* Adsgram Section */
+.ads-header-card {
+    background: linear-gradient(135deg, rgba(255,149,0,0.12), rgba(92,95,245,0.08));
+    border: 1px solid rgba(255,149,0,0.25);
+    border-radius: 22px;
     padding: 20px;
-    margin-top: 15px;
+    margin-bottom: 18px;
+    text-align: center;
+}
+.ads-counter-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 10px 20px rgba(92, 95, 245, 0.2);
+    margin-top: 14px;
+    gap: 10px;
+}
+.ads-counter-box {
+    flex: 1;
+    background: rgba(0,0,0,0.25);
+    border-radius: 14px;
+    padding: 12px 8px;
+    text-align: center;
+}
+.ads-counter-box .big-num {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--orange);
+}
+.ads-counter-box .small-lbl {
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-top: 2px;
+}
+.timer-box .big-num { color: var(--primary) !important; font-size: 16px !important; }
+
+.ads-progress-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    margin-top: 14px;
+    overflow: hidden;
+}
+.ads-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--orange), #ffdc5e);
+    border-radius: 10px;
+    transition: width 0.6s ease;
+    box-shadow: 0 0 8px rgba(255,149,0,0.5);
 }
 
-.ads-content h3 { font-size: 18px; margin-bottom: 5px; }
-.ads-content p { font-size: 11px; opacity: 0.8; }
+.adsgram-card {
+    background: linear-gradient(145deg, rgba(255,149,0,0.06), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,149,0,0.15);
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+.adsgram-card:active { transform: scale(0.97); }
+.adsgram-card.done {
+    opacity: 0.4;
+    border-color: var(--glass-border);
+}
+.adsgram-icon {
+    width: 46px;
+    height: 46px;
+    background: rgba(255,149,0,0.12);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+.adsgram-info { flex-grow: 1; }
+.adsgram-info h4 { font-size: 13px; margin-bottom: 3px; }
+.adsgram-info p { font-size: 10px; color: var(--text-dim); }
+.btn-watch {
+    background: linear-gradient(135deg, var(--orange), #e67e00);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'Tajawal', sans-serif;
+    transition: opacity 0.2s;
+}
+.btn-watch:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-done {
+    background: rgba(77,255,136,0.1);
+    color: var(--green);
+    border: 1px solid rgba(77,255,136,0.2);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: default;
+    white-space: nowrap;
+}
+
+/* Refer System */
+.refer-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.stat-box { background: var(--glass); padding: 15px; border-radius: 18px; text-align: center; border: 1px solid var(--glass-border); }
+.copy-area {
+    background: rgba(0,0,0,0.3);
+    border: 1px dashed var(--primary);
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+/* Leaderboard */
+.leader-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+.leader-card.rank-1 { border-color: var(--accent); background: rgba(201, 168, 76, 0.05); }
+.l-amount { color: var(--green); font-family: 'Poppins'; font-weight: 800; font-size: 17px; }
+.l-info { flex-grow: 1; text-align: center; }
+.l-rank { font-size: 22px; width: 35px; text-align: left; }
 
 /* Global UI */
 .nav-bar { position: fixed; bottom: 20px; left: 15px; right: 15px; background: rgba(15, 18, 35, 0.95); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 22px; display: flex; justify-content: space-around; padding: 10px; z-index: 1000; }
-.nav-btn { color: var(--text-dim); background: none; border: none; font-size: 10px; flex: 1; text-align: center; }
+.nav-btn { color: var(--text-dim); background: none; border: none; font-size: 10px; flex: 1; text-align: center; cursor: pointer; }
 .nav-btn.active { color: var(--primary); font-weight: bold; }
 .page { display: none; animation: fadeIn 0.3s ease; }
 .page.active { display: block; }
-.btn-action { background: var(--primary); color: white; border: none; width: 100%; padding: 16px; border-radius: 15px; font-weight: 900; cursor: pointer; }
+.btn-action { background: var(--primary); color: white; border: none; width: 100%; padding: 16px; border-radius: 15px; font-weight: 900; cursor: pointer; font-family: 'Tajawal', sans-serif; }
 .glass-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; margin-bottom: 15px; }
 
-#toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 12px 25px; border-radius: 12px; z-index: 10000; transition: 0.5s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+#toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 12px 25px; border-radius: 12px; z-index: 10000; transition: 0.5s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); white-space: nowrap; }
+#live-notify { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(20, 25, 45, 0.9); backdrop-filter: blur(10px); border: 1px solid var(--primary); border-radius: 50px; padding: 8px 20px; font-size: 10px; z-index: 2000; display: none; animation: slideUp 0.5s; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { bottom: 50px; opacity: 0; } to { bottom: 100px; opacity: 1; } }
 </style>
 </head>
 <body>
 
+<div id="live-notify"></div>
 <div id="toast"></div>
 
-<div id="sub-overlay" style="position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 25px;">
+<div id="sub-overlay" style="position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 25px;">
     <div class="glass-card" style="text-align: center; width: 100%;">
         <div style="font-size: 40px; margin-bottom: 15px;">👑</div>
         <h3>نظام التحقق</h3>
@@ -75,7 +240,7 @@ body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; 
     </div>
 </div>
 
-<div id="main-content">
+<div id="main-content" style="filter: blur(10px); pointer-events: none;">
     <header class="cool-header">
         <div class="logo-num433">NUM<b>433</b></div>
         <div class="user-status-card">
@@ -84,42 +249,141 @@ body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; 
         </div>
     </header>
 
+    <!-- HOME PAGE -->
     <div id="p-home" class="page active">
         <div class="glass-card" style="text-align: center; background: linear-gradient(to bottom, rgba(92,95,245,0.1), transparent);">
             <p style="color: var(--text-dim); font-size: 11px;">الرصيد القابل للسحب</p>
             <div style="font-size: 42px; font-weight: 900; font-family: 'Poppins'; margin: 10px 0;">$<span id="balance">0.000</span></div>
         </div>
-        
-        <div class="ads-banner" onclick="runAdsGram()">
-            <div class="ads-content">
-                <h3>💎 الكنز اليومي</h3>
-                <p>شاهد الإعلانات واربح ($0.005 لكل إعلان)</p>
-                <div style="margin-top: 8px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.2); display: inline-block; padding: 2px 10px; border-radius: 10px;" id="ads-counter">20 / 20</div>
-            </div>
-            <div style="font-size: 30px;">🎁</div>
-        </div>
 
-        <div class="glass-card" style="margin-top:15px;">
+        <div class="glass-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                 <h4 style="color: var(--accent); font-size: 14px;">رتبة الحساب: <span id="u-level">VIP 1</span></h4>
+                <span style="font-size: 10px; color: var(--text-dim);">هدف الترقية: $10</span>
             </div>
             <div style="height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
-                <div id="level-bar" style="height: 100%; background: var(--primary); width: 0%; transition: 0.8s;"></div>
+                <div id="level-bar" style="height: 100%; background: var(--primary); width: 0%; transition: 0.8s; box-shadow: 0 0 10px var(--primary);"></div>
+            </div>
+        </div>
+
+        <!-- Quick Stats on Home -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+            <div class="glass-card" style="text-align:center; padding: 15px; margin-bottom:0;">
+                <div style="font-size:10px; color:var(--text-dim); margin-bottom:5px;">مهام اليوم</div>
+                <div style="font-size:20px; font-weight:900; color:var(--green);" id="home-tasks-count">0/10</div>
+            </div>
+            <div class="glass-card" style="text-align:center; padding: 15px; margin-bottom:0;">
+                <div style="font-size:10px; color:var(--text-dim); margin-bottom:5px;">إعلانات اليوم</div>
+                <div style="font-size:20px; font-weight:900; color:var(--orange);" id="home-ads-count">0/20</div>
             </div>
         </div>
     </div>
 
+    <!-- TASKS PAGE -->
     <div id="p-tasks" class="page">
         <div style="text-align: center; margin-bottom: 20px;">
             <h3 style="font-size: 20px;">مركز المهام 🎯</h3>
+            <p style="color: var(--text-dim); font-size: 11px;">شاهد الإعلانات واجمع أرباحك اليومية</p>
         </div>
         <div id="tasks-list"></div>
     </div>
 
+    <!-- ADS PAGE (NEW) -->
+    <div id="p-ads" class="page">
+        <div class="ads-header-card">
+            <div style="font-size: 32px; margin-bottom: 8px;">📺</div>
+            <h3 style="font-size: 18px; margin-bottom: 4px;">إعلانات Adsgram</h3>
+            <p style="font-size: 11px; color: var(--text-dim);">شاهد 20 إعلاناً يومياً واربح مكافأتك</p>
+
+            <div class="ads-counter-row">
+                <div class="ads-counter-box">
+                    <div class="big-num" id="ads-watched-count">0</div>
+                    <div class="small-lbl">شاهدت</div>
+                </div>
+                <div class="ads-counter-box">
+                    <div class="big-num" id="ads-remaining-count">20</div>
+                    <div class="small-lbl">متبقي</div>
+                </div>
+                <div class="ads-counter-box timer-box">
+                    <div class="big-num" id="ads-timer">--:--:--</div>
+                    <div class="small-lbl">تجديد بعد</div>
+                </div>
+            </div>
+
+            <div class="ads-progress-bar">
+                <div class="ads-progress-fill" id="ads-progress-fill" style="width:0%"></div>
+            </div>
+
+            <div style="margin-top: 12px; font-size: 11px; color: var(--text-dim);">
+                إجمالي المكسب من الإعلانات: <span style="color: var(--orange); font-weight: bold;">$<span id="ads-total-earned">0.000</span></span>
+            </div>
+        </div>
+
+        <div id="adsgram-list"></div>
+    </div>
+
+    <!-- LEADERBOARD PAGE -->
+    <div id="p-leaders" class="page">
+        <h3 style="text-align: center; margin-bottom: 20px;">أقوى المستخدمين 🏆</h3>
+        <div class="leader-card rank-1"><span class="l-amount">$342.50</span><div class="l-info"><span style="display: block; font-weight: bold;">أحمد المحمدي</span><span style="font-size: 10px; color: var(--text-dim);">650 إحالة</span></div><span class="l-rank">👑</span></div>
+        <div class="leader-card"><span class="l-amount">$210.15</span><div class="l-info"><span style="display: block; font-weight: bold;">سارة خالد</span><span style="font-size: 10px; color: var(--text-dim);">412 إحالة</span></div><span class="l-rank">🥈</span></div>
+        <div class="leader-card"><span class="l-amount">$156.80</span><div class="l-info"><span style="display: block; font-weight: bold;">Mostafa VIP</span><span style="font-size: 10px; color: var(--text-dim);">280 إحالة</span></div><span class="l-rank">🥉</span></div>
+    </div>
+
+    <!-- REFER PAGE -->
+    <div id="p-refer" class="page">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h3 style="font-size: 20px;">برنامج الإحالة 👥</h3>
+            <p style="color: var(--text-dim); font-size: 11px;">اربح مبالغ إضافية عن كل شخص تدعوه</p>
+        </div>
+        <div class="refer-stats">
+            <div class="stat-box">
+                <span style="font-size: 10px; color: var(--text-dim);">إجمالي الدعوات</span>
+                <div style="font-size: 20px; font-weight: 900; color: var(--primary);" id="ref-count-display">0</div>
+            </div>
+            <div class="stat-box">
+                <span style="font-size: 10px; color: var(--text-dim);">مكافأة الإحالة</span>
+                <div style="font-size: 20px; font-weight: 900; color: var(--green);">$0.00</div>
+            </div>
+        </div>
+        <div class="glass-card">
+            <h4 style="margin-bottom: 12px; font-size: 14px;">رابط الدعوة الخاص بك:</h4>
+            <div class="copy-area">
+                <span id="ref-link" style="font-size: 10px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%;">تحميل...</span>
+                <button onclick="copyRef()" style="background: var(--primary); color: white; border: none; padding: 6px 15px; border-radius: 8px; font-size: 10px; cursor: pointer;">نسخ</button>
+            </div>
+            <p style="margin-top: 15px; font-size: 9px; color: #ffbc00; text-align: center;">نظامنا يكتشف الدعوات الوهمية تلقائياً ويجمد الحساب.</p>
+        </div>
+    </div>
+
+    <!-- WALLET PAGE -->
+    <div id="p-wallet" class="page">
+        <h3 style="margin-bottom: 20px;">سحب الأرباح 💰</h3>
+        <div class="glass-card" style="background: rgba(0,0,0,0.2);">
+            <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 14px;">متطلبات السحب:</h4>
+            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:8px;">
+                <span>الدعوات المطلوبة:</span> <b id="c-ref">0 / 10</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:12px;">
+                <span>الحد الأدنى للسحب:</span> <b id="c-money">لم يكتمل</b>
+            </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="glass-card" onclick="selectPay('Binance')" style="text-align:center; padding:15px; cursor:pointer; border: 1px solid var(--glass-border);">Binance</div>
+            <div class="glass-card" onclick="selectPay('USDT')" style="text-align:center; padding:15px; cursor:pointer; border: 1px solid var(--glass-border);">USDT (TRC20)</div>
+        </div>
+        <div id="w-form" class="glass-card" style="display:none; border-top: 2px solid var(--primary);">
+            <input type="text" id="wallet-addr" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); padding:12px; border-radius:10px; color:white;" placeholder="أدخل عنوان المحفظة">
+            <button class="btn-action" style="margin-top:10px;" onclick="confirmWithdraw()">تأكيد عملية السحب</button>
+        </div>
+    </div>
+
+    <!-- NAV BAR (6 tabs) -->
     <nav class="nav-bar">
         <button class="nav-btn active" onclick="showTab('p-home', this)">🏠<br>الرئيسية</button>
         <button class="nav-btn" onclick="showTab('p-tasks', this)">🎯<br>المهام</button>
-        <button class="nav-btn" onclick="showTab('p-leaders', this)">🏆<br>المتصدرين</button>
+        <button class="nav-btn" onclick="showTab('p-ads', this)">📺<br>إعلانات</button>
+        <button class="nav-btn" onclick="showTab('p-leaders', this)">🏆<br>المتصدرون</button>
         <button class="nav-btn" onclick="showTab('p-refer', this)">👥<br>الدعوات</button>
         <button class="nav-btn" onclick="showTab('p-wallet', this)">💰<br>المحفظة</button>
     </nav>
@@ -128,80 +392,292 @@ body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; 
 <script>
 const tg = window.Telegram.WebApp; 
 tg.expand();
+tg.headerColor = '#070912';
 
-// الإعدادات وحفظ البيانات
-let S = JSON.parse(localStorage.getItem('n433_pro')) || { 
-    balance: 0.000, 
-    adsToday: 0, 
-    lastReset: new Date().getTime(),
-    refCount: 0, 
-    isSubscribed: false 
+const ADS_LIMIT = 20;
+const ADS_REWARD = 0.005; // $0.005 per Adsgram ad
+const TASKS_REWARD = 0.010; // $0.010 per libtl ad
+
+// ─── State ───────────────────────────────────────────────
+let S = JSON.parse(localStorage.getItem('n433_pro')) || {
+    balance: 0.000,
+    adsToday: 0,           // libtl tasks
+    adsgramToday: 0,       // adsgram ads watched count
+    adsgramEarned: 0.000,  // total earned from adsgram
+    adsgramResetTime: 0,   // timestamp of last reset
+    refCount: 0,
+    isSubscribed: false
 };
 
-// فحص مرور 24 ساعة لتصفير العداد
-function checkDailyReset() {
-    const now = new Date().getTime();
-    const oneDay = 24 * 60 * 60 * 1000;
-    if (now - S.lastReset > oneDay) {
-        S.adsToday = 0;
-        S.lastReset = now;
+// Check if 24h passed since last Adsgram reset
+function checkAdsgramReset() {
+    const now = Date.now();
+    const elapsed = now - (S.adsgramResetTime || 0);
+    if (elapsed >= 24 * 60 * 60 * 1000) {
+        S.adsgramToday = 0;
+        S.adsgramResetTime = now;
         save();
     }
 }
-checkDailyReset();
 
-// تهيئة AdsGram
-const AdController = window.Adsgram.init({ blockId: "28510" });
+// ─── Timer ───────────────────────────────────────────────
+function updateAdsTimer() {
+    const now = Date.now();
+    const resetAt = (S.adsgramResetTime || now) + 24 * 60 * 60 * 1000;
+    const remaining = Math.max(0, resetAt - now);
 
-function runAdsGram() {
-    if (S.adsToday >= 20) {
-        showToast("⚠️ انتهت محاولاتك! عد بعد 24 ساعة");
+    if (remaining === 0) {
+        checkAdsgramReset();
+        updateUI();
         return;
     }
 
-    AdController.show().then((result) => {
-        S.balance += 0.005; // القيمة اللي بتحددها لكل إعلان
-        S.adsToday += 1;
+    const h = Math.floor(remaining / 3600000);
+    const m = Math.floor((remaining % 3600000) / 60000);
+    const sec = Math.floor((remaining % 60000) / 1000);
+    const fmt = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+
+    const el = document.getElementById('ads-timer');
+    if (el) el.innerText = fmt;
+}
+setInterval(updateAdsTimer, 1000);
+
+// ─── Adsgram Init ─────────────────────────────────────────
+let AdsgramController = null;
+
+function initAdsgram() {
+    if (typeof window.Adsgram === 'undefined') return;
+    AdsgramController = window.Adsgram.init({ blockId: "28510" });
+}
+
+function watchAdsgramAd(index) {
+    if (S.adsgramToday >= ADS_LIMIT) {
+        return showToast("✅ انتهيت من إعلانات اليوم");
+    }
+
+    const btn = document.getElementById(`adsgram-btn-${index}`);
+    if (btn) { btn.disabled = true; btn.innerText = "جاري..."; }
+
+    if (!AdsgramController) {
+        // Adsgram not loaded yet, retry init
+        initAdsgram();
+        if (!AdsgramController) {
+            if (btn) { btn.disabled = false; btn.innerText = "شاهد"; }
+            return showToast("⚠️ الإعلان غير متاح الآن، حاول مرة أخرى");
+        }
+    }
+
+    AdsgramController.show().then(() => {
+        // Reward on successful watch
+        S.balance += ADS_REWARD;
+        S.adsgramToday += 1;
+        S.adsgramEarned = (S.adsgramEarned || 0) + ADS_REWARD;
+        if (!S.adsgramResetTime) S.adsgramResetTime = Date.now();
         save();
-        showToast("💰 تم إضافة المكافأة للحساب");
-    }).catch((err) => {
-        showToast("❌ حدث خطأ أو تم إغلاق الإعلان");
+        showToast(`💰 +$${ADS_REWARD.toFixed(3)} من الإعلان #${index}`);
+    }).catch((result) => {
+        // User skipped or error — no reward
+        if (btn) { btn.disabled = false; btn.innerText = "شاهد"; }
+        if (result && result.error) {
+            showToast("⚠️ لم يتم مشاهدة الإعلان كاملاً");
+        }
     });
 }
 
-function save() { 
-    localStorage.setItem('n433_pro', JSON.stringify(S)); 
-    updateUI(); 
+// ─── Fake Notification ────────────────────────────────────
+const fakes = ["Ahmed", "Sami", "Leo_FX", "Mariam", "User_99", "Crypto_King", "Omar", "Hassan"];
+function notify() {
+    const n = document.getElementById('live-notify');
+    if (Math.random() > 0.5) {
+        n.innerHTML = `🚀 المستخدم <b>${fakes[Math.floor(Math.random()*fakes.length)]}</b> سحب للتو <b>$${(Math.random()*30+10).toFixed(2)}</b>`;
+        n.style.display = 'block';
+        setTimeout(() => n.style.display = 'none', 3000);
+    }
+}
+setInterval(notify, 10000);
+
+// ─── Subscription ─────────────────────────────────────────
+function verifySub() {
+    S.isSubscribed = true;
+    save();
+    showToast("✅ تم التحقق بنجاح");
+    setTimeout(() => location.reload(), 1000);
 }
 
-function updateUI() { 
+if (S.isSubscribed) {
+    document.getElementById('sub-overlay').style.display = 'none';
+    document.getElementById('main-content').style.filter = 'none';
+    document.getElementById('main-content').style.pointerEvents = 'auto';
+}
+
+// ─── Save & Update UI ─────────────────────────────────────
+function save() { localStorage.setItem('n433_pro', JSON.stringify(S)); updateUI(); }
+
+function updateUI() {
+    // Balance
     document.getElementById('balance').innerText = S.balance.toFixed(3);
-    document.getElementById('ads-counter').innerText = `${20 - S.adsToday} / 20`;
-    
-    // شريط المستوى
-    let prog = (S.balance / 10) * 100;
+    document.getElementById('ref-count-display').innerText = S.refCount;
+
+    // Home quick stats
+    const hTasks = document.getElementById('home-tasks-count');
+    const hAds = document.getElementById('home-ads-count');
+    if (hTasks) hTasks.innerText = `${S.adsToday}/10`;
+    if (hAds) hAds.innerText = `${S.adsgramToday}/${ADS_LIMIT}`;
+
+    // Withdrawal Conditions
+    document.getElementById('c-ref').innerText = `${S.refCount} / 10`;
+    document.getElementById('c-ref').style.color = S.refCount >= 10 ? "#4dff88" : "#ff4d4d";
+    document.getElementById('c-money').innerText = S.balance >= 10 ? "مكتمل ✅" : "غير مكتمل ❌";
+    document.getElementById('c-money').style.color = S.balance >= 10 ? "#4dff88" : "#ff4d4d";
+
+    // VIP System
+    let lvl = "VIP 1"; let prog = (S.balance / 10) * 100;
+    if (S.balance >= 10) { lvl = "VIP 2"; prog = ((S.balance-10)/40)*100; }
+    document.getElementById('u-level').innerText = lvl;
     document.getElementById('level-bar').style.width = Math.min(prog, 100) + "%";
+
+    // Tasks List (libtl)
+    const list = document.getElementById('tasks-list');
+    if (S.adsToday >= 10) {
+        list.innerHTML = `<div class="glass-card" style="text-align:center; padding: 30px;">
+            <div style="font-size: 40px;">✅</div>
+            <h4>انتهت مهام اليوم</h4>
+            <p style="font-size:11px; color:var(--text-dim);">عد مجدداً بعد انتهاء الموقت اليومي</p>
+        </div>`;
+    } else {
+        let h = '';
+        for (let i = S.adsToday+1; i <= 10; i++) {
+            h += `<div class="task-card">
+                <div class="task-icon">🎬</div>
+                <div class="task-info">
+                    <h4>مهمة فيديو #${i}</h4>
+                    <p>احصل على مكافأة فورية</p>
+                </div>
+                <div style="text-align: left;">
+                    <div class="reward-badge">+$0.010</div>
+                    <button class="btn-action" style="width:auto; padding:6px 15px; font-size:10px; margin-top:8px;" onclick="doTask(this)">بدء</button>
+                </div>
+            </div>`;
+        }
+        list.innerHTML = h;
+    }
+
+    // Adsgram List
+    updateAdsgramList();
+
+    // Adsgram stats
+    const watchedEl = document.getElementById('ads-watched-count');
+    const remainEl = document.getElementById('ads-remaining-count');
+    const earnEl = document.getElementById('ads-total-earned');
+    const fillEl = document.getElementById('ads-progress-fill');
+
+    if (watchedEl) watchedEl.innerText = S.adsgramToday;
+    if (remainEl) remainEl.innerText = Math.max(0, ADS_LIMIT - S.adsgramToday);
+    if (earnEl) earnEl.innerText = (S.adsgramEarned || 0).toFixed(3);
+    if (fillEl) fillEl.style.width = Math.min((S.adsgramToday / ADS_LIMIT) * 100, 100) + "%";
 }
 
-function showTab(id, btn) { 
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); 
-    document.getElementById(id).classList.add('active'); 
-    btn.classList.add('active'); 
+function updateAdsgramList() {
+    const container = document.getElementById('adsgram-list');
+    if (!container) return;
+
+    if (S.adsgramToday >= ADS_LIMIT) {
+        container.innerHTML = `<div class="glass-card" style="text-align:center; padding: 30px; border-color: rgba(255,149,0,0.2);">
+            <div style="font-size: 40px;">🎉</div>
+            <h4 style="margin-bottom:8px;">أحسنت! انتهيت من كل الإعلانات</h4>
+            <p style="font-size:11px; color:var(--text-dim);">ستتجدد الإعلانات بعد <span id="ads-timer-done" style="color:var(--primary);">انتهاء المؤقت</span></p>
+            <p style="margin-top:10px; font-size:12px; color:var(--orange);">ربحت اليوم: <b>$${((S.adsgramEarned)||0).toFixed(3)}</b></p>
+        </div>`;
+        return;
+    }
+
+    let html = '';
+    for (let i = 1; i <= ADS_LIMIT; i++) {
+        const isDone = i <= S.adsgramToday;
+        html += `<div class="adsgram-card ${isDone ? 'done' : ''}">
+            <div class="adsgram-icon">${isDone ? '✅' : '📺'}</div>
+            <div class="adsgram-info">
+                <h4>إعلان telegram #${i}</h4>
+                <p>${isDone ? 'تمت المشاهدة ✓' : 'اضغط شاهد واكسب مكافأتك'}</p>
+            </div>
+            ${isDone
+                ? `<span class="btn-done">+$${ADS_REWARD.toFixed(3)}</span>`
+                : `<div style="text-align:left;">
+                    <div class="reward-badge-orange" style="margin-bottom:6px;">+$${ADS_REWARD.toFixed(3)}</div>
+                    <button class="btn-watch" id="adsgram-btn-${i}" onclick="watchAdsgramAd(${i})">شاهد</button>
+                   </div>`
+            }
+        </div>`;
+    }
+    container.innerHTML = html;
 }
 
-function showToast(msg) { 
-    const t = document.getElementById('toast'); 
-    t.innerText = msg; 
-    t.style.top = '20px'; 
-    setTimeout(() => t.style.top = '-100px', 3000); 
+// ─── Tasks (libtl) ────────────────────────────────────────
+function doTask(btn) {
+    btn.disabled = true;
+    btn.innerText = "جاري...";
+    show_10908620().then(() => {
+        S.balance += TASKS_REWARD;
+        S.adsToday += 1;
+        save();
+        showToast("💰 تم إضافة $0.010 لرصيدك");
+    }).catch(() => {
+        btn.disabled = false;
+        btn.innerText = "بدء";
+    });
 }
 
-// بيانات المستخدم
+// ─── Navigation ───────────────────────────────────────────
+function showTab(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    // Refresh adsgram list when switching to ads tab
+    if (id === 'p-ads') {
+        checkAdsgramReset();
+        updateAdsgramList();
+    }
+}
+
+// ─── Toast ────────────────────────────────────────────────
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.style.top = '20px';
+    setTimeout(() => t.style.top = '-100px', 3000);
+}
+
+// ─── Wallet ───────────────────────────────────────────────
+function selectPay(m) {
+    if (S.refCount < 10 || S.balance < 10) return showToast("❌ لم تستوفِ شروط السحب بعد");
+    document.getElementById('w-form').style.display = 'block';
+}
+
+function confirmWithdraw() {
+    const addr = document.getElementById('wallet-addr').value;
+    if (addr.length < 5) return showToast("⚠️ يرجى إدخال عنوان صحيح");
+    showToast("✅ تم إرسال الطلب للمراجعة");
+    document.getElementById('w-form').style.display = 'none';
+}
+
+// ─── Referral ─────────────────────────────────────────────
+function copyRef() {
+    const link = document.getElementById('ref-link').innerText;
+    navigator.clipboard.writeText(link).then(() => {
+        showToast("🔗 تم نسخ رابط الدعوة");
+    });
+}
+
+// ─── Init ─────────────────────────────────────────────────
 const user = tg.initDataUnsafe?.user;
-document.getElementById('u_name').innerText = user?.first_name || "Guest";
+document.getElementById('u_name').innerText = user?.first_name || "Guest User";
+document.getElementById('ref-link').innerText = `https://t.me/Number433bot?start=${user?.id || '6619233998'}`;
 
+checkAdsgramReset();
+initAdsgram();
 updateUI();
+updateAdsTimer();
 </script>
 </body>
 </html>
