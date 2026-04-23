@@ -6,8 +6,7 @@
 <title>Number 433 Elite - Professional Edition</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="https://sad.adsgram.ai/js/adsgram-ad-sdk.js"></script>
-<script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
+<script src="https://sad.adsgram.ai/js/sad.js"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
 
@@ -93,7 +92,7 @@ body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; 
 
 /* Global UI */
 .nav-bar { position: fixed; bottom: 20px; left: 15px; right: 15px; background: rgba(15, 18, 35, 0.95); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 22px; display: flex; justify-content: space-around; padding: 10px; z-index: 1000; }
-.nav-btn { color: var(--text-dim); background: none; border: none; font-size: 10px; flex: 1; text-align: center; }
+.nav-btn { color: var(--text-dim); background: none; border: none; font-size: 10px; flex: 1; text-align: center; outline: none; }
 .nav-btn.active { color: var(--primary); font-weight: bold; }
 .page { display: none; animation: fadeIn 0.3s ease; }
 .page.active { display: block; }
@@ -137,14 +136,15 @@ body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; 
             <div style="font-size: 42px; font-weight: 900; font-family: 'Poppins'; margin: 10px 0;">$<span id="balance">0.000</span></div>
         </div>
 
-        <div class="glass-card" style="border: 1px solid var(--primary);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h4 style="font-size: 14px;">إعلانات Adsgram المميزة</h4>
-                <span class="reward-badge">20 يومياً</span>
+        <div class="glass-card" style="border-color: var(--primary); display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <h4 style="font-size: 14px;">مهام اليوم</h4>
+                <p style="font-size: 11px; color: var(--text-dim);">أكمل 20 إعلان لزيادة رصيدك</p>
             </div>
-            <p style="font-size: 10px; color: var(--text-dim); margin-bottom: 15px;">شاهد إعلانات Adsgram لزيادة أرباحك بسرعة.</p>
-            <button class="btn-action" id="adsgram-btn" onclick="runAdsgram()">شاهد الآن واحصل على مكافأة</button>
-            <p id="ads-timer" style="font-size: 9px; text-align: center; margin-top: 8px; color: var(--accent);"></p>
+            <div style="text-align: center;">
+                <span id="home-task-count" style="font-weight: 900; color: var(--primary);">0/20</span>
+                <button onclick="showTab('p-tasks', document.querySelectorAll('.nav-btn')[1])" style="display:block; background: var(--primary); border:none; color:white; padding:4px 10px; border-radius:5px; font-size:10px; margin-top:5px;">اذهب</button>
+            </div>
         </div>
         
         <div class="glass-card">
@@ -161,7 +161,7 @@ body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; 
     <div id="p-tasks" class="page">
         <div style="text-align: center; margin-bottom: 20px;">
             <h3 style="font-size: 20px;">مركز المهام 🎯</h3>
-            <p style="color: var(--text-dim); font-size: 11px;">شاهد الإعلانات واجمع أرباحك اليومية</p>
+            <p style="color: var(--text-dim); font-size: 11px;">شاهد إعلانات AdsGram واجمع أرباحك (20 يومياً)</p>
         </div>
         <div id="tasks-list"></div>
     </div>
@@ -233,30 +233,27 @@ const tg = window.Telegram.WebApp;
 tg.expand();
 tg.headerColor = '#070912';
 
-// تهيئة Adsgram
+// تهيئة AdsGram
 const AdController = window.Adsgram.init({ blockId: "28510" });
 
+// جلب البيانات مع منطق تصفير المهام كل 24 ساعة
 let S = JSON.parse(localStorage.getItem('n433_pro')) || { 
     balance: 0.000, 
     adsToday: 0, 
     refCount: 0, 
     isSubscribed: false,
-    lastReset: Date.now() 
+    lastTaskDate: Date.now()
 };
 
-// نظام تصفير العداد كل 24 ساعة
-function checkDailyReset() {
-    const now = Date.now();
-    const oneDay = 24 * 60 * 60 * 1000;
-    if (now - S.lastReset > oneDay) {
-        S.adsToday = 0;
-        S.lastReset = now;
-        save();
-    }
+// فحص مرور 24 ساعة لتصفير المهام
+const now = Date.now();
+const oneDay = 24 * 60 * 60 * 1000;
+if (now - S.lastTaskDate > oneDay) {
+    S.adsToday = 0;
+    S.lastTaskDate = now;
+    save();
 }
-checkDailyReset();
 
-// Fake Notification Logic
 const fakes = ["Ahmed", "Sami", "Leo_FX", "Mariam", "User_99", "Crypto_King", "Omar", "Hassan"];
 function notify() {
     const n = document.getElementById('live-notify');
@@ -285,49 +282,38 @@ function save() { localStorage.setItem('n433_pro', JSON.stringify(S)); updateUI(
 function updateUI() { 
     document.getElementById('balance').innerText = S.balance.toFixed(3);
     document.getElementById('ref-count-display').innerText = S.refCount;
+    document.getElementById('home-task-count').innerText = `${S.adsToday}/20`;
     
-    // التحديث لـ 20 إعلان
-    const adBtn = document.getElementById('adsgram-btn');
-    if(S.adsToday >= 20) {
-        adBtn.disabled = true;
-        adBtn.innerText = "تم إكمال جميع إعلانات اليوم";
-        adBtn.style.background = "var(--glass)";
-    } else {
-        adBtn.innerText = `مشاهدة إعلان (${S.adsToday}/20)`;
-    }
-
-    // Withdrawal Conditions
     document.getElementById('c-ref').innerText = `${S.refCount} / 10`;
     document.getElementById('c-ref').style.color = S.refCount >= 10 ? "#4dff88" : "#ff4d4d";
     document.getElementById('c-money').innerText = S.balance >= 10 ? "مكتمل ✅" : "غير مكتمل ❌";
     document.getElementById('c-money').style.color = S.balance >= 10 ? "#4dff88" : "#ff4d4d";
 
-    // VIP System
     let lvl = "VIP 1"; let prog = (S.balance / 10) * 100;
     if(S.balance >= 10) { lvl = "VIP 2"; prog = ((S.balance-10)/40)*100; }
     document.getElementById('u-level').innerText = lvl;
     document.getElementById('level-bar').style.width = Math.min(prog, 100) + "%";
 
-    // Tasks List rendering
     const list = document.getElementById('tasks-list');
     if(S.adsToday >= 20) {
         list.innerHTML = `<div class="glass-card" style="text-align:center; padding: 30px;">
             <div style="font-size: 40px;">✅</div>
-            <h4>انتهت مهام اليوم</h4>
-            <p style="font-size:11px; color:var(--text-dim);">عد مجدداً بعد انتهاء الموقت اليومي</p>
+            <h4>انتهت مهام اليوم (20/20)</h4>
+            <p style="font-size:11px; color:var(--text-dim);">عد مجدداً بعد 24 ساعة للمزيد من الأرباح</p>
         </div>`;
     } else {
         let h = ''; 
+        // عرض المهام المتبقية حتى 20
         for(let i=S.adsToday+1; i<=20; i++) {
             h += `<div class="task-card">
                 <div class="task-icon">🎬</div>
                 <div class="task-info">
-                    <h4>مهمة فيديو #${i}</h4>
-                    <p>احصل على مكافأة فورية</p>
+                    <h4>مهمة AdsGram #${i}</h4>
+                    <p>شاهد الإعلان للحصول على المكافأة</p>
                 </div>
                 <div style="text-align: left;">
                     <div class="reward-badge">+$0.01</div>
-                    <button class="btn-action" style="width:auto; padding:6px 15px; font-size:10px; margin-top:8px;" onclick="runAdsgram()">بدء</button>
+                    <button class="btn-action" style="width:auto; padding:6px 15px; font-size:10px; margin-top:8px;" onclick="doAdsGramTask(this)">مشاهدة</button>
                 </div>
             </div>`;
         }
@@ -335,25 +321,24 @@ function updateUI() {
     }
 }
 
-// دالة تشغيل إعلانات Adsgram
-function runAdsgram() {
-    if (S.adsToday >= 20) return showToast("⚠️ أكملت الحد اليومي");
+// وظيفة تشغيل إعلان AdsGram الحقيقي
+function doAdsGramTask(btn) { 
+    btn.disabled = true; 
+    btn.innerText = "جاري التحميل...";
     
     AdController.show().then((result) => {
-        // تم مشاهدة الإعلان بنجاح
-        S.balance += 0.01;
-        S.adsToday += 1;
-        save();
-        showToast("💰 تم إضافة $0.010 لرصيدك");
-    }).catch((result) => {
-        // فشل أو تم إغلاق الإعلان
-        showToast("❌ يجب إكمال الإعلان للحصول على المكافأة");
+        // إذا شاهد المستخدم الإعلان بالكامل
+        S.balance += 0.01; 
+        S.adsToday += 1; 
+        S.lastTaskDate = Date.now();
+        save(); 
+        showToast("💰 أحسنت! تم إضافة $0.010 لرصيدك");
+    }).catch((error) => {
+        // إذا أغلق المستخدم الإعلان أو حدث خطأ
+        showToast("⚠️ يجب مشاهدة الإعلان كاملاً");
+        btn.disabled = false;
+        btn.innerText = "مشاهدة";
     });
-}
-
-function doTask(btn) { 
-    // هذه الدالة القديمة تم استبدالها بـ runAdsgram لتعمل بالجديد
-    runAdsgram();
 }
 
 function showTab(id, btn) { 
@@ -389,7 +374,6 @@ function copyRef() {
     });
 }
 
-// User Data init
 const user = tg.initDataUnsafe?.user;
 document.getElementById('u_name').innerText = user?.first_name || "Guest User";
 document.getElementById('ref-link').innerText = `https://t.me/Number433bot?start=${user?.id || '6619233998'}`;
