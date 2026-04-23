@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Number 433 Elite - Professional Edition</title>
+<title>Number 433 Elite - Fixed Edition</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://adsgram.ai/sdk-v1.js"></script>
@@ -20,19 +20,47 @@
   --glass-border: rgba(255, 255, 255, 0.08);
   --text-dim: #8489b2;
   --green: #4dff88;
-  --red: #ff4d4d;
   --fast-earn: #ffbc00;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; min-height: 100vh; padding: 10px 15px 120px; direction: rtl; }
+body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; min-height: 100vh; padding: 10px 15px 120px; direction: rtl; overflow-x: hidden; }
+
+/* Overlay Fix */
+#sub-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
 
 /* Header */
 .cool-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
 .logo-num433 { font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 800; color: white; }
 .logo-num433 b { color: var(--primary); }
-.user-status-card { display: flex; align-items: center; gap: 8px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; padding: 6px 12px; font-size: 12px; }
-.online-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); }
+
+/* Buttons */
+.btn-action { 
+    background: var(--primary); 
+    color: white; 
+    border: none; 
+    width: 100%; 
+    padding: 16px; 
+    border-radius: 15px; 
+    font-weight: 900; 
+    cursor: pointer; 
+    font-family: 'Tajawal';
+    transition: 0.3s;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}
+.btn-action:active { transform: scale(0.95); opacity: 0.8; }
+.btn-fast { background: var(--fast-earn); color: #000; }
 
 /* Task Cards */
 .task-card {
@@ -44,371 +72,203 @@ body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; 
     display: flex;
     align-items: center;
     gap: 15px;
-    transition: transform 0.2s;
-}
-.task-card:active { transform: scale(0.97); }
-.task-icon {
-    width: 45px;
-    height: 45px;
-    background: rgba(92, 95, 245, 0.1);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    color: var(--primary);
-}
-.task-info { flex-grow: 1; }
-.task-info h4 { font-size: 14px; margin-bottom: 4px; }
-.task-info p { font-size: 10px; color: var(--text-dim); }
-.reward-badge {
-    background: rgba(77, 255, 136, 0.1);
-    color: var(--green);
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: bold;
-    display: inline-block;
 }
 
-/* Home Fast Earn Card */
-.fast-earn-card {
-    background: linear-gradient(135deg, rgba(255, 188, 0, 0.1), rgba(0,0,0,0.2));
-    border: 1px solid rgba(255, 188, 0, 0.3);
-    border-radius: 20px;
-    padding: 15px;
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+.glass-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; margin-bottom: 15px; }
 
-/* Global UI */
 .nav-bar { position: fixed; bottom: 20px; left: 15px; right: 15px; background: rgba(15, 18, 35, 0.95); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 22px; display: flex; justify-content: space-around; padding: 10px; z-index: 1000; }
 .nav-btn { color: var(--text-dim); background: none; border: none; font-size: 10px; flex: 1; text-align: center; }
 .nav-btn.active { color: var(--primary); font-weight: bold; }
-.page { display: none; animation: fadeIn 0.3s ease; }
-.page.active { display: block; }
-.btn-action { background: var(--primary); color: white; border: none; width: 100%; padding: 16px; border-radius: 15px; font-weight: 900; cursor: pointer; }
-.btn-fast { background: var(--fast-earn); color: #000; }
-.glass-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; margin-bottom: 15px; }
 
-#toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 12px 25px; border-radius: 12px; z-index: 10000; transition: 0.5s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-#live-notify { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(20, 25, 45, 0.9); backdrop-filter: blur(10px); border: 1px solid var(--primary); border-radius: 50px; padding: 8px 20px; font-size: 10px; z-index: 2000; display: none; animation: slideUp 0.5s; }
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.3s ease; }
+
+#toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 12px 25px; border-radius: 12px; z-index: 100000; transition: 0.5s; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideUp { from { bottom: 50px; opacity: 0; } to { bottom: 100px; opacity: 1; } }
 </style>
 </head>
 <body>
 
-<div id="live-notify"></div>
 <div id="toast"></div>
 
-<div id="sub-overlay" style="position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 25px;">
-    <div class="glass-card" style="text-align: center; width: 100%;">
-        <div style="font-size: 40px; margin-bottom: 15px;">👑</div>
-        <h3>نظام التحقق</h3>
-        <p style="font-size: 12px; color: var(--text-dim); margin: 15px 0 25px;">اشترك في القناة لتفعيل الحساب واستلام الأرباح.</p>
-        <button class="btn-action" style="background: #0088cc;" onclick="window.open('https://t.me/Number433', '_blank')">اشترك الآن</button>
-        <button class="btn-action" style="background: transparent; border: 1px solid var(--glass-border); margin-top: 10px;" onclick="verifySub()">تحقق من الاشتراك</button>
+<div id="sub-overlay">
+    <div class="glass-card" style="text-align: center; width: 100%; border-color: var(--primary);">
+        <div style="font-size: 50px; margin-bottom: 15px;">🔒</div>
+        <h3 style="margin-bottom: 10px;">تفعيل الحساب</h3>
+        <p style="font-size: 13px; color: var(--text-dim); margin-bottom: 25px;">يجب عليك الانضمام لقناتنا الرسمية لتتمكن من جمع الأرباح وسحبها.</p>
+        
+        <a href="https://t.me/Number433" target="_blank" class="btn-action" style="background: #0088cc; margin-bottom: 12px;">1. انضم للقناة الآن</a>
+        
+        <button class="btn-action" style="background: transparent; border: 1px solid var(--glass-border);" onclick="verifySub()">2. تحقق من الانضمام</button>
     </div>
 </div>
 
-<div id="main-content" style="filter: blur(10px); pointer-events: none;">
+<div id="main-content" style="filter: blur(15px); pointer-events: none;">
     <header class="cool-header">
         <div class="logo-num433">NUM<b>433</b></div>
-        <div class="user-status-card">
-            <span class="online-dot"></span>
-            <span id="u_name">تحميل...</span>
+        <div class="user-status-card" style="background: var(--glass); padding: 5px 15px; border-radius: 20px;">
+            <span id="u_name">...</span>
         </div>
     </header>
 
     <div id="p-home" class="page active">
         <div class="glass-card" style="text-align: center; background: linear-gradient(to bottom, rgba(92,95,245,0.1), transparent);">
-            <p style="color: var(--text-dim); font-size: 11px;">الرصيد القابل للسحب</p>
-            <div style="font-size: 42px; font-weight: 900; font-family: 'Poppins'; margin: 10px 0;">$<span id="balance">0.000</span></div>
+            <p style="color: var(--text-dim); font-size: 12px;">رصيدك الحالي</p>
+            <div style="font-size: 45px; font-weight: 900; font-family: 'Poppins'; margin: 10px 0; color: #fff;">$<span id="balance">0.000</span></div>
         </div>
 
-        <div class="fast-earn-card">
-            <div>
-                <h4 style="font-size: 14px; color: var(--fast-earn);">⚡ الكسب السريع</h4>
-                <p style="font-size: 10px; color: var(--text-dim);">متاح اليوم: <span id="fast-count">20/20</span></p>
-            </div>
-            <button class="btn-action btn-fast" style="width: auto; padding: 8px 20px; font-size: 12px;" onclick="showTab('p-tasks', document.getElementById('btn-task-nav'))">ابدأ الآن</button>
-        </div>
-        
-        <div class="glass-card" style="margin-top: 15px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h4 style="color: var(--accent); font-size: 14px;">رتبة الحساب: <span id="u-level">VIP 1</span></h4>
-                <span style="font-size: 10px; color: var(--text-dim);">هدف الترقية: $10</span>
-            </div>
-            <div style="height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
-                <div id="level-bar" style="height: 100%; background: var(--primary); width: 0%; transition: 0.8s; box-shadow: 0 0 10px var(--primary);"></div>
+        <div class="glass-card" style="border: 1px solid var(--fast-earn); background: rgba(255,188,0,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h4 style="color: var(--fast-earn);">⚡ الكسب السريع</h4>
+                    <p style="font-size: 11px; color: var(--text-dim);">متاح: <span id="fast-count">20</span> إعلان</p>
+                </div>
+                <button class="btn-action btn-fast" style="width: auto; padding: 10px 20px;" onclick="showTab('p-tasks', document.getElementById('btn-task-nav')); switchTaskType('fast');">ابدأ</button>
             </div>
         </div>
     </div>
 
     <div id="p-tasks" class="page">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <h3 style="font-size: 20px;">مركز المهام 🎯</h3>
-            <p style="color: var(--text-dim); font-size: 11px;">شاهد الإعلانات واجمع أرباحك اليومية</p>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button id="tab-normal" class="btn-action" style="padding: 12px;" onclick="switchTaskType('normal')">المهام (10)</button>
+            <button id="tab-fast" class="btn-action btn-fast" style="padding: 12px;" onclick="switchTaskType('fast')">السريع (20)</button>
         </div>
-        
-        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-            <button id="tab-normal" class="btn-action" style="padding: 10px; font-size: 12px;" onclick="switchTaskType('normal')">المهام العادية</button>
-            <button id="tab-fast" class="btn-action btn-fast" style="padding: 10px; font-size: 12px; opacity: 0.6;" onclick="switchTaskType('fast')">الكسب السريع</button>
-        </div>
-
         <div id="tasks-list"></div>
     </div>
 
-    <div id="p-leaders" class="page">
-        <h3 style="text-align: center; margin-bottom: 20px;">أقوى المستخدمين 🏆</h3>
-        <div class="leader-card rank-1"><span class="l-amount">$342.50</span><div class="l-info"><span style="display: block; font-weight: bold;">أحمد المحمدي</span><span style="font-size: 10px; color: var(--text-dim);">650 إحالة</span></div><span class="l-rank">👑</span></div>
-        <div class="leader-card"><span class="l-amount">$210.15</span><div class="l-info"><span style="display: block; font-weight: bold;">سارة خالد</span><span style="font-size: 10px; color: var(--text-dim);">412 إحالة</span></div><span class="l-rank">🥈</span></div>
-        <div class="leader-card"><span class="l-amount">$156.80</span><div class="l-info"><span style="display: block; font-weight: bold;">Mostafa VIP</span><span style="font-size: 10px; color: var(--text-dim);">280 إحالة</span></div><span class="l-rank">🥉</span></div>
-    </div>
-
-    <div id="p-refer" class="page">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <h3 style="font-size: 20px;">برنامج الإحالة 👥</h3>
-            <p style="color: var(--text-dim); font-size: 11px;">اربح مبالغ إضافية عن كل شخص تدعوه</p>
-        </div>
-        <div class="refer-stats">
-            <div class="stat-box">
-                <span style="font-size: 10px; color: var(--text-dim);">إجمالي الدعوات</span>
-                <div style="font-size: 20px; font-weight: 900; color: var(--primary);" id="ref-count-display">0</div>
-            </div>
-            <div class="stat-box">
-                <span style="font-size: 10px; color: var(--text-dim);">مكافأة الإحالة</span>
-                <div style="font-size: 20px; font-weight: 900; color: var(--green);">$0.00</div>
-            </div>
-        </div>
-        <div class="glass-card">
-            <h4 style="margin-bottom: 12px; font-size: 14px;">رابط الدعوة الخاص بك:</h4>
-            <div class="copy-area">
-                <span id="ref-link" style="font-size: 10px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%;">تحميل...</span>
-                <button onclick="copyRef()" style="background: var(--primary); color: white; border: none; padding: 6px 15px; border-radius: 8px; font-size: 10px; cursor: pointer;">نسخ</button>
-            </div>
-        </div>
-    </div>
-
     <div id="p-wallet" class="page">
-        <h3 style="margin-bottom: 20px;">سحب الأرباح 💰</h3>
-        <div class="glass-card" style="background: rgba(0,0,0,0.2);">
-            <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 14px;">متطلبات السحب:</h4>
-            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:8px;">
-                <span>الدعوات المطلوبة:</span> <b id="c-ref">0 / 10</b>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:12px;">
-                <span>الحد الأدنى للسحب:</span> <b id="c-money">لم يكتمل</b>
-            </div>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div class="glass-card" onclick="selectPay('Binance')" style="text-align:center; padding:15px; cursor:pointer; border: 1px solid var(--glass-border);">Binance</div>
-            <div class="glass-card" onclick="selectPay('USDT')" style="text-align:center; padding:15px; cursor:pointer; border: 1px solid var(--glass-border);">USDT (TRC20)</div>
-        </div>
-        <div id="w-form" class="glass-card" style="display:none; border-top: 2px solid var(--primary);">
-            <input type="text" id="wallet-addr" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); padding:12px; border-radius:10px; color:white;" placeholder="أدخل عنوان المحفظة">
-            <button class="btn-action" style="margin-top:10px;" onclick="confirmWithdraw()">تأكيد عملية السحب</button>
+        <h3 style="margin-bottom: 20px;">السحب</h3>
+        <div class="glass-card">
+            <p style="font-size: 12px; color: var(--text-dim);">الحد الأدنى للسحب هو 10$.</p>
         </div>
     </div>
 
     <nav class="nav-bar">
         <button class="nav-btn active" onclick="showTab('p-home', this)">🏠<br>الرئيسية</button>
         <button id="btn-task-nav" class="nav-btn" onclick="showTab('p-tasks', this)">🎯<br>المهام</button>
-        <button class="nav-btn" onclick="showTab('p-leaders', this)">🏆<br>المتصدرين</button>
-        <button class="nav-btn" onclick="showTab('p-refer', this)">👥<br>الدعوات</button>
         <button class="nav-btn" onclick="showTab('p-wallet', this)">💰<br>المحفظة</button>
     </nav>
 </div>
 
 <script>
-const tg = window.Telegram.WebApp; 
+const tg = window.Telegram.WebApp;
 tg.expand();
-tg.headerColor = '#070912';
 
-// Setup Adsgram
-const AdController = window.Adsgram.init({ blockId: "28510" });
+// Adsgram
+const AdController = window.Adsgram ? window.Adsgram.init({ blockId: "28510" }) : null;
 
-// Load Data with 24h Reset logic
+// Data
 let S = JSON.parse(localStorage.getItem('n433_pro')) || { 
     balance: 0.000, 
     adsToday: 0, 
     fastAdsToday: 0, 
-    refCount: 0, 
     isSubscribed: false,
     lastReset: Date.now()
 };
 
-// Check for 24h Reset
+// 24h Reset
 if (Date.now() - S.lastReset > 86400000) {
-    S.adsToday = 0;
-    S.fastAdsToday = 0;
-    S.lastReset = Date.now();
+    S.adsToday = 0; S.fastAdsToday = 0; S.lastReset = Date.now();
     save();
 }
 
-let currentTaskType = 'normal';
+function save() { 
+    localStorage.setItem('n433_pro', JSON.stringify(S)); 
+    updateUI(); 
+}
 
-function save() { localStorage.setItem('n433_pro', JSON.stringify(S)); updateUI(); }
+function verifySub() {
+    // محاكاة للتحقق - في الحقيقة يفضل ربطه بـ API
+    showToast("⏳ جاري التحقق...");
+    setTimeout(() => {
+        S.isSubscribed = true;
+        save();
+        document.getElementById('sub-overlay').style.display = 'none';
+        document.getElementById('main-content').style.filter = 'none';
+        document.getElementById('main-content').style.pointerEvents = 'auto';
+        showToast("✅ تم التفعيل بنجاح");
+    }, 1500);
+}
 
-function updateUI() { 
+// التأكد من الحالة عند فتح التطبيق
+if (S.isSubscribed) {
+    document.getElementById('sub-overlay').style.display = 'none';
+    document.getElementById('main-content').style.filter = 'none';
+    document.getElementById('main-content').style.pointerEvents = 'auto';
+}
+
+function updateUI() {
     document.getElementById('balance').innerText = S.balance.toFixed(3);
-    document.getElementById('ref-count-display').innerText = S.refCount;
-    document.getElementById('fast-count').innerText = `${20 - S.fastAdsToday} / 20`;
-    
-    // Withdrawal Conditions
-    document.getElementById('c-ref').innerText = `${S.refCount} / 10`;
-    document.getElementById('c-ref').style.color = S.refCount >= 10 ? "#4dff88" : "#ff4d4d";
-    document.getElementById('c-money').innerText = S.balance >= 10 ? "مكتمل ✅" : "غير مكتمل ❌";
-    document.getElementById('c-money').style.color = S.balance >= 10 ? "#4dff88" : "#ff4d4d";
-
-    // VIP System
-    let lvl = "VIP 1"; let prog = (S.balance / 10) * 100;
-    if(S.balance >= 10) { lvl = "VIP 2"; prog = ((S.balance-10)/40)*100; }
-    document.getElementById('u-level').innerText = lvl;
-    document.getElementById('level-bar').style.width = Math.min(prog, 100) + "%";
-
+    document.getElementById('fast-count').innerText = (20 - S.fastAdsToday);
     renderTasks();
 }
 
+let currentTaskType = 'normal';
 function switchTaskType(type) {
     currentTaskType = type;
-    document.getElementById('tab-normal').style.opacity = type === 'normal' ? '1' : '0.6';
-    document.getElementById('tab-fast').style.opacity = type === 'fast' ? '1' : '0.6';
+    document.getElementById('tab-normal').style.opacity = type === 'normal' ? '1' : '0.5';
+    document.getElementById('tab-fast').style.opacity = type === 'fast' ? '1' : '0.5';
     renderTasks();
 }
 
 function renderTasks() {
     const list = document.getElementById('tasks-list');
     let h = '';
-    
     if (currentTaskType === 'normal') {
-        if(S.adsToday >= 10) {
-            h = emptyState("انتهت المهام العادية");
-        } else {
-            for(let i=S.adsToday+1; i<=10; i++) {
-                h += taskTemplate(`مهمة فيديو #${i}`, "🎬", "$0.01", "doTask(this)");
-            }
+        let rem = 10 - S.adsToday;
+        if(rem <= 0) h = '<div class="glass-card">انتهت مهام اليوم</div>';
+        else {
+            for(let i=1; i<=rem; i++) h += taskItem("مهمة فيديو", "$0.01", "doNormalTask(this)");
         }
     } else {
-        if(S.fastAdsToday >= 20) {
-            h = emptyState("انتهت مهام الكسب السريع");
-        } else {
-            for(let i=S.fastAdsToday+1; i<=20; i++) {
-                h += taskTemplate(`كسب سريع #${i}`, "⚡", "$0.005", "doFastTask(this)");
-            }
+        let rem = 20 - S.fastAdsToday;
+        if(rem <= 0) h = '<div class="glass-card">انتهت مهام السريع</div>';
+        else {
+            for(let i=1; i<=rem; i++) h += taskItem("كسب سريع", "$0.005", "doFastTask(this)");
         }
     }
     list.innerHTML = h;
 }
 
-function taskTemplate(title, icon, reward, action) {
+function taskItem(name, price, action) {
     return `<div class="task-card">
-        <div class="task-icon">${icon}</div>
-        <div class="task-info">
-            <h4>${title}</h4>
-            <p>مكافأة فورية من Adsgram</p>
-        </div>
-        <div style="text-align: left;">
-            <div class="reward-badge">+${reward}</div>
-            <button class="btn-action" style="width:auto; padding:6px 15px; font-size:10px; margin-top:8px;" onclick="${action}">مشاهدة</button>
-        </div>
+        <div style="flex-grow:1"><h4>${name}</h4><small>${price}</small></div>
+        <button class="btn-action" style="width:auto; padding:8px 15px;" onclick="${action}">مشاهدة</button>
     </div>`;
 }
 
-function emptyState(msg) {
-    return `<div class="glass-card" style="text-align:center; padding: 30px;">
-        <div style="font-size: 40px;">✅</div>
-        <h4>${msg}</h4>
-        <p style="font-size:11px; color:var(--text-dim);">تتجدد المهام تلقائياً كل 24 ساعة</p>
-    </div>`;
+function doNormalTask(btn) {
+    btn.disabled = true; btn.innerText = "...";
+    show_10908620().then(() => {
+        S.balance += 0.01; S.adsToday++; save();
+        showToast("💰 +$0.01");
+    }).catch(() => { btn.disabled = false; btn.innerText = "مشاهدة"; });
 }
 
-// ADSGRAM Logic
-async function doFastTask(btn) {
+function doFastTask(btn) {
+    if(!AdController) return showToast("Adsgram Not Ready");
     btn.disabled = true;
-    btn.innerText = "جاري...";
-    
     AdController.show().then(() => {
-        S.balance += 0.005;
-        S.fastAdsToday += 1;
-        save();
-        showToast("⚡ تم إضافة $0.005 لرصيدك");
-    }).catch((err) => {
-        showToast("⚠️ فشل تحميل الإعلان");
-        btn.disabled = false;
-        btn.innerText = "مشاهدة";
-    });
+        S.balance += 0.005; S.fastAdsToday++; save();
+        showToast("⚡ +$0.005");
+    }).catch(() => { btn.disabled = false; });
 }
 
-// Original Task Logic (Old Ads)
-function doTask(btn) { 
-    btn.disabled = true; 
-    btn.innerText = "جاري...";
-    show_10908620().then(() => { 
-        S.balance += 0.01; 
-        S.adsToday += 1; 
-        save(); 
-        showToast("💰 تم إضافة $0.010 لرصيدك"); 
-    }).catch(() => {
-        btn.disabled = false;
-        btn.innerText = "مشاهدة";
-    }); 
+function showTab(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
 }
 
-// Navigation & Global UI
-function showTab(id, btn) { 
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); 
-    document.getElementById(id).classList.add('active'); 
-    btn.classList.add('active'); 
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.innerText = msg; t.style.top = '20px';
+    setTimeout(() => t.style.top = '-100px', 2500);
 }
 
-function verifySub() { 
-    S.isSubscribed = true; 
-    save(); 
-    showToast("✅ تم التحقق بنجاح");
-    setTimeout(() => location.reload(), 1000);
-}
-
-if (S.isSubscribed) { 
-    document.getElementById('sub-overlay').style.display = 'none'; 
-    document.getElementById('main-content').style.filter = 'none'; 
-    document.getElementById('main-content').style.pointerEvents = 'auto'; 
-}
-
-function showToast(msg) { 
-    const t = document.getElementById('toast'); 
-    t.innerText = msg; 
-    t.style.top = '20px'; 
-    setTimeout(() => t.style.top = '-100px', 3000); 
-}
-
-function copyRef() { 
-    const link = document.getElementById('ref-link').innerText;
-    navigator.clipboard.writeText(link).then(() => showToast("🔗 تم نسخ الرابط"));
-}
-
-function selectPay(m) { 
-    if(S.refCount < 10 || S.balance < 10) return showToast("❌ لم تستوفِ شروط السحب"); 
-    document.getElementById('w-form').style.display='block'; 
-}
-
-function confirmWithdraw() {
-    const addr = document.getElementById('wallet-addr').value;
-    if(addr.length < 5) return showToast("⚠️ عنوان غير صحيح");
-    showToast("✅ تم إرسال طلبك");
-    document.getElementById('w-form').style.display='none';
-}
-
-// User Init
-const user = tg.initDataUnsafe?.user;
-document.getElementById('u_name').innerText = user?.first_name || "Guest";
-document.getElementById('ref-link').innerText = `https://t.me/Number433bot?start=${user?.id || '6619233998'}`;
-
+document.getElementById('u_name').innerText = tg.initDataUnsafe?.user?.first_name || "Guest";
 updateUI();
 </script>
 </body>
