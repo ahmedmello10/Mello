@@ -594,10 +594,10 @@ function updateAdsgramList() {
     let html = '';
     for (let i = 1; i <= ADS_LIMIT; i++) {
         const isDone = i <= S.adsgramToday;
-        html += `<div class="adsgram-card ${isDone ? 'done' : ''}">
-            <div class="adsgram-icon">${isDone ? '✅' : '📺'}</div>
-            <div class="adsgram-info">
-                <h4>إعلان telegram #${i}</h4>
+        html += `<div class="telegram-card ${isDone ? 'done' : ''}">
+            <div class="telegram-icon">${isDone ? '✅' : '📺'}</div>
+            <div class="telegram-info">
+                <h4>إعلان #${i}</h4>
                 <p>${isDone ? 'تمت المشاهدة ✓' : 'اضغط شاهد واكسب مكافأتك'}</p>
             </div>
             ${isDone
