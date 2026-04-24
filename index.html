@@ -170,6 +170,7 @@ body::before {
 .page-title { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; margin:0 16px 4px; }
 .page-sub { font-size:11px; color:var(--text-dim); margin:0 16px 16px; }
 
+.task-item.done { opacity:0.4; }
 .task-item {
   margin: 0 16px 10px;
   background: rgba(255,255,255,0.03);
@@ -626,8 +627,29 @@ body::before {
 
   <!-- TASKS -->
   <div id="p-tasks" class="page">
-    <div class="page-title">مركز المهام 🎯</div>
-    <div class="page-sub">شاهد الإعلانات واكسب أرباحك اليومية</div>
+    <div class="ads-hero" style="background:linear-gradient(135deg,rgba(108,99,255,0.14),rgba(0,230,118,0.07));border-color:rgba(108,99,255,0.22);">
+      <div class="ads-hero-icon">🎯</div>
+      <h3>مركز المهام</h3>
+      <p>شاهد 10 إعلانات يومياً واكسب أرباحك</p>
+      <div class="ads-counters">
+        <div class="ads-cnt-box">
+          <div class="n" id="tasks-watched-count" style="color:var(--primary)">0</div>
+          <div class="l">أنجزت</div>
+        </div>
+        <div class="ads-cnt-box">
+          <div class="n" id="tasks-remaining-count" style="color:var(--green)">10</div>
+          <div class="l">متبقي</div>
+        </div>
+        <div class="ads-cnt-box">
+          <div class="n purple" id="tasks-timer">--:--:--</div>
+          <div class="l">تجديد بعد</div>
+        </div>
+      </div>
+      <div class="ads-bar-wrap">
+        <div class="ads-bar-fill" id="tasks-progress-fill" style="width:0%;background:linear-gradient(90deg,var(--primary),#a78bfa);box-shadow:0 0 8px var(--primary)"></div>
+      </div>
+      <div class="ads-earned-row">إجمالي المكسب من المهام: <b style="color:var(--primary)">$<span id="tasks-total-earned">0.000</span></b></div>
+    </div>
     <div id="tasks-list"></div>
   </div>
 
@@ -770,7 +792,7 @@ function tickTimer() {
   if (rem === 0) { checkReset(); updateUI(); return; }
   const h = Math.floor(rem/3600000), m = Math.floor((rem%3600000)/60000), s = Math.floor((rem%60000)/1000);
   const fmt = `${pad(h)}:${pad(m)}:${pad(s)}`;
-  ['ads-timer'].forEach(id => { const el=document.getElementById(id); if(el) el.innerText=fmt; });
+  ['ads-timer','tasks-timer'].forEach(id => { const el=document.getElementById(id); if(el) el.innerText=fmt; });
 }
 function pad(n){return String(n).padStart(2,'0');}
 setInterval(tickTimer,1000);
@@ -833,20 +855,32 @@ function updateUI() {
   if(cr){ cr.innerText=`${S.refCount} / 10`; cr.style.color=S.refCount>=10?'var(--green)':'var(--red)'; }
   if(cm){ cm.innerText=S.balance>=10?'مكتمل ✅':'غير مكتمل ❌'; cm.style.color=S.balance>=10?'var(--green)':'var(--red)'; }
 
+  // tasks counters
+  const tw=document.getElementById('tasks-watched-count'),tr=document.getElementById('tasks-remaining-count');
+  const te=document.getElementById('tasks-total-earned'),tf=document.getElementById('tasks-progress-fill');
+  if(tw) tw.innerText=S.adsToday;
+  if(tr) tr.innerText=Math.max(0,10-S.adsToday);
+  if(te) te.innerText=(S.adsToday*TASK_REWARD).toFixed(3);
+  if(tf) tf.style.width=Math.min((S.adsToday/10)*100,100)+'%';
+
   // tasks list
   const tl=document.getElementById('tasks-list');
   if(tl){
     if(S.adsToday>=10){
-      tl.innerHTML=`<div class="empty-state"><div class="es-icon">✅</div><h4>انتهت مهام اليوم</h4><p>عد غداً لاستكمال مهامك</p></div>`;
+      tl.innerHTML=`<div class="empty-state"><div class="es-icon">🎉</div><h4>أحسنت! انتهيت من كل المهام</h4><p>ربحت اليوم: <b style="color:var(--primary)">$${(S.adsToday*TASK_REWARD).toFixed(3)}</b></p></div>`;
     } else {
       let h='';
-      for(let i=S.adsToday+1;i<=10;i++){
-        h+=`<div class="task-item">
-          <div class="t-icon">🎬</div>
-          <div class="t-info"><h4>مهمة فيديو #${i}</h4><p>مكافأة فورية عند المشاهدة</p></div>
+      for(let i=1;i<=10;i++){
+        const done=i<=S.adsToday;
+        h+=`<div class="task-item ${done?'done':''}">
+          <div class="t-icon">${done?'✅':'🎬'}</div>
+          <div class="t-info"><h4>مهمة فيديو #${i}</h4><p>${done?'تمت المشاهدة ✓':'مكافأة فورية عند المشاهدة'}</p></div>
           <div class="t-right">
-            <div class="pill-green">+$0.010</div><br>
-            <button class="btn-start" onclick="doTask(this)">بدء</button>
+            ${done
+              ?`<span class="done-chip" style="background:var(--primary-soft);color:var(--primary);border-color:rgba(108,99,255,0.2)">+$${TASK_REWARD.toFixed(3)}</span>`
+              :`<div class="pill-green" style="margin-bottom:5px">+$${TASK_REWARD.toFixed(3)}</div>
+               <button class="btn-start" onclick="doTask(this)">بدء</button>`
+            }
           </div>
         </div>`;
       }
