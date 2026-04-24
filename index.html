@@ -3,681 +3,963 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Number 433 Elite - Professional Edition</title>
+<title>Number 433 Elite</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
-<!-- Adsgram SDK -->
 <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --bg: #070912;
-  --primary: #5c5ff5;
-  --accent: #c9a84c;
-  --glass: rgba(255, 255, 255, 0.04);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --text-dim: #8489b2;
-  --green: #4dff88;
-  --red: #ff4d4d;
-  --orange: #ff9500;
+  --bg: #06080f;
+  --bg2: #0c0f1e;
+  --primary: #6c63ff;
+  --primary-soft: rgba(108,99,255,0.15);
+  --gold: #f0c040;
+  --gold-soft: rgba(240,192,64,0.12);
+  --green: #00e676;
+  --green-soft: rgba(0,230,118,0.1);
+  --red: #ff4f4f;
+  --orange: #ff9100;
+  --orange-soft: rgba(255,145,0,0.12);
+  --text: #e8eaf6;
+  --text-dim: #5a607a;
+  --text-mid: #9098b8;
+  --border: rgba(255,255,255,0.07);
+  --border-bright: rgba(255,255,255,0.13);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { background: var(--bg); color: white; font-family: 'Tajawal', sans-serif; min-height: 100vh; padding: 10px 15px 120px; direction: rtl; }
 
-/* Header */
-.cool-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
-.logo-num433 { font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 800; color: white; }
-.logo-num433 b { color: var(--primary); }
-.user-status-card { display: flex; align-items: center; gap: 8px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; padding: 6px 12px; font-size: 12px; }
-.online-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); }
-
-/* Task Cards */
-.task-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 15px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    transition: transform 0.2s;
-}
-.task-card:active { transform: scale(0.97); }
-.task-icon {
-    width: 45px;
-    height: 45px;
-    background: rgba(92, 95, 245, 0.1);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    color: var(--primary);
-}
-.task-info { flex-grow: 1; }
-.task-info h4 { font-size: 14px; margin-bottom: 4px; }
-.task-info p { font-size: 10px; color: var(--text-dim); }
-.reward-badge {
-    background: rgba(77, 255, 136, 0.1);
-    color: var(--green);
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: bold;
-    display: inline-block;
-}
-.reward-badge-orange {
-    background: rgba(255, 149, 0, 0.1);
-    color: var(--orange);
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: bold;
-    display: inline-block;
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Tajawal', sans-serif;
+  min-height: 100vh;
+  padding: 0 0 100px;
+  direction: rtl;
+  overflow-x: hidden;
 }
 
-/* Adsgram Section */
-.ads-header-card {
-    background: linear-gradient(135deg, rgba(255,149,0,0.12), rgba(92,95,245,0.08));
-    border: 1px solid rgba(255,149,0,0.25);
-    border-radius: 22px;
-    padding: 20px;
-    margin-bottom: 18px;
-    text-align: center;
-}
-.ads-counter-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 14px;
-    gap: 10px;
-}
-.ads-counter-box {
-    flex: 1;
-    background: rgba(0,0,0,0.25);
-    border-radius: 14px;
-    padding: 12px 8px;
-    text-align: center;
-}
-.ads-counter-box .big-num {
-    font-family: 'Poppins', sans-serif;
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--orange);
-}
-.ads-counter-box .small-lbl {
-    font-size: 9px;
-    color: var(--text-dim);
-    margin-top: 2px;
-}
-.timer-box .big-num { color: var(--primary) !important; font-size: 16px !important; }
-
-.ads-progress-bar {
-    height: 6px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 10px;
-    margin-top: 14px;
-    overflow: hidden;
-}
-.ads-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--orange), #ffdc5e);
-    border-radius: 10px;
-    transition: width 0.6s ease;
-    box-shadow: 0 0 8px rgba(255,149,0,0.5);
+/* ── MESH BG ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 10%, rgba(108,99,255,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 10% 80%, rgba(0,230,118,0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.adsgram-card {
-    background: linear-gradient(145deg, rgba(255,149,0,0.06), rgba(255,255,255,0.02));
-    border: 1px solid rgba(255,149,0,0.15);
-    border-radius: 20px;
-    padding: 16px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    transition: transform 0.2s, border-color 0.2s;
+.wrap { position: relative; z-index: 1; padding: 0 16px; }
+
+/* ── HEADER ── */
+.hdr {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 16px 10px;
+  position: relative; z-index: 1;
 }
-.adsgram-card:active { transform: scale(0.97); }
-.adsgram-card.done {
-    opacity: 0.4;
-    border-color: var(--glass-border);
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+  color: white;
 }
-.adsgram-icon {
-    width: 46px;
-    height: 46px;
-    background: rgba(255,149,0,0.12);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
+.logo span { color: var(--primary); }
+.user-chip {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 40px;
+  padding: 5px 12px 5px 8px;
+  font-size: 12px; color: var(--text-mid);
 }
-.adsgram-info { flex-grow: 1; }
-.adsgram-info h4 { font-size: 13px; margin-bottom: 3px; }
-.adsgram-info p { font-size: 10px; color: var(--text-dim); }
-.btn-watch {
-    background: linear-gradient(135deg, var(--orange), #e67e00);
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 11px;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
-    font-family: 'Tajawal', sans-serif;
-    transition: opacity 0.2s;
+.pulse-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 0 rgba(0,230,118,0.5);
+  animation: pulse-anim 2s infinite;
 }
-.btn-watch:disabled { opacity: 0.4; cursor: not-allowed; }
-.btn-done {
-    background: rgba(77,255,136,0.1);
-    color: var(--green);
-    border: 1px solid rgba(77,255,136,0.2);
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 11px;
-    font-weight: 700;
-    cursor: default;
-    white-space: nowrap;
+@keyframes pulse-anim {
+  0%   { box-shadow: 0 0 0 0 rgba(0,230,118,0.5); }
+  70%  { box-shadow: 0 0 0 6px rgba(0,230,118,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,230,118,0); }
 }
 
-/* Refer System */
-.refer-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-.stat-box { background: var(--glass); padding: 15px; border-radius: 18px; text-align: center; border: 1px solid var(--glass-border); }
-.copy-area {
-    background: rgba(0,0,0,0.3);
-    border: 1px dashed var(--primary);
-    padding: 12px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-/* Leaderboard */
-.leader-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-.leader-card.rank-1 { border-color: var(--accent); background: rgba(201, 168, 76, 0.05); }
-.l-amount { color: var(--green); font-family: 'Poppins'; font-weight: 800; font-size: 17px; }
-.l-info { flex-grow: 1; text-align: center; }
-.l-rank { font-size: 22px; width: 35px; text-align: left; }
-
-/* Global UI */
-.nav-bar { position: fixed; bottom: 20px; left: 15px; right: 15px; background: rgba(15, 18, 35, 0.95); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 22px; display: flex; justify-content: space-around; padding: 10px; z-index: 1000; }
-.nav-btn { color: var(--text-dim); background: none; border: none; font-size: 10px; flex: 1; text-align: center; cursor: pointer; }
-.nav-btn.active { color: var(--primary); font-weight: bold; }
-.page { display: none; animation: fadeIn 0.3s ease; }
+/* ── PAGES ── */
+.page { display: none; animation: pgIn 0.3s ease; }
 .page.active { display: block; }
-.btn-action { background: var(--primary); color: white; border: none; width: 100%; padding: 16px; border-radius: 15px; font-weight: 900; cursor: pointer; font-family: 'Tajawal', sans-serif; }
-.glass-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; margin-bottom: 15px; }
+@keyframes pgIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 
-#toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 12px 25px; border-radius: 12px; z-index: 10000; transition: 0.5s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); white-space: nowrap; }
-#live-notify { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(20, 25, 45, 0.9); backdrop-filter: blur(10px); border: 1px solid var(--primary); border-radius: 50px; padding: 8px 20px; font-size: 10px; z-index: 2000; display: none; animation: slideUp 0.5s; }
+/* ── HOME ── */
+.balance-hero {
+  margin: 8px 16px 14px;
+  background: linear-gradient(135deg, rgba(108,99,255,0.18) 0%, rgba(0,230,118,0.07) 100%);
+  border: 1px solid rgba(108,99,255,0.25);
+  border-radius: 26px;
+  padding: 28px 22px 22px;
+  position: relative;
+  overflow: hidden;
+}
+.balance-hero::after {
+  content: '';
+  position: absolute;
+  top: -40px; left: -40px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(108,99,255,0.15), transparent 70%);
+  pointer-events: none;
+}
+.bal-label { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+.bal-amount {
+  font-family: 'Syne', sans-serif;
+  font-size: 46px; font-weight: 800; line-height: 1;
+  background: linear-gradient(135deg, #fff 40%, var(--primary) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 18px;
+}
+.bal-amount sup { font-size: 22px; vertical-align: super; }
+.withdraw-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--primary);
+  color: white; border: none;
+  width: 100%; padding: 14px;
+  border-radius: 16px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(108,99,255,0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.withdraw-btn:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(108,99,255,0.2); }
+.withdraw-btn svg { width: 18px; height: 18px; }
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideUp { from { bottom: 50px; opacity: 0; } to { bottom: 100px; opacity: 1; } }
+/* VIP Bar */
+.vip-card {
+  margin: 0 16px 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 16px 18px;
+}
+.vip-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.vip-badge {
+  font-size: 11px; font-weight: 700;
+  background: var(--gold-soft);
+  color: var(--gold);
+  border: 1px solid rgba(240,192,64,0.2);
+  padding: 3px 10px; border-radius: 20px;
+}
+.prog-track { height:5px; background:rgba(255,255,255,0.05); border-radius:10px; overflow:hidden; }
+.prog-fill { height:100%; background:linear-gradient(90deg,var(--primary),#a78bfa); border-radius:10px; transition:width 0.8s cubic-bezier(.4,0,.2,1); box-shadow:0 0 8px var(--primary); }
+
+/* Quick stats */
+.stats-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 16px 14px; }
+.stat-tile {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 16px;
+}
+.stat-tile .lbl { font-size:10px; color:var(--text-dim); margin-bottom:5px; }
+.stat-tile .val { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; }
+
+/* ── TASKS ── */
+.page-title { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; margin:0 16px 4px; }
+.page-sub { font-size:11px; color:var(--text-dim); margin:0 16px 16px; }
+
+.task-item {
+  margin: 0 16px 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 14px;
+  transition: border-color 0.2s;
+}
+.task-item:active { transform: scale(0.98); }
+.t-icon {
+  width: 44px; height: 44px; border-radius: 14px; flex-shrink:0;
+  background: var(--primary-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.t-info { flex:1; }
+.t-info h4 { font-size:13px; margin-bottom:2px; }
+.t-info p { font-size:10px; color:var(--text-dim); }
+.t-right { text-align:left; }
+.pill-green {
+  display:inline-block;
+  background:var(--green-soft);
+  color:var(--green);
+  border:1px solid rgba(0,230,118,0.15);
+  font-size:11px; font-weight:700;
+  padding:3px 10px; border-radius:20px;
+  margin-bottom:6px;
+}
+.pill-orange {
+  display:inline-block;
+  background:var(--orange-soft);
+  color:var(--orange);
+  border:1px solid rgba(255,145,0,0.15);
+  font-size:11px; font-weight:700;
+  padding:3px 10px; border-radius:20px;
+  margin-bottom:6px;
+}
+.btn-start {
+  display:block;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border: 1px solid rgba(108,99,255,0.25);
+  padding:6px 14px; border-radius:10px;
+  font-size:11px; font-weight:700;
+  cursor:pointer; font-family:'Tajawal',sans-serif;
+  transition:background 0.2s;
+}
+.btn-start:active { background:rgba(108,99,255,0.25); }
+.btn-start:disabled { opacity:0.4; cursor:not-allowed; }
+
+/* done state */
+.task-item.done { opacity:0.45; }
+
+/* ── ADS PAGE ── */
+.ads-hero {
+  margin: 0 16px 14px;
+  background: linear-gradient(135deg, rgba(255,145,0,0.12), rgba(108,99,255,0.08));
+  border: 1px solid rgba(255,145,0,0.2);
+  border-radius: 26px;
+  padding: 22px 20px 18px;
+  text-align: center;
+}
+.ads-hero-icon { font-size:36px; margin-bottom:8px; }
+.ads-hero h3 { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; margin-bottom:4px; }
+.ads-hero p { font-size:11px; color:var(--text-dim); }
+.ads-counters { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:16px; }
+.ads-cnt-box { background:rgba(0,0,0,0.3); border-radius:14px; padding:10px 6px; }
+.ads-cnt-box .n { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; color:var(--orange); }
+.ads-cnt-box .n.purple { color:var(--primary); font-size:15px; }
+.ads-cnt-box .l { font-size:9px; color:var(--text-dim); margin-top:2px; }
+.ads-bar-wrap { height:5px; background:rgba(255,255,255,0.05); border-radius:10px; margin-top:14px; overflow:hidden; }
+.ads-bar-fill { height:100%; background:linear-gradient(90deg,var(--orange),#ffe066); border-radius:10px; transition:width 0.6s; box-shadow:0 0 8px rgba(255,145,0,0.5); }
+.ads-earned-row { margin-top:12px; font-size:11px; color:var(--text-dim); }
+.ads-earned-row b { color:var(--orange); }
+
+.ad-item {
+  margin: 0 16px 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 14px;
+  transition: border-color 0.2s;
+}
+.ad-item.done { opacity:0.4; }
+.ad-icon {
+  width:44px; height:44px; border-radius:14px; flex-shrink:0;
+  background:var(--orange-soft);
+  display:flex; align-items:center; justify-content:center; font-size:20px;
+}
+.ad-info { flex:1; }
+.ad-info h4 { font-size:13px; margin-bottom:2px; }
+.ad-info p { font-size:10px; color:var(--text-dim); }
+.btn-watch {
+  background:linear-gradient(135deg,var(--orange),#e67e00);
+  color:white; border:none;
+  padding:8px 16px; border-radius:12px;
+  font-size:12px; font-weight:700;
+  cursor:pointer; font-family:'Tajawal',sans-serif;
+  box-shadow:0 3px 12px rgba(255,145,0,0.3);
+  transition:opacity 0.2s;
+}
+.btn-watch:disabled { opacity:0.4; cursor:not-allowed; }
+.done-chip {
+  background:var(--green-soft);
+  color:var(--green);
+  border:1px solid rgba(0,230,118,0.15);
+  padding:6px 12px; border-radius:10px;
+  font-size:11px; font-weight:700;
+}
+
+/* ── LEADERS ── */
+.podium-row { display:grid; grid-template-columns:1fr 1.15fr 1fr; gap:10px; margin:0 16px 14px; align-items:flex-end; }
+.podium-card {
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:16px 10px;
+  text-align:center;
+}
+.podium-card.first {
+  background:linear-gradient(160deg,rgba(240,192,64,0.12),rgba(108,99,255,0.08));
+  border-color:rgba(240,192,64,0.3);
+}
+.podium-card .crown { font-size:24px; margin-bottom:6px; }
+.podium-card .name { font-size:11px; font-weight:700; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.podium-card .amount { font-family:'Syne',sans-serif; font-size:13px; font-weight:800; color:var(--green); }
+.podium-card .refs { font-size:9px; color:var(--text-dim); margin-top:2px; }
+
+.leader-row {
+  margin:0 16px 8px;
+  background:rgba(255,255,255,0.025);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:14px 16px;
+  display:flex; align-items:center; gap:12px;
+}
+.lr-rank { font-size:14px; width:26px; text-align:center; flex-shrink:0; }
+.lr-info { flex:1; }
+.lr-info .nm { font-size:13px; font-weight:700; }
+.lr-info .rf { font-size:10px; color:var(--text-dim); }
+.lr-amt { font-family:'Syne',sans-serif; font-size:14px; font-weight:800; color:var(--green); }
+
+/* ── REFER ── */
+.refer-hero {
+  margin:0 16px 14px;
+  background:linear-gradient(135deg,rgba(108,99,255,0.12),rgba(0,230,118,0.06));
+  border:1px solid rgba(108,99,255,0.2);
+  border-radius:26px;
+  padding:22px 20px;
+  text-align:center;
+}
+.refer-hero h3 { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; margin-bottom:4px; }
+.refer-hero p { font-size:11px; color:var(--text-dim); }
+.refer-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 16px 14px; }
+.ref-stat {
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px; text-align:center;
+}
+.ref-stat .rv { font-family:'Syne',sans-serif; font-size:24px; font-weight:800; color:var(--primary); }
+.ref-stat .rl { font-size:10px; color:var(--text-dim); margin-top:3px; }
+
+.link-card {
+  margin:0 16px 14px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:18px;
+}
+.link-card h4 { font-size:13px; margin-bottom:10px; color:var(--text-mid); }
+.link-box {
+  display:flex; align-items:center; gap:10px;
+  background:rgba(0,0,0,0.3);
+  border:1px dashed rgba(108,99,255,0.35);
+  border-radius:14px;
+  padding:10px 14px;
+}
+.link-text { flex:1; font-size:10px; color:var(--text-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.copy-btn {
+  background:var(--primary); color:white; border:none;
+  padding:7px 16px; border-radius:10px;
+  font-size:11px; font-weight:700; cursor:pointer;
+  font-family:'Tajawal',sans-serif; flex-shrink:0;
+}
+.warn-note {
+  margin-top:12px; font-size:9px; color:#ffbc00; text-align:center;
+  background:rgba(255,188,0,0.06); border-radius:8px; padding:6px;
+}
+
+/* ── BOTTOM NAV ── */
+.nav-bar {
+  position:fixed; bottom:16px; left:14px; right:14px;
+  background:rgba(12,15,30,0.92);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--border-bright);
+  border-radius:24px;
+  display:flex; justify-content:space-around;
+  padding:10px 6px;
+  z-index:1000;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.nav-btn {
+  background:none; border:none;
+  color:var(--text-dim);
+  font-size:9px; flex:1; text-align:center;
+  cursor:pointer; padding:4px 0;
+  transition:color 0.2s;
+  font-family:'Tajawal',sans-serif;
+}
+.nav-btn .nav-ic { font-size:19px; display:block; margin-bottom:2px; }
+.nav-btn.active { color:var(--primary); font-weight:700; }
+.nav-btn.active .nav-ic {
+  filter: drop-shadow(0 0 6px var(--primary));
+}
+
+/* ── SUBSCRIPTION OVERLAY ── */
+#sub-overlay {
+  position:fixed; inset:0;
+  background:linear-gradient(160deg,#07090f,#0e1228);
+  z-index:9999;
+  display:flex; align-items:center; justify-content:center; padding:28px;
+}
+.sub-card {
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border-bright);
+  border-radius:28px;
+  padding:32px 24px;
+  text-align:center; width:100%;
+}
+.sub-card h3 { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; margin-bottom:8px; }
+.sub-card p { font-size:12px; color:var(--text-dim); margin-bottom:28px; line-height:1.6; }
+.btn-tg {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  background:#0088cc; color:white; border:none;
+  width:100%; padding:15px; border-radius:16px;
+  font-family:'Tajawal',sans-serif; font-size:15px; font-weight:700;
+  cursor:pointer; margin-bottom:10px;
+}
+.btn-verify {
+  background:transparent; color:var(--text-mid);
+  border:1px solid var(--border-bright);
+  width:100%; padding:14px; border-radius:16px;
+  font-family:'Tajawal',sans-serif; font-size:14px; cursor:pointer;
+}
+
+/* ── WITHDRAW BOTTOM SHEET ── */
+#sheet-overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(4px);
+  z-index:5000;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+}
+#sheet-overlay.open { display:flex; }
+.sheet {
+  background:#0f1220;
+  border:1px solid var(--border-bright);
+  border-radius:28px 28px 0 0;
+  width:100%; max-width:480px;
+  padding:24px 20px 36px;
+  animation:sheetUp 0.35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes sheetUp { from { transform:translateY(100%); opacity:0; } to { transform:translateY(0); opacity:1; } }
+.sheet-handle { width:36px; height:4px; background:var(--border-bright); border-radius:10px; margin:0 auto 20px; }
+.sheet h3 { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; margin-bottom:6px; }
+.sheet p { font-size:11px; color:var(--text-dim); margin-bottom:20px; }
+.sheet-reqs {
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:16px; padding:14px 16px; margin-bottom:16px;
+}
+.req-row { display:flex; justify-content:space-between; font-size:12px; margin-bottom:8px; }
+.req-row:last-child { margin-bottom:0; }
+.methods-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+.method-btn {
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  color:var(--text-mid);
+  border-radius:14px; padding:14px;
+  font-family:'Tajawal',sans-serif; font-size:13px; font-weight:700;
+  cursor:pointer; transition:border-color 0.2s, background 0.2s;
+  text-align:center;
+}
+.method-btn.selected { border-color:var(--primary); background:var(--primary-soft); color:var(--primary); }
+.sheet-input {
+  width:100%; background:rgba(0,0,0,0.35);
+  border:1px solid var(--border-bright);
+  padding:13px 14px; border-radius:14px;
+  color:white; font-size:13px; font-family:'Tajawal',sans-serif;
+  margin-bottom:12px; display:none;
+}
+.sheet-input:focus { outline:none; border-color:var(--primary); }
+.btn-confirm {
+  width:100%; padding:15px;
+  background:var(--primary); color:white; border:none;
+  border-radius:16px; font-family:'Tajawal',sans-serif;
+  font-size:15px; font-weight:700; cursor:pointer;
+  box-shadow:0 4px 20px rgba(108,99,255,0.35);
+  display:none;
+}
+
+/* ── TOAST ── */
+#toast {
+  position:fixed; top:-80px; left:50%; transform:translateX(-50%);
+  background:rgba(15,18,35,0.95);
+  border:1px solid var(--border-bright);
+  backdrop-filter:blur(16px);
+  color:white; padding:11px 22px;
+  border-radius:40px; z-index:10000;
+  transition:top 0.4s cubic-bezier(.22,1,.36,1);
+  font-size:13px; white-space:nowrap;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* ── LIVE NOTIFY (redesigned) ── */
+#live-notify {
+  position:fixed; bottom:108px; left:50%; transform:translateX(-50%);
+  z-index:2000; display:none;
+  animation:notifyPop 0.4s cubic-bezier(.22,1,.36,1);
+}
+@keyframes notifyPop { from { transform:translateX(-50%) scale(0.85); opacity:0; } to { transform:translateX(-50%) scale(1); opacity:1; } }
+.notify-inner {
+  display:flex; align-items:center; gap:10px;
+  background:rgba(10,13,28,0.95);
+  border:1px solid rgba(0,230,118,0.25);
+  backdrop-filter:blur(16px);
+  border-radius:50px;
+  padding:9px 18px 9px 10px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,230,118,0.08);
+}
+.notify-avatar {
+  width:28px; height:28px; border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),var(--green));
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:800; color:white; flex-shrink:0;
+}
+.notify-text { font-size:11px; color:var(--text-mid); white-space:nowrap; }
+.notify-text b { color:white; }
+.notify-text .amt { color:var(--green); font-family:'Syne',sans-serif; font-weight:700; }
+
+/* ── EMPTY STATES ── */
+.empty-state {
+  text-align:center; padding:40px 20px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--border);
+  border-radius:22px; margin:0 16px;
+}
+.empty-state .es-icon { font-size:44px; margin-bottom:12px; }
+.empty-state h4 { font-size:15px; margin-bottom:6px; }
+.empty-state p { font-size:11px; color:var(--text-dim); }
 </style>
 </head>
 <body>
 
-<div id="live-notify"></div>
+<!-- LIVE NOTIFY -->
+<div id="live-notify">
+  <div class="notify-inner">
+    <div class="notify-avatar" id="notify-av">A</div>
+    <div class="notify-text" id="notify-text"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
 <div id="toast"></div>
 
-<div id="sub-overlay" style="position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 25px;">
-    <div class="glass-card" style="text-align: center; width: 100%;">
-        <div style="font-size: 40px; margin-bottom: 15px;">👑</div>
-        <h3>نظام التحقق</h3>
-        <p style="font-size: 12px; color: var(--text-dim); margin: 15px 0 25px;">اشترك في القناة لتفعيل الحساب واستلام الأرباح.</p>
-        <button class="btn-action" style="background: #0088cc;" onclick="window.open('https://t.me/Number433', '_blank')">اشترك الآن</button>
-        <button class="btn-action" style="background: transparent; border: 1px solid var(--glass-border); margin-top: 10px;" onclick="verifySub()">تحقق من الاشتراك</button>
-    </div>
+<!-- SUBSCRIPTION OVERLAY -->
+<div id="sub-overlay">
+  <div class="sub-card">
+    <div style="font-size:48px;margin-bottom:14px;">👑</div>
+    <h3>تحقق من الاشتراك</h3>
+    <p>اشترك في قناتنا الرسمية لتفعيل حسابك والبدء في جمع أرباحك اليومية</p>
+    <button class="btn-tg" onclick="window.open('https://t.me/Number433','_blank')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.48 14.697 4.53 13.8c-.658-.197-.67-.657.136-.975l10.868-4.19c.548-.197 1.027.12.847.958l-.819.655z"/></svg>
+      اشترك في القناة
+    </button>
+    <button class="btn-verify" onclick="verifySub()">✓ تحققت من الاشتراك</button>
+  </div>
 </div>
 
-<div id="main-content" style="filter: blur(10px); pointer-events: none;">
-    <header class="cool-header">
-        <div class="logo-num433">NUM<b>433</b></div>
-        <div class="user-status-card">
-            <span class="online-dot"></span>
-            <span id="u_name">تحميل...</span>
-        </div>
-    </header>
-
-    <!-- HOME PAGE -->
-    <div id="p-home" class="page active">
-        <div class="glass-card" style="text-align: center; background: linear-gradient(to bottom, rgba(92,95,245,0.1), transparent);">
-            <p style="color: var(--text-dim); font-size: 11px;">الرصيد القابل للسحب</p>
-            <div style="font-size: 42px; font-weight: 900; font-family: 'Poppins'; margin: 10px 0;">$<span id="balance">0.000</span></div>
-        </div>
-
-        <div class="glass-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h4 style="color: var(--accent); font-size: 14px;">رتبة الحساب: <span id="u-level">VIP 1</span></h4>
-                <span style="font-size: 10px; color: var(--text-dim);">هدف الترقية: $10</span>
-            </div>
-            <div style="height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
-                <div id="level-bar" style="height: 100%; background: var(--primary); width: 0%; transition: 0.8s; box-shadow: 0 0 10px var(--primary);"></div>
-            </div>
-        </div>
-
-        <!-- Quick Stats on Home -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-            <div class="glass-card" style="text-align:center; padding: 15px; margin-bottom:0;">
-                <div style="font-size:10px; color:var(--text-dim); margin-bottom:5px;">مهام اليوم</div>
-                <div style="font-size:20px; font-weight:900; color:var(--green);" id="home-tasks-count">0/10</div>
-            </div>
-            <div class="glass-card" style="text-align:center; padding: 15px; margin-bottom:0;">
-                <div style="font-size:10px; color:var(--text-dim); margin-bottom:5px;">إعلانات اليوم</div>
-                <div style="font-size:20px; font-weight:900; color:var(--orange);" id="home-ads-count">0/20</div>
-            </div>
-        </div>
+<!-- WITHDRAW SHEET -->
+<div id="sheet-overlay" onclick="closeSheet(event)">
+  <div class="sheet" id="sheet-box">
+    <div class="sheet-handle"></div>
+    <h3>💸 سحب الأرباح</h3>
+    <p>اختر طريقة الدفع وأدخل عنوان محفظتك</p>
+    <div class="sheet-reqs">
+      <div class="req-row">
+        <span style="color:var(--text-dim)">الدعوات المطلوبة</span>
+        <b id="c-ref">0 / 10</b>
+      </div>
+      <div class="req-row">
+        <span style="color:var(--text-dim)">الحد الأدنى</span>
+        <b id="c-money">لم يكتمل ❌</b>
+      </div>
     </div>
-
-    <!-- TASKS PAGE -->
-    <div id="p-tasks" class="page">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <h3 style="font-size: 20px;">مركز المهام 🎯</h3>
-            <p style="color: var(--text-dim); font-size: 11px;">شاهد الإعلانات واجمع أرباحك اليومية</p>
-        </div>
-        <div id="tasks-list"></div>
+    <div class="methods-grid">
+      <button class="method-btn" onclick="selectPay('Binance',this)">💛 Binance</button>
+      <button class="method-btn" onclick="selectPay('USDT',this)">🟢 USDT TRC20</button>
     </div>
-
-    <!-- ADS PAGE (NEW) -->
-    <div id="p-ads" class="page">
-        <div class="ads-header-card">
-            <div style="font-size: 32px; margin-bottom: 8px;">📺</div>
-            <h3 style="font-size: 18px; margin-bottom: 4px;">إعلانات Adsgram</h3>
-            <p style="font-size: 11px; color: var(--text-dim);">شاهد 20 إعلاناً يومياً واربح مكافأتك</p>
-
-            <div class="ads-counter-row">
-                <div class="ads-counter-box">
-                    <div class="big-num" id="ads-watched-count">0</div>
-                    <div class="small-lbl">شاهدت</div>
-                </div>
-                <div class="ads-counter-box">
-                    <div class="big-num" id="ads-remaining-count">20</div>
-                    <div class="small-lbl">متبقي</div>
-                </div>
-                <div class="ads-counter-box timer-box">
-                    <div class="big-num" id="ads-timer">--:--:--</div>
-                    <div class="small-lbl">تجديد بعد</div>
-                </div>
-            </div>
-
-            <div class="ads-progress-bar">
-                <div class="ads-progress-fill" id="ads-progress-fill" style="width:0%"></div>
-            </div>
-
-            <div style="margin-top: 12px; font-size: 11px; color: var(--text-dim);">
-                إجمالي المكسب من الإعلانات: <span style="color: var(--orange); font-weight: bold;">$<span id="ads-total-earned">0.000</span></span>
-            </div>
-        </div>
-
-        <div id="adsgram-list"></div>
-    </div>
-
-    <!-- LEADERBOARD PAGE -->
-    <div id="p-leaders" class="page">
-        <h3 style="text-align: center; margin-bottom: 20px;">أقوى المستخدمين 🏆</h3>
-        <div class="leader-card rank-1"><span class="l-amount">$342.50</span><div class="l-info"><span style="display: block; font-weight: bold;">أحمد المحمدي</span><span style="font-size: 10px; color: var(--text-dim);">650 إحالة</span></div><span class="l-rank">👑</span></div>
-        <div class="leader-card"><span class="l-amount">$210.15</span><div class="l-info"><span style="display: block; font-weight: bold;">سارة خالد</span><span style="font-size: 10px; color: var(--text-dim);">412 إحالة</span></div><span class="l-rank">🥈</span></div>
-        <div class="leader-card"><span class="l-amount">$156.80</span><div class="l-info"><span style="display: block; font-weight: bold;">Mostafa VIP</span><span style="font-size: 10px; color: var(--text-dim);">280 إحالة</span></div><span class="l-rank">🥉</span></div>
-    </div>
-
-    <!-- REFER PAGE -->
-    <div id="p-refer" class="page">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <h3 style="font-size: 20px;">برنامج الإحالة 👥</h3>
-            <p style="color: var(--text-dim); font-size: 11px;">اربح مبالغ إضافية عن كل شخص تدعوه</p>
-        </div>
-        <div class="refer-stats">
-            <div class="stat-box">
-                <span style="font-size: 10px; color: var(--text-dim);">إجمالي الدعوات</span>
-                <div style="font-size: 20px; font-weight: 900; color: var(--primary);" id="ref-count-display">0</div>
-            </div>
-            <div class="stat-box">
-                <span style="font-size: 10px; color: var(--text-dim);">مكافأة الإحالة</span>
-                <div style="font-size: 20px; font-weight: 900; color: var(--green);">$0.00</div>
-            </div>
-        </div>
-        <div class="glass-card">
-            <h4 style="margin-bottom: 12px; font-size: 14px;">رابط الدعوة الخاص بك:</h4>
-            <div class="copy-area">
-                <span id="ref-link" style="font-size: 10px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%;">تحميل...</span>
-                <button onclick="copyRef()" style="background: var(--primary); color: white; border: none; padding: 6px 15px; border-radius: 8px; font-size: 10px; cursor: pointer;">نسخ</button>
-            </div>
-            <p style="margin-top: 15px; font-size: 9px; color: #ffbc00; text-align: center;">نظامنا يكتشف الدعوات الوهمية تلقائياً ويجمد الحساب.</p>
-        </div>
-    </div>
-
-    <!-- WALLET PAGE -->
-    <div id="p-wallet" class="page">
-        <h3 style="margin-bottom: 20px;">سحب الأرباح 💰</h3>
-        <div class="glass-card" style="background: rgba(0,0,0,0.2);">
-            <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 14px;">متطلبات السحب:</h4>
-            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:8px;">
-                <span>الدعوات المطلوبة:</span> <b id="c-ref">0 / 10</b>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:12px;">
-                <span>الحد الأدنى للسحب:</span> <b id="c-money">لم يكتمل</b>
-            </div>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div class="glass-card" onclick="selectPay('Binance')" style="text-align:center; padding:15px; cursor:pointer; border: 1px solid var(--glass-border);">Binance</div>
-            <div class="glass-card" onclick="selectPay('USDT')" style="text-align:center; padding:15px; cursor:pointer; border: 1px solid var(--glass-border);">USDT (TRC20)</div>
-        </div>
-        <div id="w-form" class="glass-card" style="display:none; border-top: 2px solid var(--primary);">
-            <input type="text" id="wallet-addr" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); padding:12px; border-radius:10px; color:white;" placeholder="أدخل عنوان المحفظة">
-            <button class="btn-action" style="margin-top:10px;" onclick="confirmWithdraw()">تأكيد عملية السحب</button>
-        </div>
-    </div>
-
-    <!-- NAV BAR (6 tabs) -->
-    <nav class="nav-bar">
-        <button class="nav-btn active" onclick="showTab('p-home', this)">🏠<br>الرئيسية</button>
-        <button class="nav-btn" onclick="showTab('p-tasks', this)">🎯<br>المهام</button>
-        <button class="nav-btn" onclick="showTab('p-ads', this)">📺<br>إعلانات</button>
-        <button class="nav-btn" onclick="showTab('p-leaders', this)">🏆<br>المتصدرون</button>
-        <button class="nav-btn" onclick="showTab('p-refer', this)">👥<br>الدعوات</button>
-        <button class="nav-btn" onclick="showTab('p-wallet', this)">💰<br>المحفظة</button>
-    </nav>
+    <input type="text" id="wallet-addr" class="sheet-input" placeholder="أدخل عنوان المحفظة">
+    <button class="btn-confirm" id="btn-confirm" onclick="confirmWithdraw()">تأكيد السحب →</button>
+  </div>
 </div>
+
+<!-- MAIN CONTENT -->
+<div id="main-content" style="filter:blur(12px);pointer-events:none;">
+
+  <header class="hdr">
+    <div class="logo">NUM<span>433</span></div>
+    <div class="user-chip">
+      <span class="pulse-dot"></span>
+      <span id="u_name">تحميل...</span>
+    </div>
+  </header>
+
+  <!-- HOME -->
+  <div id="p-home" class="page active">
+    <div class="balance-hero">
+      <div class="bal-label">الرصيد القابل للسحب</div>
+      <div class="bal-amount"><sup>$</sup><span id="balance">0.000</span></div>
+      <button class="withdraw-btn" onclick="openSheet()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        سحب الأرباح
+      </button>
+    </div>
+
+    <div class="vip-card">
+      <div class="vip-top">
+        <span style="font-size:13px;font-weight:700;">رتبة الحساب</span>
+        <span class="vip-badge" id="u-level">VIP 1</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:7px;">
+        <span>التقدم نحو VIP 2</span><span>هدف: $10</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="level-bar" style="width:0%"></div></div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-tile">
+        <div class="lbl">مهام اليوم</div>
+        <div class="val" id="home-tasks-count" style="color:var(--green)">0/10</div>
+      </div>
+      <div class="stat-tile">
+        <div class="lbl">إعلانات اليوم</div>
+        <div class="val" id="home-ads-count" style="color:var(--orange)">0/20</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASKS -->
+  <div id="p-tasks" class="page">
+    <div class="page-title">مركز المهام 🎯</div>
+    <div class="page-sub">شاهد الإعلانات واكسب أرباحك اليومية</div>
+    <div id="tasks-list"></div>
+  </div>
+
+  <!-- ADS -->
+  <div id="p-ads" class="page">
+    <div class="ads-hero">
+      <div class="ads-hero-icon">📺</div>
+      <h3>إعلانات Adsgram</h3>
+      <p>شاهد 20 إعلاناً يومياً واربح مكافأتك</p>
+      <div class="ads-counters">
+        <div class="ads-cnt-box">
+          <div class="n" id="ads-watched-count">0</div>
+          <div class="l">شاهدت</div>
+        </div>
+        <div class="ads-cnt-box">
+          <div class="n" id="ads-remaining-count">20</div>
+          <div class="l">متبقي</div>
+        </div>
+        <div class="ads-cnt-box">
+          <div class="n purple" id="ads-timer">--:--:--</div>
+          <div class="l">تجديد بعد</div>
+        </div>
+      </div>
+      <div class="ads-bar-wrap"><div class="ads-bar-fill" id="ads-progress-fill" style="width:0%"></div></div>
+      <div class="ads-earned-row">إجمالي المكسب: <b>$<span id="ads-total-earned">0.000</span></b></div>
+    </div>
+    <div id="adsgram-list"></div>
+  </div>
+
+  <!-- LEADERS -->
+  <div id="p-leaders" class="page">
+    <div class="page-title" style="margin-bottom:14px;">المتصدرون 🏆</div>
+    <div class="podium-row">
+      <div class="podium-card">
+        <div class="crown">🥈</div>
+        <div class="name">سارة خالد</div>
+        <div class="amount">$210.15</div>
+        <div class="refs">412 إحالة</div>
+      </div>
+      <div class="podium-card first">
+        <div class="crown">👑</div>
+        <div class="name">أحمد المحمدي</div>
+        <div class="amount">$342.50</div>
+        <div class="refs">650 إحالة</div>
+      </div>
+      <div class="podium-card">
+        <div class="crown">🥉</div>
+        <div class="name">Mostafa VIP</div>
+        <div class="amount">$156.80</div>
+        <div class="refs">280 إحالة</div>
+      </div>
+    </div>
+    <div class="leader-row"><span class="lr-rank">4️⃣</span><div class="lr-info"><div class="nm">Omar Flash</div><div class="rf">195 إحالة</div></div><span class="lr-amt">$98.40</span></div>
+    <div class="leader-row"><span class="lr-rank">5️⃣</span><div class="lr-info"><div class="nm">Nada Pro</div><div class="rf">143 إحالة</div></div><span class="lr-amt">$71.20</span></div>
+    <div class="leader-row"><span class="lr-rank">6️⃣</span><div class="lr-info"><div class="nm">Khalid_G</div><div class="rf">108 إحالة</div></div><span class="lr-amt">$54.00</span></div>
+  </div>
+
+  <!-- REFER -->
+  <div id="p-refer" class="page">
+    <div class="refer-hero">
+      <h3>برنامج الإحالة 👥</h3>
+      <p>اربح مبالغ إضافية عن كل شخص تدعوه</p>
+    </div>
+    <div class="refer-stats">
+      <div class="ref-stat">
+        <div class="rv" id="ref-count-display">0</div>
+        <div class="rl">إجمالي الدعوات</div>
+      </div>
+      <div class="ref-stat">
+        <div class="rv" style="color:var(--green)">$0.00</div>
+        <div class="rl">مكافأة الإحالة</div>
+      </div>
+    </div>
+    <div class="link-card">
+      <h4>رابط الدعوة الخاص بك</h4>
+      <div class="link-box">
+        <span class="link-text" id="ref-link">تحميل...</span>
+        <button class="copy-btn" onclick="copyRef()">نسخ</button>
+      </div>
+      <div class="warn-note">⚠️ نظامنا يكتشف الدعوات الوهمية تلقائياً ويجمد الحساب</div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav-bar">
+    <button class="nav-btn active" onclick="showTab('p-home',this)"><span class="nav-ic">🏠</span>الرئيسية</button>
+    <button class="nav-btn" onclick="showTab('p-tasks',this)"><span class="nav-ic">🎯</span>المهام</button>
+    <button class="nav-btn" onclick="showTab('p-ads',this)"><span class="nav-ic">📺</span>إعلانات</button>
+    <button class="nav-btn" onclick="showTab('p-leaders',this)"><span class="nav-ic">🏆</span>المتصدرون</button>
+    <button class="nav-btn" onclick="showTab('p-refer',this)"><span class="nav-ic">👥</span>الدعوات</button>
+  </nav>
+
+</div><!-- /main-content -->
 
 <script>
-const tg = window.Telegram.WebApp; 
+const tg = window.Telegram.WebApp;
 tg.expand();
-tg.headerColor = '#070912';
+tg.headerColor = '#06080f';
 
-const ADS_LIMIT = 20;
-const ADS_REWARD = 0.005; // $0.005 per Adsgram ad
-const TASKS_REWARD = 0.010; // $0.010 per libtl ad
+const ADS_LIMIT   = 20;
+const ADS_REWARD  = 0.005;
+const TASK_REWARD = 0.010;
 
-// ─── State ───────────────────────────────────────────────
-let S = JSON.parse(localStorage.getItem('n433_pro')) || {
-    balance: 0.000,
-    adsToday: 0,           // libtl tasks
-    adsgramToday: 0,       // adsgram ads watched count
-    adsgramEarned: 0.000,  // total earned from adsgram
-    adsgramResetTime: 0,   // timestamp of last reset
-    refCount: 0,
-    isSubscribed: false
+let S = JSON.parse(localStorage.getItem('n433_v2')) || {
+  balance: 0,
+  adsToday: 0,
+  adsgramToday: 0,
+  adsgramEarned: 0,
+  adsgramResetTime: 0,
+  refCount: 0,
+  isSubscribed: false
 };
 
-// Check if 24h passed since last Adsgram reset
-function checkAdsgramReset() {
-    const now = Date.now();
-    const elapsed = now - (S.adsgramResetTime || 0);
-    if (elapsed >= 24 * 60 * 60 * 1000) {
-        S.adsgramToday = 0;
-        S.adsgramResetTime = now;
-        save();
-    }
-}
-
-// ─── Timer ───────────────────────────────────────────────
-function updateAdsTimer() {
-    const now = Date.now();
-    const resetAt = (S.adsgramResetTime || now) + 24 * 60 * 60 * 1000;
-    const remaining = Math.max(0, resetAt - now);
-
-    if (remaining === 0) {
-        checkAdsgramReset();
-        updateUI();
-        return;
-    }
-
-    const h = Math.floor(remaining / 3600000);
-    const m = Math.floor((remaining % 3600000) / 60000);
-    const sec = Math.floor((remaining % 60000) / 1000);
-    const fmt = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
-
-    const el = document.getElementById('ads-timer');
-    if (el) el.innerText = fmt;
-}
-setInterval(updateAdsTimer, 1000);
-
-// ─── Adsgram Init ─────────────────────────────────────────
-let AdsgramController = null;
-
-function initAdsgram() {
-    if (typeof window.Adsgram === 'undefined') return;
-    AdsgramController = window.Adsgram.init({ blockId: "28510" });
-}
-
-function watchAdsgramAd(index) {
-    if (S.adsgramToday >= ADS_LIMIT) {
-        return showToast("✅ انتهيت من إعلانات اليوم");
-    }
-
-    const btn = document.getElementById(`adsgram-btn-${index}`);
-    if (btn) { btn.disabled = true; btn.innerText = "جاري..."; }
-
-    if (!AdsgramController) {
-        // Adsgram not loaded yet, retry init
-        initAdsgram();
-        if (!AdsgramController) {
-            if (btn) { btn.disabled = false; btn.innerText = "شاهد"; }
-            return showToast("⚠️ الإعلان غير متاح الآن، حاول مرة أخرى");
-        }
-    }
-
-    AdsgramController.show().then(() => {
-        // Reward on successful watch
-        S.balance += ADS_REWARD;
-        S.adsgramToday += 1;
-        S.adsgramEarned = (S.adsgramEarned || 0) + ADS_REWARD;
-        if (!S.adsgramResetTime) S.adsgramResetTime = Date.now();
-        save();
-        showToast(`💰 +$${ADS_REWARD.toFixed(3)} من الإعلان #${index}`);
-    }).catch((result) => {
-        // User skipped or error — no reward
-        if (btn) { btn.disabled = false; btn.innerText = "شاهد"; }
-        if (result && result.error) {
-            showToast("⚠️ لم يتم مشاهدة الإعلان كاملاً");
-        }
-    });
-}
-
-// ─── Fake Notification ────────────────────────────────────
-const fakes = ["Ahmed", "Sami", "Leo_FX", "Mariam", "User_99", "Crypto_King", "Omar", "Hassan"];
-function notify() {
-    const n = document.getElementById('live-notify');
-    if (Math.random() > 0.5) {
-        n.innerHTML = `🚀 المستخدم <b>${fakes[Math.floor(Math.random()*fakes.length)]}</b> سحب للتو <b>$${(Math.random()*30+10).toFixed(2)}</b>`;
-        n.style.display = 'block';
-        setTimeout(() => n.style.display = 'none', 3000);
-    }
-}
-setInterval(notify, 10000);
-
-// ─── Subscription ─────────────────────────────────────────
+/* ── subscription ── */
 function verifySub() {
-    S.isSubscribed = true;
-    save();
-    showToast("✅ تم التحقق بنجاح");
-    setTimeout(() => location.reload(), 1000);
+  S.isSubscribed = true; save();
+  showToast('✅ تم التحقق بنجاح');
+  setTimeout(() => location.reload(), 900);
 }
-
 if (S.isSubscribed) {
-    document.getElementById('sub-overlay').style.display = 'none';
-    document.getElementById('main-content').style.filter = 'none';
-    document.getElementById('main-content').style.pointerEvents = 'auto';
+  document.getElementById('sub-overlay').style.display = 'none';
+  const mc = document.getElementById('main-content');
+  mc.style.filter = 'none'; mc.style.pointerEvents = 'auto';
 }
 
-// ─── Save & Update UI ─────────────────────────────────────
-function save() { localStorage.setItem('n433_pro', JSON.stringify(S)); updateUI(); }
+/* ── 24h reset ── */
+function checkReset() {
+  const now = Date.now();
+  if (now - (S.adsgramResetTime||0) >= 86400000) {
+    S.adsgramToday = 0;
+    S.adsgramResetTime = now;
+    save();
+  }
+}
+
+/* ── timer ── */
+function tickTimer() {
+  const resetAt = (S.adsgramResetTime||Date.now()) + 86400000;
+  const rem = Math.max(0, resetAt - Date.now());
+  if (rem === 0) { checkReset(); updateUI(); return; }
+  const h = Math.floor(rem/3600000), m = Math.floor((rem%3600000)/60000), s = Math.floor((rem%60000)/1000);
+  const fmt = `${pad(h)}:${pad(m)}:${pad(s)}`;
+  ['ads-timer'].forEach(id => { const el=document.getElementById(id); if(el) el.innerText=fmt; });
+}
+function pad(n){return String(n).padStart(2,'0');}
+setInterval(tickTimer,1000);
+
+/* ── Adsgram ── */
+let AdsCtrl = null;
+function initAdsgram() {
+  if (typeof window.Adsgram !== 'undefined') AdsCtrl = window.Adsgram.init({ blockId:"28510" });
+}
+function watchAd(i) {
+  if (S.adsgramToday >= ADS_LIMIT) return showToast('✅ انتهيت من إعلانات اليوم');
+  const btn = document.getElementById(`ab-${i}`);
+  if (btn) { btn.disabled=true; btn.innerText='...'; }
+  if (!AdsCtrl) { initAdsgram(); }
+  if (!AdsCtrl) {
+    if(btn){btn.disabled=false;btn.innerText='شاهد';}
+    return showToast('⚠️ الإعلان غير متاح حالياً');
+  }
+  AdsCtrl.show().then(()=>{
+    S.balance += ADS_REWARD;
+    S.adsgramToday++;
+    S.adsgramEarned = (S.adsgramEarned||0)+ADS_REWARD;
+    if(!S.adsgramResetTime) S.adsgramResetTime=Date.now();
+    save(); showToast(`💰 +$${ADS_REWARD.toFixed(3)} تمت الإضافة`);
+  }).catch(()=>{
+    if(btn){btn.disabled=false;btn.innerText='شاهد';}
+    showToast('⚠️ لم تكتمل المشاهدة');
+  });
+}
+
+/* ── tasks ── */
+function doTask(btn) {
+  btn.disabled=true; btn.innerText='...';
+  show_10908620().then(()=>{
+    S.balance+=TASK_REWARD; S.adsToday++;
+    save(); showToast('💰 تم إضافة $0.010 لرصيدك');
+  }).catch(()=>{ btn.disabled=false; btn.innerText='بدء'; });
+}
+
+/* ── save / updateUI ── */
+function save() { localStorage.setItem('n433_v2',JSON.stringify(S)); updateUI(); }
 
 function updateUI() {
-    // Balance
-    document.getElementById('balance').innerText = S.balance.toFixed(3);
-    document.getElementById('ref-count-display').innerText = S.refCount;
+  document.getElementById('balance').innerText = S.balance.toFixed(3);
+  document.getElementById('ref-count-display').innerText = S.refCount;
 
-    // Home quick stats
-    const hTasks = document.getElementById('home-tasks-count');
-    const hAds = document.getElementById('home-ads-count');
-    if (hTasks) hTasks.innerText = `${S.adsToday}/10`;
-    if (hAds) hAds.innerText = `${S.adsgramToday}/${ADS_LIMIT}`;
+  const hT=document.getElementById('home-tasks-count');
+  const hA=document.getElementById('home-ads-count');
+  if(hT) hT.innerText=`${S.adsToday}/10`;
+  if(hA) hA.innerText=`${S.adsgramToday}/${ADS_LIMIT}`;
 
-    // Withdrawal Conditions
-    document.getElementById('c-ref').innerText = `${S.refCount} / 10`;
-    document.getElementById('c-ref').style.color = S.refCount >= 10 ? "#4dff88" : "#ff4d4d";
-    document.getElementById('c-money').innerText = S.balance >= 10 ? "مكتمل ✅" : "غير مكتمل ❌";
-    document.getElementById('c-money').style.color = S.balance >= 10 ? "#4dff88" : "#ff4d4d";
+  // VIP
+  let lvl='VIP 1', prog=(S.balance/10)*100;
+  if(S.balance>=10){lvl='VIP 2';prog=((S.balance-10)/40)*100;}
+  document.getElementById('u-level').innerText=lvl;
+  document.getElementById('level-bar').style.width=Math.min(prog,100)+'%';
 
-    // VIP System
-    let lvl = "VIP 1"; let prog = (S.balance / 10) * 100;
-    if (S.balance >= 10) { lvl = "VIP 2"; prog = ((S.balance-10)/40)*100; }
-    document.getElementById('u-level').innerText = lvl;
-    document.getElementById('level-bar').style.width = Math.min(prog, 100) + "%";
+  // sheet reqs
+  const cr=document.getElementById('c-ref'),cm=document.getElementById('c-money');
+  if(cr){ cr.innerText=`${S.refCount} / 10`; cr.style.color=S.refCount>=10?'var(--green)':'var(--red)'; }
+  if(cm){ cm.innerText=S.balance>=10?'مكتمل ✅':'غير مكتمل ❌'; cm.style.color=S.balance>=10?'var(--green)':'var(--red)'; }
 
-    // Tasks List (libtl)
-    const list = document.getElementById('tasks-list');
-    if (S.adsToday >= 10) {
-        list.innerHTML = `<div class="glass-card" style="text-align:center; padding: 30px;">
-            <div style="font-size: 40px;">✅</div>
-            <h4>انتهت مهام اليوم</h4>
-            <p style="font-size:11px; color:var(--text-dim);">عد مجدداً بعد انتهاء الموقت اليومي</p>
-        </div>`;
+  // tasks list
+  const tl=document.getElementById('tasks-list');
+  if(tl){
+    if(S.adsToday>=10){
+      tl.innerHTML=`<div class="empty-state"><div class="es-icon">✅</div><h4>انتهت مهام اليوم</h4><p>عد غداً لاستكمال مهامك</p></div>`;
     } else {
-        let h = '';
-        for (let i = S.adsToday+1; i <= 10; i++) {
-            h += `<div class="task-card">
-                <div class="task-icon">🎬</div>
-                <div class="task-info">
-                    <h4>مهمة فيديو #${i}</h4>
-                    <p>احصل على مكافأة فورية</p>
-                </div>
-                <div style="text-align: left;">
-                    <div class="reward-badge">+$0.010</div>
-                    <button class="btn-action" style="width:auto; padding:6px 15px; font-size:10px; margin-top:8px;" onclick="doTask(this)">بدء</button>
-                </div>
-            </div>`;
+      let h='';
+      for(let i=S.adsToday+1;i<=10;i++){
+        h+=`<div class="task-item">
+          <div class="t-icon">🎬</div>
+          <div class="t-info"><h4>مهمة فيديو #${i}</h4><p>مكافأة فورية عند المشاهدة</p></div>
+          <div class="t-right">
+            <div class="pill-green">+$0.010</div><br>
+            <button class="btn-start" onclick="doTask(this)">بدء</button>
+          </div>
+        </div>`;
+      }
+      tl.innerHTML=h;
+    }
+  }
+
+  // adsgram list
+  const al=document.getElementById('adsgram-list');
+  if(al){
+    // stats
+    const aw=document.getElementById('ads-watched-count'),ar=document.getElementById('ads-remaining-count');
+    const ae=document.getElementById('ads-total-earned'),af=document.getElementById('ads-progress-fill');
+    if(aw) aw.innerText=S.adsgramToday;
+    if(ar) ar.innerText=Math.max(0,ADS_LIMIT-S.adsgramToday);
+    if(ae) ae.innerText=(S.adsgramEarned||0).toFixed(3);
+    if(af) af.style.width=Math.min((S.adsgramToday/ADS_LIMIT)*100,100)+'%';
+
+    if(S.adsgramToday>=ADS_LIMIT){
+      al.innerHTML=`<div class="empty-state"><div class="es-icon">🎉</div><h4>أحسنت! انتهيت من كل الإعلانات</h4><p>ربحت اليوم: <b style="color:var(--orange)">$${(S.adsgramEarned||0).toFixed(3)}</b></p></div>`;
+      return;
+    }
+    let h='';
+    for(let i=1;i<=ADS_LIMIT;i++){
+      const done=i<=S.adsgramToday;
+      h+=`<div class="ad-item ${done?'done':''}">
+        <div class="ad-icon">${done?'✅':'📺'}</div>
+        <div class="ad-info"><h4>إعلان Adsgram #${i}</h4><p>${done?'تمت المشاهدة ✓':'اضغط شاهد واكسب مكافأتك'}</p></div>
+        ${done
+          ?`<span class="done-chip">+$${ADS_REWARD.toFixed(3)}</span>`
+          :`<div style="text-align:left">
+              <div class="pill-orange" style="margin-bottom:5px">+$${ADS_REWARD.toFixed(3)}</div>
+              <button class="btn-watch" id="ab-${i}" onclick="watchAd(${i})">شاهد</button>
+            </div>`
         }
-        list.innerHTML = h;
+      </div>`;
     }
-
-    // Adsgram List
-    updateAdsgramList();
-
-    // Adsgram stats
-    const watchedEl = document.getElementById('ads-watched-count');
-    const remainEl = document.getElementById('ads-remaining-count');
-    const earnEl = document.getElementById('ads-total-earned');
-    const fillEl = document.getElementById('ads-progress-fill');
-
-    if (watchedEl) watchedEl.innerText = S.adsgramToday;
-    if (remainEl) remainEl.innerText = Math.max(0, ADS_LIMIT - S.adsgramToday);
-    if (earnEl) earnEl.innerText = (S.adsgramEarned || 0).toFixed(3);
-    if (fillEl) fillEl.style.width = Math.min((S.adsgramToday / ADS_LIMIT) * 100, 100) + "%";
+    al.innerHTML=h;
+  }
 }
 
-function updateAdsgramList() {
-    const container = document.getElementById('adsgram-list');
-    if (!container) return;
-
-    if (S.adsgramToday >= ADS_LIMIT) {
-        container.innerHTML = `<div class="glass-card" style="text-align:center; padding: 30px; border-color: rgba(255,149,0,0.2);">
-            <div style="font-size: 40px;">🎉</div>
-            <h4 style="margin-bottom:8px;">أحسنت! انتهيت من كل الإعلانات</h4>
-            <p style="font-size:11px; color:var(--text-dim);">ستتجدد الإعلانات بعد <span id="ads-timer-done" style="color:var(--primary);">انتهاء المؤقت</span></p>
-            <p style="margin-top:10px; font-size:12px; color:var(--orange);">ربحت اليوم: <b>$${((S.adsgramEarned)||0).toFixed(3)}</b></p>
-        </div>`;
-        return;
-    }
-
-    let html = '';
-    for (let i = 1; i <= ADS_LIMIT; i++) {
-        const isDone = i <= S.adsgramToday;
-        html += `<div class="telegram-card ${isDone ? 'done' : ''}">
-            <div class="telegram-icon">${isDone ? '✅' : '📺'}</div>
-            <div class="telegram-info">
-                <h4>إعلان #${i}</h4>
-                <p>${isDone ? 'تمت المشاهدة ✓' : 'اضغط شاهد واكسب مكافأتك'}</p>
-            </div>
-            ${isDone
-                ? `<span class="btn-done">+$${ADS_REWARD.toFixed(3)}</span>`
-                : `<div style="text-align:left;">
-                    <div class="reward-badge-orange" style="margin-bottom:6px;">+$${ADS_REWARD.toFixed(3)}</div>
-                    <button class="btn-watch" id="adsgram-btn-${i}" onclick="watchAdsgramAd(${i})">شاهد</button>
-                   </div>`
-            }
-        </div>`;
-    }
-    container.innerHTML = html;
+/* ── tabs ── */
+function showTab(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='p-ads'){ checkReset(); updateUI(); }
 }
 
-// ─── Tasks (libtl) ────────────────────────────────────────
-function doTask(btn) {
-    btn.disabled = true;
-    btn.innerText = "جاري...";
-    show_10908620().then(() => {
-        S.balance += TASKS_REWARD;
-        S.adsToday += 1;
-        save();
-        showToast("💰 تم إضافة $0.010 لرصيدك");
-    }).catch(() => {
-        btn.disabled = false;
-        btn.innerText = "بدء";
-    });
+/* ── withdraw sheet ── */
+function openSheet(){
+  document.getElementById('sheet-overlay').classList.add('open');
+}
+function closeSheet(e){
+  if(e.target===document.getElementById('sheet-overlay'))
+    document.getElementById('sheet-overlay').classList.remove('open');
+}
+let selectedMethod='';
+function selectPay(m,btn){
+  if(S.refCount<10||S.balance<10) return showToast('❌ لم تستوفِ شروط السحب بعد');
+  selectedMethod=m;
+  document.querySelectorAll('.method-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('wallet-addr').style.display='block';
+  document.getElementById('btn-confirm').style.display='block';
+  document.getElementById('wallet-addr').placeholder=`أدخل عنوان ${m}`;
+}
+function confirmWithdraw(){
+  const addr=document.getElementById('wallet-addr').value;
+  if(addr.length<5) return showToast('⚠️ يرجى إدخال عنوان صحيح');
+  showToast('✅ تم إرسال طلب السحب للمراجعة');
+  document.getElementById('sheet-overlay').classList.remove('open');
+  document.getElementById('wallet-addr').value='';
+  document.querySelectorAll('.method-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('wallet-addr').style.display='none';
+  document.getElementById('btn-confirm').style.display='none';
 }
 
-// ─── Navigation ───────────────────────────────────────────
-function showTab(id, btn) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active');
-    // Refresh adsgram list when switching to ads tab
-    if (id === 'p-ads') {
-        checkAdsgramReset();
-        updateAdsgramList();
-    }
+/* ── copy referral ── */
+function copyRef(){
+  navigator.clipboard.writeText(document.getElementById('ref-link').innerText)
+    .then(()=>showToast('🔗 تم نسخ رابط الدعوة'));
 }
 
-// ─── Toast ────────────────────────────────────────────────
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.innerText = msg;
-    t.style.top = '20px';
-    setTimeout(() => t.style.top = '-100px', 3000);
+/* ── toast ── */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.innerText=msg; t.style.top='22px';
+  setTimeout(()=>t.style.top='-80px',3000);
 }
 
-// ─── Wallet ───────────────────────────────────────────────
-function selectPay(m) {
-    if (S.refCount < 10 || S.balance < 10) return showToast("❌ لم تستوفِ شروط السحب بعد");
-    document.getElementById('w-form').style.display = 'block';
+/* ── live notify (redesigned) ── */
+const names=['أحمد','سامي','مريم','ليو','عمر','حسن','نادا','خالد','فاطمة','جاد'];
+function liveNotify(){
+  if(Math.random()>0.45){
+    const nm=names[Math.floor(Math.random()*names.length)];
+    const amt=(Math.random()*35+8).toFixed(2);
+    document.getElementById('notify-av').innerText=nm[0];
+    document.getElementById('notify-text').innerHTML=`<b>${nm}</b> سحب للتو <span class="amt">$${amt}</span>`;
+    const n=document.getElementById('live-notify');
+    n.style.display='block';
+    setTimeout(()=>n.style.display='none',3500);
+  }
 }
+setInterval(liveNotify,12000);
 
-function confirmWithdraw() {
-    const addr = document.getElementById('wallet-addr').value;
-    if (addr.length < 5) return showToast("⚠️ يرجى إدخال عنوان صحيح");
-    showToast("✅ تم إرسال الطلب للمراجعة");
-    document.getElementById('w-form').style.display = 'none';
-}
+/* ── init ── */
+const user=tg.initDataUnsafe?.user;
+document.getElementById('u_name').innerText=user?.first_name||'Guest';
+document.getElementById('ref-link').innerText=`https://t.me/Number433bot?start=${user?.id||'6619233998'}`;
 
-// ─── Referral ─────────────────────────────────────────────
-function copyRef() {
-    const link = document.getElementById('ref-link').innerText;
-    navigator.clipboard.writeText(link).then(() => {
-        showToast("🔗 تم نسخ رابط الدعوة");
-    });
-}
-
-// ─── Init ─────────────────────────────────────────────────
-const user = tg.initDataUnsafe?.user;
-document.getElementById('u_name').innerText = user?.first_name || "Guest User";
-document.getElementById('ref-link').innerText = `https://t.me/Number433bot?start=${user?.id || '6619233998'}`;
-
-checkAdsgramReset();
-initAdsgram();
-updateUI();
-updateAdsTimer();
+checkReset(); initAdsgram(); updateUI(); tickTimer();
 </script>
 </body>
 </html>
