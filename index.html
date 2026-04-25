@@ -911,7 +911,7 @@ function updateUI() {
       const done=i<=S.adsgramToday;
       h+=`<div class="ad-item ${done?'done':''}">
         <div class="ad-icon">${done?'✅':'📺'}</div>
-        <div class="ad-info"><h4>إعلان Adsgram #${i}</h4><p>${done?'تمت المشاهدة ✓':'اضغط شاهد واكسب مكافأتك'}</p></div>
+        <div class="ad-info"><h4>إعلان telegram #${i}</h4><p>${done?'تمت المشاهدة ✓':'اضغط شاهد واكسب مكافأتك'}</p></div>
         ${done
           ?`<span class="done-chip">+$${ADS_REWARD.toFixed(3)}</span>`
           :`<div style="text-align:left">
