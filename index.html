@@ -90,6 +90,43 @@ body::before {
   100% { box-shadow: 0 0 0 0 rgba(0,230,118,0); }
 }
 
+/* ── PROMO CARDS ── */
+.promo-card {
+  margin: 0 16px 12px;
+  background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(108,99,255,0.04));
+  border: 1px solid rgba(108,99,255,0.2);
+  border-radius: 22px;
+  padding: 18px 16px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.2s;
+  position: relative; overflow: hidden;
+}
+.promo-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 90% 50%, rgba(108,99,255,0.1), transparent);
+  pointer-events: none;
+}
+.promo-card.promo-green {
+  background: linear-gradient(135deg, rgba(0,230,118,0.1), rgba(0,230,118,0.03));
+  border-color: rgba(0,230,118,0.2);
+}
+.promo-card.promo-green::before {
+  background: radial-gradient(ellipse 60% 80% at 90% 50%, rgba(0,230,118,0.1), transparent);
+}
+.promo-card:active { transform: scale(0.97); }
+.promo-text { flex: 1; }
+.promo-title { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+.promo-sub { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+.promo-hl { color: var(--gold); font-weight: 700; }
+.promo-hl-green { color: var(--green); font-weight: 700; }
+.promo-emoji { font-size: 36px; flex-shrink: 0; }
+.promo-arrow {
+  font-size: 22px; color: var(--text-dim);
+  flex-shrink: 0; transform: scaleX(-1);
+}
+
 /* ── PAGES ── */
 .page { display: none; animation: pgIn 0.3s ease; }
 .page.active { display: block; }
@@ -624,6 +661,27 @@ body::before {
         <div class="val" id="home-ads-count" style="color:var(--orange)">0/20</div>
       </div>
     </div>
+
+    <!-- Promo Card 1: Referral -->
+    <div class="promo-card" onclick="showTab('p-refer', document.querySelectorAll('.nav-btn')[4])">
+      <div class="promo-text">
+        <div class="promo-title">ادعُ أصدقاءك واربح! 🤝</div>
+        <div class="promo-sub">احصل على <span class="promo-hl">$0.50</span> لكل صديق تدعوه</div>
+      </div>
+      <div class="promo-emoji">🤝</div>
+      <div class="promo-arrow">‹</div>
+    </div>
+
+    <!-- Promo Card 2: Daily Ads -->
+    <div class="promo-card promo-green" onclick="showTab('p-ads', document.querySelectorAll('.nav-btn')[2])">
+      <div class="promo-text">
+        <div class="promo-title">أكمل الإعلانات اليومية 📺</div>
+        <div class="promo-sub">اربح المزيد من خلال إكمال <span class="promo-hl-green">20 إعلان</span> يومياً</div>
+      </div>
+      <div class="promo-emoji">✅</div>
+      <div class="promo-arrow">‹</div>
+    </div>
+
   </div>
 
   <!-- TASKS -->
@@ -911,7 +969,7 @@ function updateUI() {
       const done=i<=S.adsgramToday;
       h+=`<div class="ad-item ${done?'done':''}">
         <div class="ad-icon">${done?'✅':'📺'}</div>
-        <div class="ad-info"><h4>إعلان telegram #${i}</h4><p>${done?'تمت المشاهدة ✓':'اضغط شاهد واكسب مكافأتك'}</p></div>
+        <div class="ad-info"><h4>إعلان Adsgram #${i}</h4><p>${done?'تمت المشاهدة ✓':'اضغط شاهد واكسب مكافأتك'}</p></div>
         ${done
           ?`<span class="done-chip">+$${ADS_REWARD.toFixed(3)}</span>`
           :`<div style="text-align:left">
