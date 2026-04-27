@@ -1282,11 +1282,15 @@ function watchAd(i) {
     return showToast('⚠️ الإعلان غير متاح حالياً');
   }
   AdsCtrl.show().then(()=>{
-    S.balance += ADS_REWARD;
+    // Check double ads effect
+    const isDouble = S.doubleAds && Date.now() < (S.doubleAdsExpiry||0);
+    const earned = isDouble ? ADS_REWARD * 2 : ADS_REWARD;
+    S.balance += earned;
     S.adsgramToday++;
-    S.adsgramEarned = (S.adsgramEarned||0)+ADS_REWARD;
+    S.adsgramEarned = (S.adsgramEarned||0) + earned;
+    S.points = (S.points||0) + Math.floor(earned*100);
     if(!S.adsgramResetTime) S.adsgramResetTime=Date.now();
-    save(); showToast(`💰 +$${ADS_REWARD.toFixed(3)} تمت الإضافة`);
+    save(); showToast(`💰 +$${earned.toFixed(3)}${isDouble?' ⚡×2':''} تمت الإضافة`);
   }).catch(()=>{
     if(btn){btn.disabled=false;btn.innerText='شاهد';}
     showToast('⚠️ لم تكتمل المشاهدة');
@@ -1297,8 +1301,9 @@ function watchAd(i) {
 function doTask(btn) {
   btn.disabled=true; btn.innerText='...';
   show_10908620().then(()=>{
-    S.balance+=TASK_REWARD;
+    S.balance += TASK_REWARD;
     S.adsToday++;
+    S.points = (S.points||0) + Math.floor(TASK_REWARD*100);
     if(!S.tasksResetTime) S.tasksResetTime=Date.now();
     save(); showToast('💰 تم إضافة $0.010 لرصيدك');
   }).catch(()=>{ btn.disabled=false; btn.innerText='بدء'; });
@@ -1306,7 +1311,6 @@ function doTask(btn) {
 
 /* ── save / updateUI ── */
 function save() {
-  S.points = Math.floor(S.balance * 100);
   localStorage.setItem('n433_v2',JSON.stringify(S)); updateUI();
 }
 
@@ -1330,9 +1334,10 @@ function updateUI() {
   document.getElementById('level-bar').style.width=Math.min(prog,100)+'%';
 
   // sheet reqs
+  const minW = S.withdrawMin || 10;
   const cr=document.getElementById('c-ref'),cm=document.getElementById('c-money');
   if(cr){ cr.innerText=`${S.refCount} / 10`; cr.style.color=S.refCount>=10?'var(--green)':'var(--red)'; }
-  if(cm){ cm.innerText=S.balance>=10?'مكتمل ✅':'غير مكتمل ❌'; cm.style.color=S.balance>=10?'var(--green)':'var(--red)'; }
+  if(cm){ cm.innerText=S.balance>=minW?'مكتمل ✅':`$${S.balance.toFixed(2)} / $${minW}`; cm.style.color=S.balance>=minW?'var(--green)':'var(--red)'; }
 
   // tasks counters
   const tw=document.getElementById('tasks-watched-count'),tr=document.getElementById('tasks-remaining-count');
@@ -1491,7 +1496,7 @@ function collectBonus() {
   S.balance += amount;
   S.bonusStreak = streak;
   S.lastBonusTime = Date.now();
-  S.points = Math.floor(S.balance * 100);
+  S.points = (S.points||0) + Math.floor(amount*100);
 
   document.getElementById('daily-overlay').classList.remove('open');
   save();
@@ -1530,7 +1535,8 @@ function closeSheet(e){
 }
 let selectedMethod='';
 function selectPay(m,btn){
-  if(S.refCount<10||S.balance<10) return showToast('❌ لم تستوفِ شروط السحب بعد');
+  const minWithdraw = S.withdrawMin || 10;
+  if(S.refCount<10 || S.balance<minWithdraw) return showToast(`❌ تحتاج ${S.refCount<10?'10 إحالات و':''} $${minWithdraw} على الأقل`);
   selectedMethod=m;
   document.querySelectorAll('.method-btn').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
@@ -1579,13 +1585,13 @@ setInterval(liveNotify,12000);
 
 /* ── WHEEL ── */
 const PRIZES = [
-  { label:'$0.05', amount:0.05, color:'#00c853', textColor:'#fff', weight:40 },
-  { label:'$0.05', amount:0.05, color:'#1a1535', textColor:'#00e676', weight:40 },
-  { label:'$0.10', amount:0.10, color:'#6c63ff', textColor:'#fff', weight:25 },
-  { label:'$0.10', amount:0.10, color:'#1a1535', textColor:'#a78bfa', weight:25 },
-  { label:'$0.25', amount:0.25, color:'#f0c040', textColor:'#1a1200', weight:12 },
-  { label:'$0.50', amount:0.50, color:'#ff9100', textColor:'#fff', weight:5  },
-  { label:'$1.00', amount:1.00, color:'#ff4f4f', textColor:'#fff', weight:3  },
+  { label:'$0.05', amount:0.05, color:'#00c853', textColor:'#fff', emoji:'🟢', weight:40 },
+  { label:'$0.05', amount:0.05, color:'#1a1535', textColor:'#00e676', emoji:'🟢', weight:40 },
+  { label:'$0.10', amount:0.10, color:'#6c63ff', textColor:'#fff', emoji:'🔵', weight:25 },
+  { label:'$0.10', amount:0.10, color:'#1a1535', textColor:'#a78bfa', emoji:'🔵', weight:25 },
+  { label:'$0.25', amount:0.25, color:'#f0c040', textColor:'#1a1200', emoji:'⭐', weight:12 },
+  { label:'$0.50', amount:0.50, color:'#ff9100', textColor:'#fff', emoji:'🔥', weight:5  },
+  { label:'$1.00', amount:1.00, color:'#ff4f4f', textColor:'#fff', emoji:'💎', weight:3  },
 ];
 
 const WHEEL_SEGMENTS = PRIZES.length;
@@ -1676,7 +1682,7 @@ function spinWheel() {
       spinning = false;
       S.lastSpin = Date.now();
       S.balance += PRIZES[chosen].amount;
-      S.points = Math.floor(S.balance * 100);
+      S.points = (S.points||0) + Math.floor(PRIZES[chosen].amount*100);
       save();
       if(btn){ btn.disabled=false; btn.innerText='🎡 الفة العجلة'; }
       setTimeout(()=>showWheelResult(PRIZES[chosen]), 400);
@@ -1747,12 +1753,34 @@ function renderShop(){
 function buyItem(id, cost){
   if((S.points||0) < cost) return showToast('❌ نقاطك غير كافية');
   if((S.shopOwned||[]).includes(id)) return showToast('✅ هذا العنصر مملوك بالفعل');
+
   S.points -= cost;
   if(!S.shopOwned) S.shopOwned=[];
   S.shopOwned.push(id);
+
+  // Apply effect immediately
+  if(id === 'extra_spin'){
+    S.lastSpin = 0; // reset spin timer = لفة مجانية فورية
+    showToast('🎡 تم منحك لفة عجلة مجانية! افتح العجلة الآن');
+  } else if(id === 'double_ads'){
+    S.doubleAds = true;
+    S.doubleAdsExpiry = Date.now() + 86400000;
+    showToast('⚡ مضاعفة الأرباح فعّالة لمدة 24 ساعة!');
+  } else if(id === 'lower_withdraw'){
+    S.withdrawMin = 5;
+    showToast('💸 تم تخفيض حد السحب إلى $5!');
+  } else if(id === 'vip_badge'){
+    S.hasVIP = true;
+    showToast('👑 تم منحك شارة VIP!');
+  } else if(id === 'bonus_task'){
+    S.extraTasks = (S.extraTasks||0) + 5;
+    showToast('🎯 تمت إضافة 5 مهام إضافية!');
+  } else {
+    showToast('🎉 تم الشراء بنجاح!');
+  }
+
   save();
   renderShop();
-  showToast('🎉 تم الشراء بنجاح!');
 }
 
 /* ── init ── */
