@@ -127,6 +127,174 @@ body::before {
   flex-shrink: 0; transform: scaleX(-1);
 }
 
+/* ── WHEEL ── */
+.wheel-wrap {
+  display:flex; flex-direction:column; align-items:center;
+  margin: 10px 0 16px; position:relative;
+}
+.wheel-pointer {
+  font-size:28px; color:var(--gold);
+  text-shadow: 0 0 12px var(--gold);
+  margin-bottom:-6px; z-index:2; position:relative;
+}
+#wheelCanvas {
+  border-radius:50%;
+  box-shadow: 0 0 30px rgba(108,99,255,0.4), 0 0 60px rgba(108,99,255,0.15);
+  border: 4px solid rgba(255,255,255,0.1);
+}
+.wheel-info-card {
+  margin: 0 16px 14px;
+  background: rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:20px; padding:16px 18px;
+}
+.btn-spin {
+  width:100%; padding:15px;
+  background: linear-gradient(135deg, var(--gold), #e6a800);
+  color: #1a1200; border:none;
+  border-radius:16px;
+  font-family:'Tajawal',sans-serif;
+  font-size:16px; font-weight:900;
+  cursor:pointer;
+  box-shadow: 0 4px 20px rgba(240,192,64,0.4);
+  transition: transform 0.15s, opacity 0.2s;
+}
+.btn-spin:active { transform:scale(0.97); }
+.btn-spin:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+#wheelSVG { display:block; border-radius:50%; }
+.prize-row {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:12px; padding:10px 12px;
+  font-size:13px; font-weight:700;
+}
+.prize-dot { width:10px;height:10px;border-radius:50%;flex-shrink:0; }
+
+/* ── SHOP ── */
+.shop-balance-card {
+  margin: 0 16px 16px;
+  background: linear-gradient(135deg, rgba(240,192,64,0.12), rgba(240,192,64,0.04));
+  border:1px solid rgba(240,192,64,0.25);
+  border-radius:24px; padding:22px 20px;
+  text-align:center;
+}
+.shop-item {
+  margin: 0 16px 12px;
+  background: rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:20px; padding:16px;
+  display:flex; align-items:center; gap:14px;
+  transition: border-color 0.2s;
+}
+.shop-item-icon {
+  width:52px;height:52px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex-shrink:0;
+}
+.shop-item-info { flex:1; }
+.shop-item-info h4 { font-size:13px;font-weight:700;margin-bottom:3px; }
+.shop-item-info p { font-size:10px;color:var(--text-dim);line-height:1.5; }
+.btn-buy {
+  background:var(--gold-soft);
+  color:var(--gold);
+  border:1px solid rgba(240,192,64,0.3);
+  padding:8px 14px;border-radius:12px;
+  font-family:'Tajawal',sans-serif;
+  font-size:12px;font-weight:700;
+  cursor:pointer;white-space:nowrap;
+  transition:background 0.2s;
+}
+.btn-buy:active { background:rgba(240,192,64,0.25); }
+.btn-buy:disabled { opacity:0.4;cursor:not-allowed; }
+
+/* ── WHEEL RESULT POPUP ── */
+#wheel-result {
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(8px);
+  z-index:8000;
+  display:none;
+  align-items:center;justify-content:center;
+}
+#wheel-result.open { display:flex; }
+.result-card {
+  background:#0f1220;
+  border:1px solid var(--border-bright);
+  border-radius:28px;
+  padding:36px 28px;
+  text-align:center;
+  animation:popIn 0.4s cubic-bezier(.22,1,.36,1);
+  max-width:280px;width:90%;
+}
+@keyframes popIn { from{transform:scale(0.7);opacity:0} to{transform:scale(1);opacity:1} }
+.result-emoji { font-size:64px;margin-bottom:12px; }
+.result-amount { font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:var(--gold);margin-bottom:8px; }
+.result-label { font-size:13px;color:var(--text-dim);margin-bottom:24px; }
+.btn-result-close {
+  background:var(--primary);color:white;border:none;
+  width:100%;padding:14px;border-radius:16px;
+  font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;cursor:pointer;
+}
+
+/* ── MINI CARDS ── */
+.mini-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 16px 14px;
+}
+.mini-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 18px 14px 14px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.2s, background 0.2s;
+  position: relative;
+  overflow: hidden;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.mini-card:active { transform: scale(0.95); }
+.mini-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
+.mini-card-icon-wrap {
+  width: 42px; height: 42px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.mini-card-badge {
+  font-size: 9px; font-weight: 700;
+  padding: 3px 8px; border-radius: 20px;
+  border: 1px solid;
+}
+.mini-card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px; font-weight: 800;
+  margin-bottom: 3px;
+}
+.mini-card-sub { font-size: 10px; color: var(--text-dim); }
+.mini-card-arrow-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 8px;
+}
+.mini-card-cta {
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; gap: 4px;
+}
+/* card color variants */
+.mc-purple { border-color: rgba(108,99,255,0.2); }
+.mc-purple:active { background: rgba(108,99,255,0.06); }
+.mc-orange { border-color: rgba(255,145,0,0.2); }
+.mc-orange:active { background: rgba(255,145,0,0.06); }
+.mc-gold { border-color: rgba(240,192,64,0.2); }
+.mc-gold:active { background: rgba(240,192,64,0.06); }
+.mc-green { border-color: rgba(0,230,118,0.2); }
+.mc-green:active { background: rgba(0,230,118,0.06); }
+
 /* ── PAGES ── */
 .page { display: none; animation: pgIn 0.3s ease; }
 .page.active { display: block; }
@@ -564,9 +732,113 @@ body::before {
 .empty-state .es-icon { font-size:44px; margin-bottom:12px; }
 .empty-state h4 { font-size:15px; margin-bottom:6px; }
 .empty-state p { font-size:11px; color:var(--text-dim); }
+/* ── DAILY BONUS ── */
+#daily-overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.8);
+  backdrop-filter:blur(8px);
+  z-index:7000;
+  display:none;
+  align-items:center; justify-content:center;
+  padding:24px;
+}
+#daily-overlay.open { display:flex; }
+.daily-card {
+  background:linear-gradient(160deg,#12102a,#0a0d1a);
+  border:1px solid rgba(240,192,64,0.3);
+  border-radius:32px;
+  padding:32px 24px 28px;
+  text-align:center;
+  width:100%; max-width:340px;
+  animation:popIn 0.5s cubic-bezier(.22,1,.36,1);
+  position:relative; overflow:hidden;
+}
+.daily-card::before {
+  content:'';
+  position:absolute; top:-60px; left:50%; transform:translateX(-50%);
+  width:200px; height:200px;
+  background:radial-gradient(circle, rgba(240,192,64,0.12), transparent 70%);
+  pointer-events:none;
+}
+.streak-bar {
+  display:flex; justify-content:center; gap:6px;
+  margin:16px 0 20px;
+}
+.streak-day {
+  width:32px; height:32px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.03);
+  color:var(--text-dim);
+  transition:all 0.3s;
+}
+.streak-day.done {
+  background:linear-gradient(135deg,#f0c040,#e6a800);
+  border-color:transparent;
+  color:#1a1200;
+  box-shadow:0 2px 10px rgba(240,192,64,0.35);
+}
+.streak-day.today {
+  background:linear-gradient(135deg,rgba(240,192,64,0.2),rgba(240,192,64,0.05));
+  border-color:rgba(240,192,64,0.5);
+  color:var(--gold);
+  box-shadow:0 0 12px rgba(240,192,64,0.2);
+  animation:todayPulse 1.5s infinite;
+}
+@keyframes todayPulse {
+  0%,100% { box-shadow:0 0 12px rgba(240,192,64,0.2); }
+  50%      { box-shadow:0 0 20px rgba(240,192,64,0.5); }
+}
+.bonus-box {
+  background:rgba(240,192,64,0.08);
+  border:1px solid rgba(240,192,64,0.2);
+  border-radius:20px;
+  padding:18px;
+  margin:0 0 20px;
+}
+.bonus-amount {
+  font-family:'Syne',sans-serif;
+  font-size:44px; font-weight:800;
+  color:var(--gold);
+  text-shadow:0 0 20px rgba(240,192,64,0.4);
+  line-height:1;
+}
+.btn-collect {
+  width:100%; padding:15px;
+  background:linear-gradient(135deg,#f0c040,#e6a800);
+  color:#1a1200; border:none;
+  border-radius:16px;
+  font-family:'Tajawal',sans-serif;
+  font-size:16px; font-weight:900;
+  cursor:pointer;
+  box-shadow:0 4px 20px rgba(240,192,64,0.4);
+  transition:transform 0.15s;
+}
+.btn-collect:active { transform:scale(0.97); }
 </style>
-</head>
 <body>
+
+<!-- DAILY BONUS -->
+<div id="daily-overlay">
+  <div class="daily-card">
+    <div style="font-size:52px;margin-bottom:8px;">🎁</div>
+    <h3 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px;">مكافأتك اليومية!</h3>
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:0;">تفقد البوت يومياً وزِد مكافأتك</p>
+
+    <!-- Streak 7 days -->
+    <div class="streak-bar" id="streak-bar"></div>
+
+    <!-- Amount -->
+    <div class="bonus-box">
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">مكافأة اليوم <span id="streak-day-label">1</span></div>
+      <div class="bonus-amount">$<span id="daily-amount">0.01</span></div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px;" id="streak-msg">استمر لتزيد مكافأتك! 🔥</div>
+    </div>
+
+    <button class="btn-collect" onclick="collectBonus()">🎁 استلم مكافأتك</button>
+  </div>
+</div>
 
 <!-- LIVE NOTIFY -->
 <div id="live-notify">
@@ -618,6 +890,72 @@ body::before {
   </div>
 </div>
 
+<!-- WHEEL RESULT POPUP -->
+<div id="wheel-result">
+  <div class="result-card">
+    <div class="result-emoji" id="result-emoji">🎉</div>
+    <div class="result-amount" id="result-amount">$0.00</div>
+    <div class="result-label">تمت الإضافة لرصيدك!</div>
+    <button class="btn-result-close" onclick="closeResult()">رائع! 🎊</button>
+  </div>
+</div>
+
+<!-- WHEEL SHEET -->
+<div id="wheel-sheet-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:5000;display:none;align-items:flex-end;justify-content:center;">
+  <div class="sheet" id="wheel-sheet-box" style="padding-bottom:40px;">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      <h3 style="margin:0;">🎡 عجلة الحظ</h3>
+      <button onclick="document.getElementById('wheel-sheet-overlay').style.display='none'" style="background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--text-mid);width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <p style="margin-bottom:16px;">لفة مجانية كل 24 ساعة!</p>
+
+    <!-- Wheel SVG -->
+    <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:16px;position:relative;">
+      <div style="font-size:22px;color:var(--gold);text-shadow:0 0 10px var(--gold);margin-bottom:-10px;z-index:10;position:relative;filter:drop-shadow(0 2px 6px rgba(240,192,64,0.6));">▼</div>
+      <div style="position:relative;width:260px;height:260px;border-radius:50%;box-shadow:0 0 40px rgba(108,99,255,0.3),0 0 0 3px rgba(255,255,255,0.06);">
+        <div id="wheel-spinner" style="width:260px;height:260px;border-radius:50%;overflow:hidden;will-change:transform;">
+          <svg id="wheelSVG" width="260" height="260" viewBox="0 0 260 260" style="display:block;"></svg>
+        </div>
+        <!-- Center cap -->
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:50px;height:50px;background:linear-gradient(135deg,#1a1535,#0f1220);border-radius:50%;border:3px solid rgba(255,255,255,0.12);box-shadow:0 0 20px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-size:20px;z-index:5;pointer-events:none;">💰</div>
+      </div>
+    </div>
+
+    <!-- Timer + Button -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:10px 14px;">
+      <span style="font-size:12px;color:var(--text-dim);">اللفة القادمة</span>
+      <span id="wheel-timer" style="font-family:'Syne',sans-serif;font-size:13px;color:var(--green);font-weight:700;">جاهز! ✅</span>
+    </div>
+    <button id="spin-btn" class="btn-spin" onclick="spinWheel()">🎡 الفة العجلة</button>
+
+    <!-- Prizes grid -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:14px;">
+      <div style="text-align:center;background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.15);border-radius:12px;padding:8px 4px;"><div style="font-size:10px;margin-bottom:2px;">🟢</div><div style="font-size:11px;font-weight:700;color:var(--green);">$0.05</div><div style="font-size:8px;color:var(--text-dim);">شائع</div></div>
+      <div style="text-align:center;background:rgba(108,99,255,0.08);border:1px solid rgba(108,99,255,0.15);border-radius:12px;padding:8px 4px;"><div style="font-size:10px;margin-bottom:2px;">🔵</div><div style="font-size:11px;font-weight:700;color:var(--primary);">$0.10</div><div style="font-size:8px;color:var(--text-dim);">متوسط</div></div>
+      <div style="text-align:center;background:rgba(240,192,64,0.08);border:1px solid rgba(240,192,64,0.15);border-radius:12px;padding:8px 4px;"><div style="font-size:10px;margin-bottom:2px;">⭐</div><div style="font-size:11px;font-weight:700;color:var(--gold);">$0.25</div><div style="font-size:8px;color:var(--text-dim);">نادر</div></div>
+      <div style="text-align:center;background:rgba(255,145,0,0.08);border:1px solid rgba(255,145,0,0.15);border-radius:12px;padding:8px 4px;"><div style="font-size:10px;margin-bottom:2px;">🔥</div><div style="font-size:11px;font-weight:700;color:var(--orange);">$0.50</div><div style="font-size:8px;color:var(--text-dim);">نادر جداً</div></div>
+      <div style="text-align:center;background:rgba(255,79,79,0.08);border:1px solid rgba(255,79,79,0.15);border-radius:12px;padding:8px 4px;"><div style="font-size:10px;margin-bottom:2px;">💎</div><div style="font-size:11px;font-weight:700;color:#ff4f4f;">$1.00</div><div style="font-size:8px;color:var(--text-dim);">جاكبوت</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP SHEET -->
+<div id="shop-sheet-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:5000;display:none;align-items:flex-end;justify-content:center;">
+  <div class="sheet" id="shop-sheet-box" style="max-height:85vh;overflow-y:auto;padding-bottom:40px;">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      <h3 style="margin:0;">🛍️ متجر المكافآت</h3>
+      <button onclick="document.getElementById('shop-sheet-overlay').style.display='none'" style="background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--text-mid);width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <p style="margin:0;font-size:11px;color:var(--text-dim);">استخدم نقاطك لشراء مزايا حصرية</p>
+      <div style="background:var(--gold-soft);border:1px solid rgba(240,192,64,0.2);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--gold);font-weight:700;white-space:nowrap;flex-shrink:0;">🪙 <span id="shop-points">0</span></div>
+    </div>
+    <div id="shop-items"></div>
+  </div>
+</div>
+
 <!-- MAIN CONTENT -->
 <div id="main-content" style="filter:blur(12px);pointer-events:none;">
 
@@ -662,24 +1000,69 @@ body::before {
       </div>
     </div>
 
-    <!-- Promo Card 1: Referral -->
-    <div class="promo-card" onclick="showTab('p-refer', document.querySelectorAll('.nav-btn')[4])">
-      <div class="promo-text">
-        <div class="promo-title">ادعُ أصدقاءك واربح! 🤝</div>
-        <div class="promo-sub">احصل على <span class="promo-hl">$0.50</span> لكل صديق تدعوه</div>
-      </div>
-      <div class="promo-emoji">🤝</div>
-      <div class="promo-arrow">‹</div>
-    </div>
+    <!-- كروت صغيرة 2x2 -->
+    <div class="mini-cards-grid">
 
-    <!-- Promo Card 2: Daily Ads -->
-    <div class="promo-card promo-green" onclick="showTab('p-ads', document.querySelectorAll('.nav-btn')[2])">
-      <div class="promo-text">
-        <div class="promo-title">أكمل الإعلانات اليومية 📺</div>
-        <div class="promo-sub">اربح المزيد من خلال إكمال <span class="promo-hl-green">20 إعلان</span> يومياً</div>
+      <!-- كارت الدعوات -->
+      <div class="mini-card mc-purple" onclick="showTab('p-refer', document.querySelectorAll('.nav-btn')[4])">
+        <div class="mini-card-top">
+          <div class="mini-card-icon-wrap" style="background:rgba(108,99,255,0.15);">👥</div>
+          <span class="mini-card-badge" style="color:var(--primary);border-color:rgba(108,99,255,0.2);background:rgba(108,99,255,0.08);">$0.50</span>
+        </div>
+        <div>
+          <div class="mini-card-title">ادعُ وأربح</div>
+          <div class="mini-card-sub">لكل صديق تدعوه</div>
+        </div>
+        <div class="mini-card-arrow-row">
+          <span class="mini-card-cta" style="color:var(--primary);">ابدأ الآن <span>←</span></span>
+        </div>
       </div>
-      <div class="promo-emoji">✅</div>
-      <div class="promo-arrow">‹</div>
+
+      <!-- كارت الإعلانات -->
+      <div class="mini-card mc-orange" onclick="showTab('p-ads', document.querySelectorAll('.nav-btn')[2])">
+        <div class="mini-card-top">
+          <div class="mini-card-icon-wrap" style="background:rgba(255,145,0,0.15);">📺</div>
+          <span class="mini-card-badge" style="color:var(--orange);border-color:rgba(255,145,0,0.2);background:rgba(255,145,0,0.08);"><span id="home-ads-badge">0</span>/20</span>
+        </div>
+        <div>
+          <div class="mini-card-title">الإعلانات</div>
+          <div class="mini-card-sub">20 إعلان يومياً</div>
+        </div>
+        <div class="mini-card-arrow-row">
+          <span class="mini-card-cta" style="color:var(--orange);">شاهد الآن <span>←</span></span>
+        </div>
+      </div>
+
+      <!-- كارت العجلة -->
+      <div class="mini-card mc-gold" onclick="openWheelSheet()">
+        <div class="mini-card-top">
+          <div class="mini-card-icon-wrap" style="background:rgba(240,192,64,0.15);">🎡</div>
+          <span class="mini-card-badge" style="color:var(--gold);border-color:rgba(240,192,64,0.2);background:rgba(240,192,64,0.08);">يومي</span>
+        </div>
+        <div>
+          <div class="mini-card-title">عجلة الحظ</div>
+          <div class="mini-card-sub" id="wheel-home-status">لفة مجانية!</div>
+        </div>
+        <div class="mini-card-arrow-row">
+          <span class="mini-card-cta" style="color:var(--gold);">العب الآن <span>←</span></span>
+        </div>
+      </div>
+
+      <!-- كارت المتجر -->
+      <div class="mini-card mc-green" onclick="openShopSheet()">
+        <div class="mini-card-top">
+          <div class="mini-card-icon-wrap" style="background:rgba(0,230,118,0.12);">🛍️</div>
+          <span class="mini-card-badge" style="color:var(--green);border-color:rgba(0,230,118,0.2);background:rgba(0,230,118,0.06);">🪙 <span id="shop-points-home">0</span></span>
+        </div>
+        <div>
+          <div class="mini-card-title">المتجر</div>
+          <div class="mini-card-sub">مزايا حصرية</div>
+        </div>
+        <div class="mini-card-arrow-row">
+          <span class="mini-card-cta" style="color:var(--green);">تسوق الآن <span>←</span></span>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -820,8 +1203,14 @@ let S = JSON.parse(localStorage.getItem('n433_v2')) || {
   adsgramToday: 0,
   adsgramEarned: 0,
   adsgramResetTime: 0,
+  tasksResetTime: 0,
   refCount: 0,
-  isSubscribed: false
+  isSubscribed: false,
+  lastSpin: 0,
+  points: 0,
+  shopOwned: [],
+  bonusStreak: 0,
+  lastBonusTime: 0
 };
 
 /* ── subscription ── */
@@ -839,21 +1228,41 @@ if (S.isSubscribed) {
 /* ── 24h reset ── */
 function checkReset() {
   const now = Date.now();
+  // Reset Adsgram ads
   if (now - (S.adsgramResetTime||0) >= 86400000) {
     S.adsgramToday = 0;
     S.adsgramResetTime = now;
-    save();
   }
+  // Reset daily tasks (adsToday) - uses same 24h window
+  if (now - (S.tasksResetTime||0) >= 86400000) {
+    S.adsToday = 0;
+    S.tasksResetTime = now;
+  }
+  save();
 }
 
 /* ── timer ── */
 function tickTimer() {
-  const resetAt = (S.adsgramResetTime||Date.now()) + 86400000;
-  const rem = Math.max(0, resetAt - Date.now());
-  if (rem === 0) { checkReset(); updateUI(); return; }
-  const h = Math.floor(rem/3600000), m = Math.floor((rem%3600000)/60000), s = Math.floor((rem%60000)/1000);
-  const fmt = `${pad(h)}:${pad(m)}:${pad(s)}`;
-  ['ads-timer','tasks-timer'].forEach(id => { const el=document.getElementById(id); if(el) el.innerText=fmt; });
+  // Adsgram timer
+  const adsResetAt = (S.adsgramResetTime||Date.now()) + 86400000;
+  const adsRem = Math.max(0, adsResetAt - Date.now());
+
+  // Tasks timer
+  const tasksResetAt = (S.tasksResetTime||Date.now()) + 86400000;
+  const tasksRem = Math.max(0, tasksResetAt - Date.now());
+
+  const fmtTime = (rem) => {
+    if(rem===0) return '00:00:00';
+    const h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000),s=Math.floor((rem%60000)/1000);
+    return `${pad(h)}:${pad(m)}:${pad(s)}`;
+  };
+
+  const adsEl = document.getElementById('ads-timer');
+  const tasksEl = document.getElementById('tasks-timer');
+  if(adsEl) adsEl.innerText = fmtTime(adsRem);
+  if(tasksEl) tasksEl.innerText = fmtTime(tasksRem);
+
+  if(adsRem===0 || tasksRem===0) { checkReset(); }
 }
 function pad(n){return String(n).padStart(2,'0');}
 setInterval(tickTimer,1000);
@@ -888,13 +1297,18 @@ function watchAd(i) {
 function doTask(btn) {
   btn.disabled=true; btn.innerText='...';
   show_10908620().then(()=>{
-    S.balance+=TASK_REWARD; S.adsToday++;
+    S.balance+=TASK_REWARD;
+    S.adsToday++;
+    if(!S.tasksResetTime) S.tasksResetTime=Date.now();
     save(); showToast('💰 تم إضافة $0.010 لرصيدك');
   }).catch(()=>{ btn.disabled=false; btn.innerText='بدء'; });
 }
 
 /* ── save / updateUI ── */
-function save() { localStorage.setItem('n433_v2',JSON.stringify(S)); updateUI(); }
+function save() {
+  S.points = Math.floor(S.balance * 100);
+  localStorage.setItem('n433_v2',JSON.stringify(S)); updateUI();
+}
 
 function updateUI() {
   document.getElementById('balance').innerText = S.balance.toFixed(3);
@@ -902,8 +1316,12 @@ function updateUI() {
 
   const hT=document.getElementById('home-tasks-count');
   const hA=document.getElementById('home-ads-count');
+  const hAB=document.getElementById('home-ads-badge');
+  const hStr=document.getElementById('home-streak');
   if(hT) hT.innerText=`${S.adsToday}/10`;
   if(hA) hA.innerText=`${S.adsgramToday}/${ADS_LIMIT}`;
+  if(hAB) hAB.innerText=S.adsgramToday;
+  if(hStr) hStr.innerText=`🔥 ${S.bonusStreak||0}`;
 
   // VIP
   let lvl='VIP 1', prog=(S.balance/10)*100;
@@ -981,6 +1399,20 @@ function updateUI() {
     }
     al.innerHTML=h;
   }
+  const sp=document.getElementById('shop-points');
+  const sph=document.getElementById('shop-points-home');
+  if(sp) sp.innerText=S.points||0;
+  if(sph) sph.innerText=S.points||0;
+
+  // Wheel home status
+  const whs=document.getElementById('wheel-home-status');
+  if(whs){
+    const rem=Math.max(0,(S.lastSpin||0)+86400000-Date.now());
+    if(rem===0){ whs.innerText='لفة مجانية! ✅'; whs.style.color='var(--green)'; }
+    else { const h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000); whs.innerText=`بعد ${pad(h)}:${pad(m)}`; whs.style.color='var(--text-dim)'; }
+  }
+
+  renderShop();
 }
 
 /* ── tabs ── */
@@ -990,6 +1422,102 @@ function showTab(id,btn){
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
   if(id==='p-ads'){ checkReset(); updateUI(); }
+  if(id==='p-wheel'){ drawWheel(wheelAngle); updateWheelTimer(); }
+  if(id==='p-shop'){ renderShop(); }}
+
+/* ── DAILY BONUS ── */
+const DAILY_REWARDS = [0.01,0.02,0.03,0.04,0.05,0.07,0.10,0.10,0.10,0.15,0.15,0.15,0.20,0.25,0.50];
+const STREAK_MSGS = {
+  1:'استمر لتزيد مكافأتك! 🔥',
+  3:'رائع! 3 أيام متتالية 💪',
+  5:'ممتاز! أنت على المسار الصح ⭐',
+  7:'أسبوع كامل! مكافأة خاصة 👑',
+  14:'أسبوعان! أنت محترف 💎',
+  30:'شهر كامل! أنت الأقوى 🏆'
+};
+
+function getDailyBonus() {
+  const now = Date.now();
+  const lastBonus = S.lastBonusTime || 0;
+  const streak = S.bonusStreak || 0;
+  const elapsed = now - lastBonus;
+
+  // Already collected today
+  if (elapsed < 86400000) return;
+
+  // Streak broken (more than 48h)
+  if (elapsed > 172800000 && lastBonus > 0) {
+    S.bonusStreak = 0;
+  }
+
+  // Show popup
+  showDailyPopup();
+}
+
+function showDailyPopup() {
+  const streak = (S.bonusStreak || 0) + 1;
+  const rewardIdx = Math.min(streak - 1, DAILY_REWARDS.length - 1);
+  const amount = DAILY_REWARDS[rewardIdx];
+
+  // Update amount display
+  document.getElementById('daily-amount').innerText = amount.toFixed(2);
+  document.getElementById('streak-day-label').innerText = streak;
+
+  // Streak message
+  let msg = 'استمر لتزيد مكافأتك! 🔥';
+  [1,3,5,7,14,30].forEach(d => { if(streak >= d) msg = STREAK_MSGS[d]; });
+  document.getElementById('streak-msg').innerText = msg;
+
+  // Build 7-day streak bar
+  const bar = document.getElementById('streak-bar');
+  let html = '';
+  for(let i=1; i<=7; i++){
+    const done = i < streak;
+    const today = i === Math.min(streak, 7);
+    const cls = done ? 'done' : today ? 'today' : '';
+    const icon = done ? '✓' : today ? '🎁' : i;
+    html += `<div class="streak-day ${cls}">${icon}</div>`;
+  }
+  bar.innerHTML = html;
+
+  document.getElementById('daily-overlay').classList.add('open');
+}
+
+function collectBonus() {
+  const streak = (S.bonusStreak || 0) + 1;
+  const rewardIdx = Math.min(streak - 1, DAILY_REWARDS.length - 1);
+  const amount = DAILY_REWARDS[rewardIdx];
+
+  S.balance += amount;
+  S.bonusStreak = streak;
+  S.lastBonusTime = Date.now();
+  S.points = Math.floor(S.balance * 100);
+
+  document.getElementById('daily-overlay').classList.remove('open');
+  save();
+  showToast(`🎁 تم استلام $${amount.toFixed(2)} مكافأة اليوم ${streak}!`);
+}
+
+/* ── wheel sheet ── */
+function openWheelSheet(){
+  document.getElementById('wheel-sheet-overlay').style.display='flex';
+  buildWheelSVG();
+  rotateWheel(currentDeg);
+  updateWheelTimer();
+}
+function closeWheelSheet(e){
+  if(e.target===document.getElementById('wheel-sheet-overlay'))
+    document.getElementById('wheel-sheet-overlay').style.display='none';
+}
+
+/* ── shop sheet ── */
+function openShopSheet(){
+  document.getElementById('shop-sheet-overlay').style.display='flex';
+  renderShop();
+}
+function closeShopSheet(e){
+  if(e.target===document.getElementById('shop-sheet-overlay'))
+    document.getElementById('shop-sheet-overlay').style.display='none';
 }
 
 /* ── withdraw sheet ── */
@@ -1049,12 +1577,192 @@ function liveNotify(){
 }
 setInterval(liveNotify,12000);
 
+/* ── WHEEL ── */
+const PRIZES = [
+  { label:'$0.05', amount:0.05, color:'#00c853', textColor:'#fff', weight:40 },
+  { label:'$0.05', amount:0.05, color:'#1a1535', textColor:'#00e676', weight:40 },
+  { label:'$0.10', amount:0.10, color:'#6c63ff', textColor:'#fff', weight:25 },
+  { label:'$0.10', amount:0.10, color:'#1a1535', textColor:'#a78bfa', weight:25 },
+  { label:'$0.25', amount:0.25, color:'#f0c040', textColor:'#1a1200', weight:12 },
+  { label:'$0.50', amount:0.50, color:'#ff9100', textColor:'#fff', weight:5  },
+  { label:'$1.00', amount:1.00, color:'#ff4f4f', textColor:'#fff', weight:3  },
+];
+
+const WHEEL_SEGMENTS = PRIZES.length;
+let spinning = false;
+let currentDeg = 0;
+
+function buildWheelSVG() {
+  const svg = document.getElementById('wheelSVG');
+  if(!svg) return;
+  const cx=130, cy=130, r=124;
+  const arc = 360 / WHEEL_SEGMENTS;
+  let paths = '';
+
+  PRIZES.forEach((p, i) => {
+    const startDeg = i * arc;
+    const endDeg   = startDeg + arc;
+    const startRad = (startDeg - 90) * Math.PI / 180;
+    const endRad   = (endDeg   - 90) * Math.PI / 180;
+
+    const x1 = cx + r * Math.cos(startRad);
+    const y1 = cy + r * Math.sin(startRad);
+    const x2 = cx + r * Math.cos(endRad);
+    const y2 = cy + r * Math.sin(endRad);
+
+    const midRad = ((startDeg + endDeg)/2 - 90) * Math.PI / 180;
+    const tx = cx + (r * 0.68) * Math.cos(midRad);
+    const ty = cy + (r * 0.68) * Math.sin(midRad);
+    const textRot = (startDeg + endDeg) / 2;
+
+    paths += `
+      <path d="M${cx},${cy} L${x1.toFixed(2)},${y1.toFixed(2)} A${r},${r} 0 0,1 ${x2.toFixed(2)},${y2.toFixed(2)} Z"
+        fill="${p.color}" stroke="rgba(0,0,0,0.2)" stroke-width="1.5"/>
+      <text x="${tx.toFixed(2)}" y="${ty.toFixed(2)}"
+        fill="${p.textColor}" font-size="13" font-weight="800"
+        font-family="Syne,Arial" text-anchor="middle" dominant-baseline="middle"
+        transform="rotate(${textRot},${tx.toFixed(2)},${ty.toFixed(2)})">${p.label}</text>`;
+  });
+
+  // Outer border ring
+  paths += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="2"/>`;
+  svg.innerHTML = paths;
+}
+
+function rotateWheel(deg) {
+  const spinner = document.getElementById('wheel-spinner');
+  if(spinner) spinner.style.transform = `rotate(${deg}deg)`;
+}
+
+function spinWheel() {
+  if(spinning) return;
+  const now = Date.now();
+  if(now - (S.lastSpin||0) < 86400000) return showToast('⏳ لفة واحدة كل 24 ساعة');
+
+  spinning = true;
+  const btn = document.getElementById('spin-btn');
+  if(btn){ btn.disabled=true; btn.innerText='🎡 جاري الدوران...'; }
+
+  // Weighted random prize
+  const totalWeight = PRIZES.reduce((a,p)=>a+p.weight, 0);
+  let rand = Math.random() * totalWeight, chosen = 0;
+  for(let i=0; i<PRIZES.length; i++){
+    rand -= PRIZES[i].weight;
+    if(rand <= 0){ chosen = i; break; }
+  }
+
+  const arc = 360 / WHEEL_SEGMENTS;
+  // Pointer is at top (0°) — we want chosen segment center to land at top
+  const segCenter = chosen * arc + arc / 2;
+  const extraSpins = (6 + Math.floor(Math.random()*4)) * 360;
+  const startDeg = currentDeg;
+  const endDeg = startDeg + extraSpins + (360 - (startDeg % 360) + (360 - segCenter)) % 360;
+
+  const duration = 5000;
+  let startTime = null;
+
+  function easeOut(t){ return 1 - Math.pow(1-t, 4); }
+
+  function animate(ts){
+    if(!startTime) startTime = ts;
+    const elapsed = ts - startTime;
+    const t = Math.min(elapsed / duration, 1);
+    const deg = startDeg + (endDeg - startDeg) * easeOut(t);
+    rotateWheel(deg);
+    if(t < 1){
+      requestAnimationFrame(animate);
+    } else {
+      currentDeg = endDeg % 360;
+      spinning = false;
+      S.lastSpin = Date.now();
+      S.balance += PRIZES[chosen].amount;
+      S.points = Math.floor(S.balance * 100);
+      save();
+      if(btn){ btn.disabled=false; btn.innerText='🎡 الفة العجلة'; }
+      setTimeout(()=>showWheelResult(PRIZES[chosen]), 400);
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+function showWheelResult(prize){
+  document.getElementById('result-emoji').innerText=prize.emoji;
+  document.getElementById('result-amount').innerText=prize.label;
+  document.getElementById('wheel-result').classList.add('open');
+}
+function closeResult(){
+  document.getElementById('wheel-result').classList.remove('open');
+  const btn=document.getElementById('spin-btn');
+  if(btn) btn.disabled=false;
+  updateWheelTimer();
+  updateUI();
+}
+
+function updateWheelTimer(){
+  const el=document.getElementById('wheel-timer');
+  if(!el) return;
+  const now=Date.now();
+  const rem=Math.max(0, (S.lastSpin||0)+86400000-now);
+  if(rem===0){ el.innerText='جاهز! ✅'; el.style.color='var(--green)'; const btn=document.getElementById('spin-btn'); if(btn) btn.disabled=false; }
+  else {
+    const h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000),s=Math.floor((rem%60000)/1000);
+    el.innerText=`${pad(h)}:${pad(m)}:${pad(s)}`;
+    el.style.color='var(--text-dim)';
+    const btn=document.getElementById('spin-btn'); if(btn) btn.disabled=true;
+  }
+}
+setInterval(updateWheelTimer,1000);
+
+/* ── SHOP ── */
+const SHOP_ITEMS = [
+  { id:'double_ads', icon:'⚡', bg:'rgba(108,99,255,0.12)', name:'مضاعفة أرباح الإعلانات', desc:'ضاعف أرباحك من الإعلانات لمدة 24 ساعة', cost:50, costLabel:'50 نقطة' },
+  { id:'extra_spin', icon:'🎡', bg:'rgba(240,192,64,0.12)', name:'لفة عجلة إضافية', desc:'احصل على لفة عجلة مجانية إضافية اليوم', cost:80, costLabel:'80 نقطة' },
+  { id:'lower_withdraw', icon:'💸', bg:'rgba(0,230,118,0.1)', name:'تخفيض حد السحب', desc:'اخفض الحد الأدنى للسحب من $10 إلى $5', cost:200, costLabel:'200 نقطة' },
+  { id:'vip_badge', icon:'👑', bg:'rgba(240,192,64,0.1)', name:'شارة VIP خاصة', desc:'احصل على شارة VIP مميزة في ملفك الشخصي', cost:500, costLabel:'500 نقطة' },
+  { id:'bonus_task', icon:'🎯', bg:'rgba(255,145,0,0.1)', name:'مهام يومية إضافية', desc:'أضف 5 مهام إضافية لمهامك اليومية', cost:120, costLabel:'120 نقطة' },
+];
+
+function renderShop(){
+  const container=document.getElementById('shop-items');
+  if(!container) return;
+  const sp=document.getElementById('shop-points');
+  if(sp) sp.innerText=S.points||0;
+
+  container.innerHTML=SHOP_ITEMS.map(item=>{
+    const owned=(S.shopOwned||[]).includes(item.id);
+    return `<div class="shop-item">
+      <div class="shop-item-icon" style="background:${item.bg}">${item.icon}</div>
+      <div class="shop-item-info">
+        <h4>${item.name}</h4>
+        <p>${item.desc}</p>
+      </div>
+      ${owned
+        ?`<span style="background:var(--green-soft);color:var(--green);border:1px solid rgba(0,230,118,0.2);padding:7px 12px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap;">مملوك ✓</span>`
+        :`<button class="btn-buy" onclick="buyItem('${item.id}',${item.cost})">${item.costLabel}</button>`
+      }
+    </div>`;
+  }).join('');
+}
+
+function buyItem(id, cost){
+  if((S.points||0) < cost) return showToast('❌ نقاطك غير كافية');
+  if((S.shopOwned||[]).includes(id)) return showToast('✅ هذا العنصر مملوك بالفعل');
+  S.points -= cost;
+  if(!S.shopOwned) S.shopOwned=[];
+  S.shopOwned.push(id);
+  save();
+  renderShop();
+  showToast('🎉 تم الشراء بنجاح!');
+}
+
 /* ── init ── */
 const user=tg.initDataUnsafe?.user;
 document.getElementById('u_name').innerText=user?.first_name||'Guest';
 document.getElementById('ref-link').innerText=`https://t.me/Number433bot?start=${user?.id||'6619233998'}`;
 
-checkReset(); initAdsgram(); updateUI(); tickTimer();
+checkReset(); initAdsgram(); updateUI(); tickTimer(); updateWheelTimer();
+// Show daily bonus after short delay
+if(S.isSubscribed) setTimeout(getDailyBonus, 1200);
 </script>
 </body>
 </html>
