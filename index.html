@@ -857,7 +857,7 @@ body::before {
     <div style="font-size:48px;margin-bottom:14px;">👑</div>
     <h3>تحقق من الاشتراك</h3>
     <p>اشترك في قناتنا الرسمية لتفعيل حسابك والبدء في جمع أرباحك اليومية</p>
-    <button class="btn-tg" onclick="window.open('https://t.me/Number433','_blank')">
+    <button class="btn-tg" onclick="window.open('https://t.me/VORTEX_EARN','_blank')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.48 14.697 4.53 13.8c-.658-.197-.67-.657.136-.975l10.868-4.19c.548-.197 1.027.12.847.958l-.819.655z"/></svg>
       اشترك في القناة
     </button>
@@ -1215,9 +1215,18 @@ let S = JSON.parse(localStorage.getItem('n433_v2')) || {
 
 /* ── subscription ── */
 function verifySub() {
-  S.isSubscribed = true; save();
-  showToast('✅ تم التحقق بنجاح');
-  setTimeout(() => location.reload(), 900);
+  const btn = document.querySelector('.btn-verify');
+  if(btn){ btn.innerText = '⏳ جاري التحقق...'; btn.disabled = true; }
+  setTimeout(() => {
+    S.isSubscribed = true;
+    save();
+    showToast('✅ تم التحقق بنجاح!');
+    document.getElementById('sub-overlay').style.display = 'none';
+    const mc = document.getElementById('main-content');
+    mc.style.filter = 'none';
+    mc.style.pointerEvents = 'auto';
+    setTimeout(getDailyBonus, 1000);
+  }, 1200);
 }
 if (S.isSubscribed) {
   document.getElementById('sub-overlay').style.display = 'none';
@@ -1816,8 +1825,8 @@ function buyItem(id, cost){
 
 /* ── init ── */
 const user=tg.initDataUnsafe?.user;
-document.getElementById('u_name').innerText=user?.first_name||'Guest';
-document.getElementById('ref-link').innerText=`https://t.me/Number433bot?start=${user?.id||'6619233998'}`;
+document.getElementById('u_name').innerText = user?.first_name || 'Guest';
+document.getElementById('ref-link').innerText = `https://t.me/VortexEarnBot?start=${user?.id || '0'}`;
 
 checkReset(); initAdsgram(); updateUI(); tickTimer(); updateWheelTimer();
 // Show daily bonus after short delay
