@@ -597,33 +597,52 @@ body::before {
 
 /* ── SUBSCRIPTION OVERLAY ── */
 #sub-overlay {
-  position:fixed; inset:0;
-  background:linear-gradient(160deg,#07090f,#0e1228);
-  z-index:99999;
-  display:flex; align-items:center; justify-content:center; padding:28px;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
+  background: #06080f;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
 }
 .sub-card {
-  background:rgba(255,255,255,0.03);
-  border:1px solid var(--border-bright);
-  border-radius:28px;
-  padding:32px 24px;
-  text-align:center; width:100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-bright);
+  border-radius: 28px;
+  padding: 36px 24px;
+  text-align: center; width: 100%;
+  max-width: 380px;
+  position: relative;
+  z-index: 1000000;
+}
 }
 .sub-card h3 { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; margin-bottom:8px; }
 .sub-card p { font-size:12px; color:var(--text-dim); margin-bottom:28px; line-height:1.6; }
 .btn-tg {
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  background:#0088cc; color:white; border:none;
-  width:100%; padding:15px; border-radius:16px;
-  font-family:'Tajawal',sans-serif; font-size:15px; font-weight:700;
-  cursor:pointer; margin-bottom:10px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: #0088cc; color: white; border: none;
+  width: 100%; padding: 18px; border-radius: 16px;
+  font-family: 'Tajawal', sans-serif; font-size: 16px; font-weight: 700;
+  cursor: pointer; margin-bottom: 12px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0,136,204,0.3);
+  min-height: 56px;
 }
 .btn-verify {
-  background:transparent; color:var(--text-mid);
-  border:1px solid var(--border-bright);
-  width:100%; padding:14px; border-radius:16px;
-  font-family:'Tajawal',sans-serif; font-size:14px;
-  cursor:pointer; position:relative; z-index:2;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border: 1px solid var(--border-bright);
+  width: 100%; padding: 18px; border-radius: 16px;
+  font-family: 'Tajawal', sans-serif; font-size: 15px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(255,255,255,0.1);
+  min-height: 56px;
+  display: block;
 }
 
 /* ── WITHDRAW BOTTOM SHEET ── */
@@ -739,10 +758,13 @@ body::before {
   background:rgba(0,0,0,0.8);
   backdrop-filter:blur(8px);
   z-index:6000;
+  display:none !important;
   align-items:center; justify-content:center;
   padding:24px;
 }
-#daily-overlay.open { display:flex; }
+#daily-overlay.show {
+  display:flex !important;
+}
 .daily-card {
   background:linear-gradient(160deg,#12102a,#0a0d1a);
   border:1px solid rgba(240,192,64,0.3);
@@ -820,7 +842,7 @@ body::before {
 <body>
 
 <!-- DAILY BONUS -->
-<div id="daily-overlay" style="display:none;">
+<div id="daily-overlay">
   <div class="daily-card">
     <div style="font-size:52px;margin-bottom:8px;">🎁</div>
     <h3 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px;">مكافأتك اليومية!</h3>
@@ -1203,7 +1225,20 @@ let S = JSON.parse(localStorage.getItem('n433_v2')) || {
 function verifySub() {
   S.isSubscribed = true;
   localStorage.setItem('n433_v2', JSON.stringify(S));
-  location.reload();
+
+  const overlay = document.getElementById('sub-overlay');
+  overlay.style.display = 'none';
+  overlay.style.visibility = 'hidden';
+  overlay.style.pointerEvents = 'none';
+  overlay.style.zIndex = '-1';
+
+  const mc = document.getElementById('main-content');
+  mc.style.filter = 'none';
+  mc.style.pointerEvents = 'auto';
+  mc.style.webkitFilter = 'none';
+
+  updateUI();
+  setTimeout(getDailyBonus, 500);
 }
 if (S.isSubscribed) {
   document.getElementById('sub-overlay').style.display = 'none';
@@ -1473,7 +1508,7 @@ function showDailyPopup() {
   }
   bar.innerHTML = html;
 
-  document.getElementById('daily-overlay').style.display = 'flex';
+  document.getElementById('daily-overlay').classList.add('show');
 }
 
 function collectBonus() {
@@ -1486,7 +1521,7 @@ function collectBonus() {
   S.lastBonusTime = Date.now();
   S.points = (S.points||0) + Math.floor(amount*100);
 
-  document.getElementById('daily-overlay').style.display = 'none';
+  document.getElementById('daily-overlay').classList.remove('show');
   save();
   showToast(`🎁 تم استلام $${amount.toFixed(2)} مكافأة اليوم ${streak}!`);
 }
@@ -1808,10 +1843,16 @@ document.getElementById('u_name').innerText = user?.first_name || 'Guest';
 document.getElementById('ref-link').innerText = `https://t.me/Number433bot/cr7?startapp=${user?.id || '0'}`;
 
 checkReset(); initAdsgram(); updateUI(); tickTimer(); updateWheelTimer();
-// Show daily bonus only if already subscribed
 if(S.isSubscribed) setTimeout(getDailyBonus, 800);
-// Make sure daily overlay is hidden if not subscribed
-if(!S.isSubscribed) document.getElementById('daily-overlay').style.display = 'none';
+
+// Backup touch handler for verify button
+const verifyBtn = document.querySelector('.btn-verify');
+if(verifyBtn) {
+  verifyBtn.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    verifySub();
+  }, { passive: false });
+}
 </script>
 <!-- SUBSCRIPTION OVERLAY - last element = highest stacking -->
 <div id="sub-overlay">
