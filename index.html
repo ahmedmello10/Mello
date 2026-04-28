@@ -1203,18 +1203,14 @@ let S = JSON.parse(localStorage.getItem('n433_v2')) || {
 function verifySub() {
   S.isSubscribed = true;
   localStorage.setItem('n433_v2', JSON.stringify(S));
-  document.getElementById('sub-overlay').style.display = 'none';
-  const mc = document.getElementById('main-content');
-  mc.style.filter = 'none';
-  mc.style.pointerEvents = 'auto';
-  updateUI();
-  showToast('✅ أهلاً بك! 🎉');
-  setTimeout(getDailyBonus, 800);
+  location.reload();
 }
 if (S.isSubscribed) {
   document.getElementById('sub-overlay').style.display = 'none';
+  document.getElementById('sub-overlay').style.pointerEvents = 'none';
   const mc = document.getElementById('main-content');
-  mc.style.filter = 'none'; mc.style.pointerEvents = 'auto';
+  mc.style.filter = 'none';
+  mc.style.pointerEvents = 'auto';
 }
 
 /* ── 24h reset ── */
