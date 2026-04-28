@@ -739,7 +739,6 @@ body::before {
   background:rgba(0,0,0,0.8);
   backdrop-filter:blur(8px);
   z-index:6000;
-  display:none;
   align-items:center; justify-content:center;
   padding:24px;
 }
@@ -821,7 +820,7 @@ body::before {
 <body>
 
 <!-- DAILY BONUS -->
-<div id="daily-overlay">
+<div id="daily-overlay" style="display:none;">
   <div class="daily-card">
     <div style="font-size:52px;margin-bottom:8px;">🎁</div>
     <h3 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px;">مكافأتك اليومية!</h3>
@@ -1478,7 +1477,7 @@ function showDailyPopup() {
   }
   bar.innerHTML = html;
 
-  document.getElementById('daily-overlay').classList.add('open');
+  document.getElementById('daily-overlay').style.display = 'flex';
 }
 
 function collectBonus() {
@@ -1491,7 +1490,7 @@ function collectBonus() {
   S.lastBonusTime = Date.now();
   S.points = (S.points||0) + Math.floor(amount*100);
 
-  document.getElementById('daily-overlay').classList.remove('open');
+  document.getElementById('daily-overlay').style.display = 'none';
   save();
   showToast(`🎁 تم استلام $${amount.toFixed(2)} مكافأة اليوم ${streak}!`);
 }
@@ -1813,8 +1812,10 @@ document.getElementById('u_name').innerText = user?.first_name || 'Guest';
 document.getElementById('ref-link').innerText = `https://t.me/Number433bot/cr7?startapp=${user?.id || '0'}`;
 
 checkReset(); initAdsgram(); updateUI(); tickTimer(); updateWheelTimer();
-// Show daily bonus after short delay
-if(S.isSubscribed) setTimeout(getDailyBonus, 1200);
+// Show daily bonus only if already subscribed
+if(S.isSubscribed) setTimeout(getDailyBonus, 800);
+// Make sure daily overlay is hidden if not subscribed
+if(!S.isSubscribed) document.getElementById('daily-overlay').style.display = 'none';
 </script>
 <!-- SUBSCRIPTION OVERLAY - last element = highest stacking -->
 <div id="sub-overlay">
