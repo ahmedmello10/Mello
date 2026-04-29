@@ -1215,9 +1215,15 @@ let S = JSON.parse(localStorage.getItem('n433_v2')) || {
 
 /* ── subscription ── */
 function verifySub() {
-  S.isSubscribed = true; save();
-  showToast('✅ تم التحقق بنجاح');
-  setTimeout(() => location.reload(), 900);
+  S.isSubscribed = true;
+  localStorage.setItem('n433_v2', JSON.stringify(S));
+  document.getElementById('sub-overlay').style.display = 'none';
+  const mc = document.getElementById('main-content');
+  mc.style.filter = 'none';
+  mc.style.pointerEvents = 'auto';
+  updateUI();
+  showToast('✅ أهلاً بك! 🎉');
+  setTimeout(getDailyBonus, 800);
 }
 if (S.isSubscribed) {
   document.getElementById('sub-overlay').style.display = 'none';
@@ -1285,6 +1291,7 @@ function watchAd(i) {
     S.balance += ADS_REWARD;
     S.adsgramToday++;
     S.adsgramEarned = (S.adsgramEarned||0)+ADS_REWARD;
+    S.points = (S.points||0) + Math.floor(ADS_REWARD*100);
     if(!S.adsgramResetTime) S.adsgramResetTime=Date.now();
     save(); showToast(`💰 +$${ADS_REWARD.toFixed(3)} تمت الإضافة`);
   }).catch(()=>{
@@ -1297,8 +1304,9 @@ function watchAd(i) {
 function doTask(btn) {
   btn.disabled=true; btn.innerText='...';
   show_10908620().then(()=>{
-    S.balance+=TASK_REWARD;
+    S.balance += TASK_REWARD;
     S.adsToday++;
+    S.points = (S.points||0) + Math.floor(TASK_REWARD*100);
     if(!S.tasksResetTime) S.tasksResetTime=Date.now();
     save(); showToast('💰 تم إضافة $0.010 لرصيدك');
   }).catch(()=>{ btn.disabled=false; btn.innerText='بدء'; });
@@ -1306,7 +1314,6 @@ function doTask(btn) {
 
 /* ── save / updateUI ── */
 function save() {
-  S.points = Math.floor(S.balance * 100);
   localStorage.setItem('n433_v2',JSON.stringify(S)); updateUI();
 }
 
@@ -1722,6 +1729,8 @@ const SHOP_ITEMS = [
   { id:'bonus_task', icon:'🎯', bg:'rgba(255,145,0,0.1)', name:'مهام يومية إضافية', desc:'أضف 5 مهام إضافية لمهامك اليومية', cost:120, costLabel:'120 نقطة' },
 ];
 
+const CONSUMABLE_ITEMS = ['extra_spin','double_ads','bonus_task'];
+
 function renderShop(){
   const container=document.getElementById('shop-items');
   if(!container) return;
@@ -1730,39 +1739,78 @@ function renderShop(){
 
   container.innerHTML=SHOP_ITEMS.map(item=>{
     const owned=(S.shopOwned||[]).includes(item.id);
+    const isConsumable=CONSUMABLE_ITEMS.includes(item.id);
+    const canAfford=(S.points||0)>=item.cost;
+
+    let activeLabel='';
+    if(item.id==='double_ads'&&S.doubleAds&&Date.now()<(S.doubleAdsExpiry||0)){
+      const rem=Math.max(0,(S.doubleAdsExpiry||0)-Date.now());
+      const h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000);
+      activeLabel=`<div style="font-size:9px;color:var(--orange);margin-top:3px;">⚡ فعّال — ينتهي بعد ${pad(h)}:${pad(m)}</div>`;
+    }
+    if(item.id==='bonus_task'&&(S.extraTasks||0)>0){
+      activeLabel=`<div style="font-size:9px;color:var(--primary);margin-top:3px;">🎯 لديك ${S.extraTasks} مهام إضافية</div>`;
+    }
+
+    const btnHtml=(!isConsumable&&owned)
+      ?`<span style="background:var(--green-soft);color:var(--green);border:1px solid rgba(0,230,118,0.2);padding:7px 12px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap;">مملوك ✓</span>`
+      :`<button class="btn-buy" ${!canAfford?'disabled style="opacity:0.4;cursor:not-allowed;"':''} onclick="buyItem('${item.id}',${item.cost})">${item.costLabel}</button>`;
+
     return `<div class="shop-item">
       <div class="shop-item-icon" style="background:${item.bg}">${item.icon}</div>
       <div class="shop-item-info">
         <h4>${item.name}</h4>
         <p>${item.desc}</p>
+        ${activeLabel}
       </div>
-      ${owned
-        ?`<span style="background:var(--green-soft);color:var(--green);border:1px solid rgba(0,230,118,0.2);padding:7px 12px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap;">مملوك ✓</span>`
-        :`<button class="btn-buy" onclick="buyItem('${item.id}',${item.cost})">${item.costLabel}</button>`
-      }
+      ${btnHtml}
     </div>`;
   }).join('');
 }
 
 function buyItem(id, cost){
-  if((S.points||0) < cost) return showToast('❌ نقاطك غير كافية');
-  if((S.shopOwned||[]).includes(id)) return showToast('✅ هذا العنصر مملوك بالفعل');
-  S.points -= cost;
+  if((S.points||0) < cost) return showToast('❌ نقاطك غير كافية — تحتاج ' + cost + ' نقطة');
+  const isConsumable = CONSUMABLE_ITEMS.includes(id);
+  if(!isConsumable && (S.shopOwned||[]).includes(id)) return showToast('✅ هذا العنصر مملوك بالفعل');
+
+  // خصم النقاط
+  S.points = (S.points||0) - cost;
   if(!S.shopOwned) S.shopOwned=[];
-  S.shopOwned.push(id);
-  save();
-  renderShop();
-  showToast('🎉 تم الشراء بنجاح!');
+  if(!isConsumable && !S.shopOwned.includes(id)) S.shopOwned.push(id);
+
+  // تطبيق التأثير
+  if(id==='extra_spin'){
+    S.lastSpin=0;
+    save(); renderShop();
+    document.getElementById('shop-sheet-overlay').style.display='none';
+    setTimeout(()=>openWheelSheet(), 300);
+    return showToast('🎡 لفتك المجانية جاهزة! افتح العجلة');
+  } else if(id==='double_ads'){
+    S.doubleAds=true;
+    S.doubleAdsExpiry=Date.now()+86400000;
+    showToast('⚡ مضاعفة الأرباح فعّالة 24 ساعة!');
+  } else if(id==='lower_withdraw'){
+    S.withdrawMin=5;
+    showToast('💸 تم تخفيض حد السحب إلى $5!');
+  } else if(id==='vip_badge'){
+    S.hasVIP=true;
+    showToast('👑 تم منحك شارة VIP!');
+  } else if(id==='bonus_task'){
+    S.extraTasks=(S.extraTasks||0)+5;
+    showToast('🎯 تمت إضافة 5 مهام إضافية!');
+  }
+
+  save(); renderShop();
 }
 
 /* ── init ── */
 const user=tg.initDataUnsafe?.user;
 document.getElementById('u_name').innerText=user?.first_name||'Guest';
-document.getElementById('ref-link').innerText=`https://t.me/Number433bot?start=${user?.id||'6619233998'}`;
+document.getElementById('ref-link').innerText=`https://t.me/Number433bot/cr7?startapp=${user?.id||'0'}`;
+
+function getDailyBonus(){ /* placeholder - add daily bonus UI if needed */ }
 
 checkReset(); initAdsgram(); updateUI(); tickTimer(); updateWheelTimer();
-// Show daily bonus after short delay
-if(S.isSubscribed) setTimeout(getDailyBonus, 1200);
 </script>
 </body>
 </html>
