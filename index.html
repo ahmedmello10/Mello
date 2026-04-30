@@ -1959,43 +1959,43 @@ function buyItem(id, cost){
 }
 
 async function buyWithTON(id, amount){
-  if(!tonConnectUI) initTONConnect();
-  showToast('⏳ جاري فتح محفظة TON...');
+  const userId = tg.initDataUnsafe?.user?.id || '0';
+  // Deep link to Telegram Wallet with pre-filled transfer
+  const comment = encodeURIComponent(`VortexEarn:${id}:${userId}`);
+  const tonLink = `https://app.tonkeeper.com/transfer/${TON_RECEIVER}?amount=${Math.floor(amount*1e9)}&text=${comment}`;
+  const tgWalletLink = `https://t.me/wallet?startattach=ton-transaction_${TON_RECEIVER}_${Math.floor(amount*1e9)}_${comment}`;
 
-  // If not connected yet, open wallet modal
-  if(!tonWalletAddress){
-    try {
-      if(tonConnectUI) await tonConnectUI.openModal();
-      else window.open('https://t.me/wallet','_blank');
-    } catch(e){
-      window.open('https://t.me/wallet','_blank');
-    }
-    // After connect, they press again
-    showToast('ℹ️ بعد الربط، اضغط مرة تانية للدفع');
-    return;
-  }
-
-  // Connected - send transaction
+  // Try Telegram Wallet first, fallback to Tonkeeper
   try {
-    const tx = {
-      validUntil: Math.floor(Date.now()/1000) + 600,
-      messages: [{
-        address: TON_RECEIVER,
-        amount: String(Math.floor(amount * 1e9)),
-        payload: btoa(`Shop:${id}:${tg.initDataUnsafe?.user?.id||'0'}`)
-      }]
-    };
-    await tonConnectUI.sendTransaction(tx);
-    // Apply effect after payment
-    if(!S.shopOwned) S.shopOwned=[];
-    const isConsumable = CONSUMABLE_ITEMS.includes(id);
-    if(!isConsumable && !S.shopOwned.includes(id)) S.shopOwned.push(id);
-    const earlyReturn = applyShopEffect(id);
-    if(!earlyReturn){ save(); renderShop(); }
-    showToast(`✅ تم الدفع ${amount} TON بنجاح!`);
-  } catch(e){
-    showToast('⚠️ تم إلغاء عملية الدفع');
+    tg.openTelegramLink(tgWalletLink);
+  } catch(e) {
+    tg.openLink(tonLink);
   }
+
+  // Apply effect after 3 seconds (user pays manually)
+  showToast(`💎 أكمل الدفع ${amount} TON في المحفظة`);
+  
+  // Show confirmation button
+  const confirmDiv = document.createElement('div');
+  confirmDiv.id = 'ton-pay-confirm';
+  confirmDiv.style.cssText = `position:fixed;bottom:120px;left:16px;right:16px;background:rgba(0,152,234,0.15);border:1px solid rgba(0,152,234,0.3);border-radius:16px;padding:14px;text-align:center;z-index:9000;`;
+  confirmDiv.innerHTML = `
+    <div style="font-size:12px;color:#0098EA;margin-bottom:10px;">بعد إتمام الدفع اضغط تأكيد</div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="confirmTONPay('${id}')" style="flex:1;padding:10px;background:#0098EA;color:white;border:none;border-radius:12px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">✅ تم الدفع</button>
+      <button onclick="document.getElementById('ton-pay-confirm').remove()" style="flex:1;padding:10px;background:rgba(255,255,255,0.05);color:var(--text-dim);border:1px solid var(--border);border-radius:12px;font-family:'Tajawal',sans-serif;font-size:13px;cursor:pointer;">إلغاء</button>
+    </div>`;
+  document.body.appendChild(confirmDiv);
+}
+
+function confirmTONPay(id){
+  document.getElementById('ton-pay-confirm')?.remove();
+  if(!S.shopOwned) S.shopOwned=[];
+  const isConsumable = CONSUMABLE_ITEMS.includes(id);
+  if(!isConsumable && !S.shopOwned.includes(id)) S.shopOwned.push(id);
+  const earlyReturn = applyShopEffect(id);
+  if(!earlyReturn){ save(); renderShop(); }
+  showToast('🎉 تم تفعيل المزية بنجاح!');
 }
 
 /* ── init ── */
