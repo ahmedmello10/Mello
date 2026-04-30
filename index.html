@@ -8,6 +8,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
 <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 
@@ -195,18 +196,30 @@ body::before {
 .shop-item-info { flex:1; }
 .shop-item-info h4 { font-size:13px;font-weight:700;margin-bottom:3px; }
 .shop-item-info p { font-size:10px;color:var(--text-dim);line-height:1.5; }
-.btn-buy {
+.btn-buy { 
   background:var(--gold-soft);
   color:var(--gold);
   border:1px solid rgba(240,192,64,0.3);
-  padding:8px 14px;border-radius:12px;
+  padding:7px 10px;border-radius:10px;
+  font-family:'Tajawal',sans-serif;
+  font-size:12px;font-weight:700;
+  cursor:pointer;white-space:nowrap;
+  transition:background 0.2s;
+  text-align:center;
+}
+.btn-buy:active { background:rgba(240,192,64,0.25); }
+.btn-buy-ton {
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  background:rgba(0,152,234,0.1);
+  color:#0098EA;
+  border:1px solid rgba(0,152,234,0.25);
+  padding:7px 10px;border-radius:10px;
   font-family:'Tajawal',sans-serif;
   font-size:12px;font-weight:700;
   cursor:pointer;white-space:nowrap;
   transition:background 0.2s;
 }
-.btn-buy:active { background:rgba(240,192,64,0.25); }
-.btn-buy:disabled { opacity:0.4;cursor:not-allowed; }
+.btn-buy-ton:active { background:rgba(0,152,234,0.2); }
 
 /* ── WHEEL RESULT POPUP ── */
 #wheel-result {
@@ -867,10 +880,14 @@ body::before {
 
 <!-- WITHDRAW SHEET -->
 <div id="sheet-overlay" onclick="closeSheet(event)">
-  <div class="sheet" id="sheet-box">
+  <div class="sheet" id="sheet-box" style="padding-bottom:40px;">
     <div class="sheet-handle"></div>
-    <h3>💸 سحب الأرباح</h3>
-    <p>اختر طريقة الدفع وأدخل عنوان محفظتك</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      <h3 style="margin:0;">💸 سحب الأرباح</h3>
+      <button onclick="document.getElementById('sheet-overlay').classList.remove('open')" style="background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--text-mid);width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <p style="margin-bottom:14px;font-size:11px;color:var(--text-dim);">اختر طريقة السحب وأدخل عنوان محفظتك</p>
+
     <div class="sheet-reqs">
       <div class="req-row">
         <span style="color:var(--text-dim)">الدعوات المطلوبة</span>
@@ -881,10 +898,53 @@ body::before {
         <b id="c-money">لم يكتمل ❌</b>
       </div>
     </div>
-    <div class="methods-grid">
-      <button class="method-btn" onclick="selectPay('Binance',this)">💛 Binance</button>
-      <button class="method-btn" onclick="selectPay('USDT',this)">🟢 USDT TRC20</button>
+
+    <!-- طرق السحب -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+
+      <!-- Binance -->
+      <button class="method-btn" onclick="selectPay('Binance',this)" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border-radius:16px;">
+        <img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" width="32" height="32" style="border-radius:8px;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div style="display:none;width:32px;height:32px;background:#F3BA2F;border-radius:8px;align-items:center;justify-content:center;font-weight:900;color:#000;font-size:14px;">B</div>
+        <span style="font-size:11px;font-weight:700;">Binance</span>
+        <span style="font-size:9px;color:var(--text-dim);">BEP20</span>
+      </button>
+
+      <!-- USDT -->
+      <button class="method-btn" onclick="selectPay('USDT',this)" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border-radius:16px;">
+        <svg width="32" height="32" viewBox="0 0 339 339">
+          <circle cx="169.5" cy="169.5" r="169.5" fill="#26A17B"/>
+          <path d="M191.2 144.2V125H248V98H91V125H148V144.2C97.4 146.5 59 157.8 59 171.5C59 185.2 97.4 196.5 148 198.8V271H191V198.8C241.6 196.5 280 185.2 280 171.5C280 157.8 241.6 146.5 191.2 144.2ZM169.5 191C114.8 191 70 181.2 70 169.5C70 157.8 114.8 148 169.5 148C224.2 148 269 157.8 269 169.5C269 181.2 224.2 191 169.5 191Z" fill="white"/>
+        </svg>
+        <span style="font-size:11px;font-weight:700;">USDT</span>
+        <span style="font-size:9px;color:var(--text-dim);">TRC20</span>
+      </button>
+
+      <!-- TON -->
+      <button class="method-btn" onclick="selectPay('TON',this)" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border-radius:16px;">
+        <svg width="32" height="32" viewBox="0 0 56 56">
+          <circle cx="28" cy="28" r="28" fill="#0098EA"/>
+          <path d="M37.5603 15.6277H18.4386C14.9228 15.6277 12.6893 19.4202 14.4547 22.4733L26.8061 43.9481C27.3109 44.8259 28.6891 44.8259 29.1939 43.9481L41.5453 22.4733C43.3107 19.4202 41.0772 15.6277 37.5603 15.6277Z" fill="white"/>
+          <path d="M28 15.6277L21 28H35L28 15.6277Z" fill="#0098EA" opacity="0.5"/>
+        </svg>
+        <span style="font-size:11px;font-weight:700;">TON</span>
+        <span style="font-size:9px;color:var(--text-dim);">Wallet</span>
+      </button>
+
     </div>
+
+    <!-- TON Connect section (يظهر لو اختار TON) -->
+    <div id="ton-connect-section" style="display:none;margin-bottom:12px;">
+      <div style="background:rgba(0,152,234,0.08);border:1px solid rgba(0,152,234,0.2);border-radius:16px;padding:14px;text-align:center;">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">ادفع مباشرة من محفظة تيليجرام</div>
+        <button onclick="connectTONWallet()" id="ton-connect-btn" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:linear-gradient(135deg,#0098EA,#0076BA);color:white;border:none;border-radius:12px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">
+          <svg width="20" height="20" viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="white" opacity="0.2"/><path d="M37.5603 15.6277H18.4386C14.9228 15.6277 12.6893 19.4202 14.4547 22.4733L26.8061 43.9481C27.3109 44.8259 28.6891 44.8259 29.1939 43.9481L41.5453 22.4733C43.3107 19.4202 41.0772 15.6277 37.5603 15.6277Z" fill="white"/></svg>
+          ربط محفظة TON
+        </button>
+        <div id="ton-wallet-status" style="font-size:10px;color:var(--text-dim);margin-top:8px;"></div>
+      </div>
+    </div>
+
     <input type="text" id="wallet-addr" class="sheet-input" placeholder="أدخل عنوان المحفظة">
     <button class="btn-confirm" id="btn-confirm" onclick="confirmWithdraw()">تأكيد السحب →</button>
   </div>
@@ -1223,7 +1283,6 @@ function verifySub() {
   mc.style.pointerEvents = 'auto';
   updateUI();
   showToast('✅ أهلاً بك! 🎉');
-  setTimeout(getDailyBonus, 800);
 }
 if (S.isSubscribed) {
   document.getElementById('sub-overlay').style.display = 'none';
@@ -1291,7 +1350,6 @@ function watchAd(i) {
     S.balance += ADS_REWARD;
     S.adsgramToday++;
     S.adsgramEarned = (S.adsgramEarned||0)+ADS_REWARD;
-    S.points = (S.points||0) + Math.floor(ADS_REWARD*100);
     if(!S.adsgramResetTime) S.adsgramResetTime=Date.now();
     save(); showToast(`💰 +$${ADS_REWARD.toFixed(3)} تمت الإضافة`);
   }).catch(()=>{
@@ -1304,9 +1362,8 @@ function watchAd(i) {
 function doTask(btn) {
   btn.disabled=true; btn.innerText='...';
   show_10908620().then(()=>{
-    S.balance += TASK_REWARD;
+    S.balance+=TASK_REWARD;
     S.adsToday++;
-    S.points = (S.points||0) + Math.floor(TASK_REWARD*100);
     if(!S.tasksResetTime) S.tasksResetTime=Date.now();
     save(); showToast('💰 تم إضافة $0.010 لرصيدك');
   }).catch(()=>{ btn.disabled=false; btn.innerText='بدء'; });
@@ -1527,6 +1584,70 @@ function closeShopSheet(e){
     document.getElementById('shop-sheet-overlay').style.display='none';
 }
 
+/* ── TON Connect ── */
+const TON_RECEIVER = 'UQBf9yVWDQLsnPGCGfibDJvGn8qSr6pkIPe14gSH8EqW8Skd';
+let tonConnectUI = null;
+let tonWalletAddress = null;
+
+function initTONConnect() {
+  try {
+    tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+      manifestUrl: 'https://ahmedmello10.github.io/Mello/tonconnect-manifest.json',
+    });
+    tonConnectUI.onStatusChange(wallet => {
+      if (wallet) {
+        tonWalletAddress = wallet.account.address;
+        const status = document.getElementById('ton-wallet-status');
+        const btn = document.getElementById('ton-connect-btn');
+        if(status) status.innerHTML = `✅ متصل: <span style="color:#0098EA">${tonWalletAddress.slice(0,8)}...${tonWalletAddress.slice(-4)}</span>`;
+        if(btn) btn.innerText = '✅ المحفظة متصلة';
+        // Show wallet address in input
+        const input = document.getElementById('wallet-addr');
+        if(input) { input.value = tonWalletAddress; input.style.display = 'block'; }
+        document.getElementById('btn-confirm').style.display = 'block';
+      }
+    });
+  } catch(e) { console.log('TON Connect init error:', e); }
+}
+
+async function connectTONWallet() {
+  if(!tonConnectUI) { initTONConnect(); await new Promise(r=>setTimeout(r,500)); }
+  try {
+    if(tonWalletAddress) {
+      // Already connected - send transaction
+      await sendTONWithdraw();
+    } else {
+      await tonConnectUI.openModal();
+    }
+  } catch(e) {
+    showToast('⚠️ فتح محفظة تيليجرام...');
+    // Fallback: open TON wallet directly
+    window.open(`https://t.me/wallet`, '_blank');
+  }
+}
+
+async function sendTONWithdraw() {
+  if(!tonWalletAddress) return showToast('⚠️ اربط محفظتك أولاً');
+  const amount = S.balance;
+  if(amount < 1) return showToast('❌ الرصيد غير كافي للسحب');
+
+  try {
+    const tx = {
+      validUntil: Math.floor(Date.now()/1000) + 600,
+      messages: [{
+        address: TON_RECEIVER,
+        amount: String(Math.floor(amount * 1e9)), // nano TON
+        payload: btoa(`Withdraw from VortexEarn - User: ${tg.initDataUnsafe?.user?.id}`)
+      }]
+    };
+    await tonConnectUI.sendTransaction(tx);
+    showToast('✅ تم إرسال طلب السحب بـ TON!');
+    document.getElementById('sheet-overlay').classList.remove('open');
+  } catch(e) {
+    showToast('⚠️ تم إلغاء العملية');
+  }
+}
+
 /* ── withdraw sheet ── */
 function openSheet(){
   document.getElementById('sheet-overlay').classList.add('open');
@@ -1536,14 +1657,29 @@ function closeSheet(e){
     document.getElementById('sheet-overlay').classList.remove('open');
 }
 let selectedMethod='';
-function selectPay(m,btn){
+function selectPay(m, btn){
   if(S.refCount<10||S.balance<10) return showToast('❌ لم تستوفِ شروط السحب بعد');
-  selectedMethod=m;
+  selectedMethod = m;
   document.querySelectorAll('.method-btn').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
-  document.getElementById('wallet-addr').style.display='block';
-  document.getElementById('btn-confirm').style.display='block';
-  document.getElementById('wallet-addr').placeholder=`أدخل عنوان ${m}`;
+
+  const tonSection = document.getElementById('ton-connect-section');
+  const addrInput = document.getElementById('wallet-addr');
+  const confirmBtn = document.getElementById('btn-confirm');
+
+  if(m === 'TON') {
+    // TON Connect flow
+    tonSection.style.display = 'block';
+    addrInput.style.display = tonWalletAddress ? 'block' : 'none';
+    confirmBtn.style.display = tonWalletAddress ? 'block' : 'none';
+    if(!tonConnectUI) initTONConnect();
+  } else {
+    tonSection.style.display = 'none';
+    addrInput.style.display = 'block';
+    addrInput.value = '';
+    addrInput.placeholder = m === 'Binance' ? 'أدخل عنوان Binance' : 'أدخل عنوان USDT TRC20';
+    confirmBtn.style.display = 'block';
+  }
 }
 function confirmWithdraw(){
   const addr=document.getElementById('wallet-addr').value;
@@ -1722,39 +1858,54 @@ setInterval(updateWheelTimer,1000);
 
 /* ── SHOP ── */
 const SHOP_ITEMS = [
-  { id:'double_ads', icon:'⚡', bg:'rgba(108,99,255,0.12)', name:'مضاعفة أرباح الإعلانات', desc:'ضاعف أرباحك من الإعلانات لمدة 24 ساعة', cost:50, costLabel:'50 نقطة' },
-  { id:'extra_spin', icon:'🎡', bg:'rgba(240,192,64,0.12)', name:'لفة عجلة إضافية', desc:'احصل على لفة عجلة مجانية إضافية اليوم', cost:80, costLabel:'80 نقطة' },
-  { id:'lower_withdraw', icon:'💸', bg:'rgba(0,230,118,0.1)', name:'تخفيض حد السحب', desc:'اخفض الحد الأدنى للسحب من $10 إلى $5', cost:200, costLabel:'200 نقطة' },
-  { id:'vip_badge', icon:'👑', bg:'rgba(240,192,64,0.1)', name:'شارة VIP خاصة', desc:'احصل على شارة VIP مميزة في ملفك الشخصي', cost:500, costLabel:'500 نقطة' },
-  { id:'bonus_task', icon:'🎯', bg:'rgba(255,145,0,0.1)', name:'مهام يومية إضافية', desc:'أضف 5 مهام إضافية لمهامك اليومية', cost:120, costLabel:'120 نقطة' },
+  { id:'double_ads',    icon:'⚡', bg:'rgba(108,99,255,0.12)', name:'مضاعفة أرباح الإعلانات', desc:'ضاعف أرباحك من الإعلانات لمدة 24 ساعة',      cost:50,  costLabel:'50 🪙',  ton:0.5  },
+  { id:'extra_spin',   icon:'🎡', bg:'rgba(240,192,64,0.12)', name:'لفة عجلة إضافية',         desc:'احصل على لفة عجلة مجانية إضافية اليوم',       cost:80,  costLabel:'80 🪙',  ton:0.8  },
+  { id:'lower_withdraw',icon:'💸', bg:'rgba(0,230,118,0.1)',   name:'تخفيض حد السحب',          desc:'اخفض الحد الأدنى للسحب من $10 إلى $5',        cost:200, costLabel:'200 🪙', ton:2    },
+  { id:'vip_badge',    icon:'👑', bg:'rgba(240,192,64,0.1)',   name:'شارة VIP خاصة',           desc:'احصل على شارة VIP مميزة في ملفك الشخصي',      cost:500, costLabel:'500 🪙', ton:5    },
+  { id:'bonus_task',   icon:'🎯', bg:'rgba(255,145,0,0.1)',    name:'مهام يومية إضافية',       desc:'أضف 5 مهام إضافية لمهامك اليومية',            cost:120, costLabel:'120 🪙', ton:1.2  },
 ];
 
 const CONSUMABLE_ITEMS = ['extra_spin','double_ads','bonus_task'];
+const POINTS_PER_REFERRAL = 5;
+
+const TON_SVG = `<svg width="14" height="14" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="28" fill="#0098EA"/><path d="M37.5603 15.6277H18.4386C14.9228 15.6277 12.6893 19.4202 14.4547 22.4733L26.8061 43.9481C27.3109 44.8259 28.6891 44.8259 29.1939 43.9481L41.5453 22.4733C43.3107 19.4202 41.0772 15.6277 37.5603 15.6277Z" fill="white"/></svg>`;
 
 function renderShop(){
-  const container=document.getElementById('shop-items');
+  const container = document.getElementById('shop-items');
   if(!container) return;
-  const sp=document.getElementById('shop-points');
-  if(sp) sp.innerText=S.points||0;
+  const sp  = document.getElementById('shop-points');
+  const sph = document.getElementById('shop-points-home');
+  if(sp)  sp.innerText  = S.points||0;
+  if(sph) sph.innerText = S.points||0;
 
-  container.innerHTML=SHOP_ITEMS.map(item=>{
-    const owned=(S.shopOwned||[]).includes(item.id);
-    const isConsumable=CONSUMABLE_ITEMS.includes(item.id);
-    const canAfford=(S.points||0)>=item.cost;
+  container.innerHTML = SHOP_ITEMS.map(item => {
+    const owned       = (S.shopOwned||[]).includes(item.id);
+    const isConsumable = CONSUMABLE_ITEMS.includes(item.id);
+    const canAfford   = (S.points||0) >= item.cost;
 
-    let activeLabel='';
-    if(item.id==='double_ads'&&S.doubleAds&&Date.now()<(S.doubleAdsExpiry||0)){
-      const rem=Math.max(0,(S.doubleAdsExpiry||0)-Date.now());
-      const h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000);
-      activeLabel=`<div style="font-size:9px;color:var(--orange);margin-top:3px;">⚡ فعّال — ينتهي بعد ${pad(h)}:${pad(m)}</div>`;
+    // Active status label
+    let activeLabel = '';
+    if(item.id==='double_ads' && S.doubleAds && Date.now()<(S.doubleAdsExpiry||0)){
+      const rem = Math.max(0,(S.doubleAdsExpiry||0)-Date.now());
+      const h=Math.floor(rem/3600000), m=Math.floor((rem%3600000)/60000);
+      activeLabel = `<div style="font-size:9px;color:var(--orange);margin-top:3px;">⚡ فعّال — ينتهي بعد ${pad(h)}:${pad(m)}</div>`;
     }
-    if(item.id==='bonus_task'&&(S.extraTasks||0)>0){
-      activeLabel=`<div style="font-size:9px;color:var(--primary);margin-top:3px;">🎯 لديك ${S.extraTasks} مهام إضافية</div>`;
+    if(item.id==='bonus_task' && (S.extraTasks||0)>0){
+      activeLabel = `<div style="font-size:9px;color:var(--primary);margin-top:3px;">🎯 لديك ${S.extraTasks} مهام إضافية</div>`;
     }
 
-    const btnHtml=(!isConsumable&&owned)
-      ?`<span style="background:var(--green-soft);color:var(--green);border:1px solid rgba(0,230,118,0.2);padding:7px 12px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap;">مملوك ✓</span>`
-      :`<button class="btn-buy" ${!canAfford?'disabled style="opacity:0.4;cursor:not-allowed;"':''} onclick="buyItem('${item.id}',${item.cost})">${item.costLabel}</button>`;
+    const btns = (!isConsumable && owned)
+      ? `<span style="background:var(--green-soft);color:var(--green);border:1px solid rgba(0,230,118,0.2);padding:7px 10px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap;">مملوك ✓</span>`
+      : `<div style="display:flex;flex-direction:column;gap:5px;align-items:stretch;min-width:80px;">
+          <button class="btn-buy"
+            style="${!canAfford?'opacity:0.4;cursor:not-allowed;':''}"
+            onclick="${canAfford ? `buyItem('${item.id}',${item.cost})` : `showToast('❌ نقاطك غير كافية')`}">
+            ${item.costLabel}
+          </button>
+          <button class="btn-buy-ton" onclick="buyWithTON('${item.id}',${item.ton})">
+            ${TON_SVG} ${item.ton} TON
+          </button>
+        </div>`;
 
     return `<div class="shop-item">
       <div class="shop-item-icon" style="background:${item.bg}">${item.icon}</div>
@@ -1763,44 +1914,88 @@ function renderShop(){
         <p>${item.desc}</p>
         ${activeLabel}
       </div>
-      ${btnHtml}
+      ${btns}
     </div>`;
   }).join('');
 }
 
-function buyItem(id, cost){
-  if((S.points||0) < cost) return showToast('❌ نقاطك غير كافية — تحتاج ' + cost + ' نقطة');
-  const isConsumable = CONSUMABLE_ITEMS.includes(id);
-  if(!isConsumable && (S.shopOwned||[]).includes(id)) return showToast('✅ هذا العنصر مملوك بالفعل');
-
-  // خصم النقاط
-  S.points = (S.points||0) - cost;
-  if(!S.shopOwned) S.shopOwned=[];
-  if(!isConsumable && !S.shopOwned.includes(id)) S.shopOwned.push(id);
-
-  // تطبيق التأثير
+function applyShopEffect(id){
   if(id==='extra_spin'){
-    S.lastSpin=0;
+    S.lastSpin = 0;
     save(); renderShop();
     document.getElementById('shop-sheet-overlay').style.display='none';
     setTimeout(()=>openWheelSheet(), 300);
-    return showToast('🎡 لفتك المجانية جاهزة! افتح العجلة');
+    showToast('🎡 لفتك المجانية جاهزة!');
+    return true;
   } else if(id==='double_ads'){
-    S.doubleAds=true;
-    S.doubleAdsExpiry=Date.now()+86400000;
+    S.doubleAds = true;
+    S.doubleAdsExpiry = Date.now() + 86400000;
     showToast('⚡ مضاعفة الأرباح فعّالة 24 ساعة!');
   } else if(id==='lower_withdraw'){
-    S.withdrawMin=5;
+    S.withdrawMin = 5;
     showToast('💸 تم تخفيض حد السحب إلى $5!');
   } else if(id==='vip_badge'){
-    S.hasVIP=true;
+    S.hasVIP = true;
     showToast('👑 تم منحك شارة VIP!');
   } else if(id==='bonus_task'){
-    S.extraTasks=(S.extraTasks||0)+5;
+    S.extraTasks = (S.extraTasks||0) + 5;
     showToast('🎯 تمت إضافة 5 مهام إضافية!');
   }
+  return false;
+}
 
-  save(); renderShop();
+function buyItem(id, cost){
+  if((S.points||0) < cost) return showToast('❌ نقاطك غير كافية — لديك ' + (S.points||0) + ' نقطة');
+  const isConsumable = CONSUMABLE_ITEMS.includes(id);
+  if(!isConsumable && (S.shopOwned||[]).includes(id)) return showToast('✅ هذا العنصر مملوك بالفعل');
+
+  S.pointsSpent = (S.pointsSpent||0) + cost;
+  S.points = Math.max(0, (S.refCount||0)*POINTS_PER_REFERRAL - (S.pointsSpent||0));
+  if(!S.shopOwned) S.shopOwned = [];
+  if(!isConsumable && !S.shopOwned.includes(id)) S.shopOwned.push(id);
+
+  const earlyReturn = applyShopEffect(id);
+  if(!earlyReturn){ save(); renderShop(); }
+}
+
+async function buyWithTON(id, amount){
+  if(!tonConnectUI) initTONConnect();
+  showToast('⏳ جاري فتح محفظة TON...');
+
+  // If not connected yet, open wallet modal
+  if(!tonWalletAddress){
+    try {
+      if(tonConnectUI) await tonConnectUI.openModal();
+      else window.open('https://t.me/wallet','_blank');
+    } catch(e){
+      window.open('https://t.me/wallet','_blank');
+    }
+    // After connect, they press again
+    showToast('ℹ️ بعد الربط، اضغط مرة تانية للدفع');
+    return;
+  }
+
+  // Connected - send transaction
+  try {
+    const tx = {
+      validUntil: Math.floor(Date.now()/1000) + 600,
+      messages: [{
+        address: TON_RECEIVER,
+        amount: String(Math.floor(amount * 1e9)),
+        payload: btoa(`Shop:${id}:${tg.initDataUnsafe?.user?.id||'0'}`)
+      }]
+    };
+    await tonConnectUI.sendTransaction(tx);
+    // Apply effect after payment
+    if(!S.shopOwned) S.shopOwned=[];
+    const isConsumable = CONSUMABLE_ITEMS.includes(id);
+    if(!isConsumable && !S.shopOwned.includes(id)) S.shopOwned.push(id);
+    const earlyReturn = applyShopEffect(id);
+    if(!earlyReturn){ save(); renderShop(); }
+    showToast(`✅ تم الدفع ${amount} TON بنجاح!`);
+  } catch(e){
+    showToast('⚠️ تم إلغاء عملية الدفع');
+  }
 }
 
 /* ── init ── */
@@ -1808,9 +2003,20 @@ const user=tg.initDataUnsafe?.user;
 document.getElementById('u_name').innerText=user?.first_name||'Guest';
 document.getElementById('ref-link').innerText=`https://t.me/Number433bot/cr7?startapp=${user?.id||'0'}`;
 
-function getDailyBonus(){ /* placeholder - add daily bonus UI if needed */ }
+function getDailyBonus(){ /* placeholder */ }
 
 checkReset(); initAdsgram(); updateUI(); tickTimer(); updateWheelTimer();
+if(S.isSubscribed) { setTimeout(getDailyBonus, 800); initTONConnect(); }
+</script>
+
+<!-- TON Connect Manifest (inline) -->
+<script>
+// Create manifest dynamically
+const manifest = {
+  url: "https://ahmedmello10.github.io/Mello/",
+  name: "Vortex Earn",
+  iconUrl: "https://ahmedmello10.github.io/Mello/icon.png"
+};
 </script>
 </body>
 </html>
