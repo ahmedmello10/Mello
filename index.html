@@ -8,7 +8,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src='//libtl.com/sdk.js' data-zone='10908620' data-sdk='show_10908620'></script>
 <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
-<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tonconnect/ui@2.0.6/dist/tonconnect-ui.min.js"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 
@@ -1591,60 +1591,83 @@ let tonWalletAddress = null;
 
 function initTONConnect() {
   try {
+    if(tonConnectUI) return;
     tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
       manifestUrl: 'https://ahmedmello10.github.io/Mello/tonconnect-manifest.json',
+      buttonRootId: null
     });
+
     tonConnectUI.onStatusChange(wallet => {
-      if (wallet) {
+      if(wallet) {
         tonWalletAddress = wallet.account.address;
-        const status = document.getElementById('ton-wallet-status');
-        const btn = document.getElementById('ton-connect-btn');
-        if(status) status.innerHTML = `✅ متصل: <span style="color:#0098EA">${tonWalletAddress.slice(0,8)}...${tonWalletAddress.slice(-4)}</span>`;
-        if(btn) btn.innerText = '✅ المحفظة متصلة';
-        // Show wallet address in input
-        const input = document.getElementById('wallet-addr');
-        if(input) { input.value = tonWalletAddress; input.style.display = 'block'; }
-        document.getElementById('btn-confirm').style.display = 'block';
+        showToast('✅ تم ربط المحفظة بنجاح!');
+      } else {
+        tonWalletAddress = null;
       }
     });
-  } catch(e) { console.log('TON Connect init error:', e); }
-}
-
-async function connectTONWallet() {
-  if(!tonConnectUI) { initTONConnect(); await new Promise(r=>setTimeout(r,500)); }
-  try {
-    if(tonWalletAddress) {
-      // Already connected - send transaction
-      await sendTONWithdraw();
-    } else {
-      await tonConnectUI.openModal();
-    }
   } catch(e) {
-    showToast('⚠️ فتح محفظة تيليجرام...');
-    // Fallback: open TON wallet directly
-    window.open(`https://t.me/wallet`, '_blank');
+    console.log('TON init error:', e);
   }
 }
 
-async function sendTONWithdraw() {
-  if(!tonWalletAddress) return showToast('⚠️ اربط محفظتك أولاً');
-  const amount = S.balance;
-  if(amount < 1) return showToast('❌ الرصيد غير كافي للسحب');
+async function buyWithTON(id, amount) {
+  // Init if not done yet
+  if(!tonConnectUI) {
+    initTONConnect();
+    await new Promise(r => setTimeout(r, 800));
+  }
+
+  if(!tonConnectUI) {
+    showToast('⚠️ TON غير متاح حالياً');
+    return;
+  }
 
   try {
+    // If not connected, open connect modal
+    if(!tonWalletAddress) {
+      showToast('⏳ جاري فتح المحفظة...');
+      await tonConnectUI.openModal();
+
+      // Wait for connection
+      await new Promise((resolve, reject) => {
+        let tries = 0;
+        const check = setInterval(() => {
+          tries++;
+          if(tonWalletAddress) { clearInterval(check); resolve(); }
+          if(tries > 30) { clearInterval(check); reject(); }
+        }, 500);
+      });
+    }
+
+    // Connected - send transaction
+    showToast('⏳ جاري إرسال المعاملة...');
+    const userId = tg.initDataUnsafe?.user?.id || '0';
+
     const tx = {
       validUntil: Math.floor(Date.now()/1000) + 600,
       messages: [{
         address: TON_RECEIVER,
-        amount: String(Math.floor(amount * 1e9)), // nano TON
-        payload: btoa(`Withdraw from VortexEarn - User: ${tg.initDataUnsafe?.user?.id}`)
+        amount: String(Math.floor(amount * 1e9)),
+        payload: btoa(`VortexEarn:${id}:${userId}`).replace(/=/g,'')
       }]
     };
+
     await tonConnectUI.sendTransaction(tx);
-    showToast('✅ تم إرسال طلب السحب بـ TON!');
-    document.getElementById('sheet-overlay').classList.remove('open');
+
+    // Apply effect after successful payment
+    if(!S.shopOwned) S.shopOwned = [];
+    const isConsumable = CONSUMABLE_ITEMS.includes(id);
+    if(!isConsumable && !S.shopOwned.includes(id)) S.shopOwned.push(id);
+    const earlyReturn = applyShopEffect(id);
+    if(!earlyReturn) { save(); renderShop(); }
+    showToast(`✅ تم الدفع ${amount} TON — المزية فعّالة!`);
+
   } catch(e) {
-    showToast('⚠️ تم إلغاء العملية');
+    if(e?.message?.includes('User rejects')) {
+      showToast('❌ تم إلغاء عملية الدفع');
+    } else {
+      showToast('⚠️ حدث خطأ، حاول مرة أخرى');
+    }
   }
 }
 
@@ -1896,16 +1919,11 @@ function renderShop(){
 
     const btns = (!isConsumable && owned)
       ? `<span style="background:var(--green-soft);color:var(--green);border:1px solid rgba(0,230,118,0.2);padding:7px 10px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap;">مملوك ✓</span>`
-      : `<div style="display:flex;flex-direction:column;gap:5px;align-items:stretch;min-width:80px;">
-          <button class="btn-buy"
-            style="${!canAfford?'opacity:0.4;cursor:not-allowed;':''}"
-            onclick="${canAfford ? `buyItem('${item.id}',${item.cost})` : `showToast('❌ نقاطك غير كافية')`}">
-            ${item.costLabel}
-          </button>
-          <button class="btn-buy-ton" onclick="buyWithTON('${item.id}',${item.ton})">
-            ${TON_SVG} ${item.ton} TON
-          </button>
-        </div>`;
+      : `<button class="btn-buy"
+          style="${!canAfford?'opacity:0.4;cursor:not-allowed;':''}"
+          onclick="${canAfford ? `buyItem('${item.id}',${item.cost})` : `showToast('❌ نقاطك غير كافية')`}">
+          ${item.costLabel}
+        </button>`;
 
     return `<div class="shop-item">
       <div class="shop-item-icon" style="background:${item.bg}">${item.icon}</div>
