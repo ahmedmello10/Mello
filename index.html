@@ -1378,6 +1378,18 @@ function updateUI() {
   document.getElementById('balance').innerText = S.balance.toFixed(3);
   document.getElementById('ref-count-display').innerText = S.refCount;
 
+  // نقاط المتجر = الإحالات × 5 مطروحاً منها المصروف
+  const earnedPoints = (S.refCount||0) * 5;
+  const spentPoints  = S.pointsSpent || 0;
+  S.points = Math.max(0, earnedPoints - spentPoints);
+
+  const sp  = document.getElementById('shop-points');
+  const sph = document.getElementById('shop-points-home');
+  const rpd = document.getElementById('ref-points-display');
+  if(sp)  sp.innerText  = S.points;
+  if(sph) sph.innerText = S.points;
+  if(rpd) rpd.innerText = `🪙 ${S.points}`;
+
   const hT=document.getElementById('home-tasks-count');
   const hA=document.getElementById('home-ads-count');
   const hAB=document.getElementById('home-ads-badge');
@@ -1555,7 +1567,7 @@ function collectBonus() {
   S.balance += amount;
   S.bonusStreak = streak;
   S.lastBonusTime = Date.now();
-  S.points = Math.floor(S.balance * 100);
+  // لا تلمس النقاط هنا — النقاط من الإحالات بس
 
   document.getElementById('daily-overlay').classList.remove('open');
   save();
@@ -1745,13 +1757,13 @@ setInterval(liveNotify,12000);
 
 /* ── WHEEL ── */
 const PRIZES = [
-  { label:'$0.05', amount:0.05, color:'#00c853', textColor:'#fff', weight:40 },
-  { label:'$0.05', amount:0.05, color:'#1a1535', textColor:'#00e676', weight:40 },
-  { label:'$0.10', amount:0.10, color:'#6c63ff', textColor:'#fff', weight:25 },
-  { label:'$0.10', amount:0.10, color:'#1a1535', textColor:'#a78bfa', weight:25 },
-  { label:'$0.25', amount:0.25, color:'#f0c040', textColor:'#1a1200', weight:12 },
-  { label:'$0.50', amount:0.50, color:'#ff9100', textColor:'#fff', weight:5  },
-  { label:'$1.00', amount:1.00, color:'#ff4f4f', textColor:'#fff', weight:3  },
+  { label:'$0.05', amount:0.05, color:'#00c853', textColor:'#fff', emoji:'🟢', weight:40 },
+  { label:'$0.05', amount:0.05, color:'#1a1535', textColor:'#00e676', emoji:'🟢', weight:40 },
+  { label:'$0.10', amount:0.10, color:'#6c63ff', textColor:'#fff', emoji:'🔵', weight:25 },
+  { label:'$0.10', amount:0.10, color:'#1a1535', textColor:'#a78bfa', emoji:'🔵', weight:25 },
+  { label:'$0.25', amount:0.25, color:'#f0c040', textColor:'#1a1200', emoji:'⭐', weight:12 },
+  { label:'$0.50', amount:0.50, color:'#ff9100', textColor:'#fff', emoji:'🔥', weight:5  },
+  { label:'$1.00', amount:1.00, color:'#ff4f4f', textColor:'#fff', emoji:'💎', weight:3  },
 ];
 
 const WHEEL_SEGMENTS = PRIZES.length;
@@ -1963,12 +1975,12 @@ function applyShopEffect(id){
 }
 
 function buyItem(id, cost){
-  if((S.points||0) < cost) return showToast('❌ نقاطك غير كافية — لديك ' + (S.points||0) + ' نقطة');
+  if((S.points||0) < cost) return showToast('❌ نقاطك غير كافية — لديك ' + (S.points||0) + ' نقطة\nادعُ أصدقاء لتجمع المزيد!');
   const isConsumable = CONSUMABLE_ITEMS.includes(id);
   if(!isConsumable && (S.shopOwned||[]).includes(id)) return showToast('✅ هذا العنصر مملوك بالفعل');
 
   S.pointsSpent = (S.pointsSpent||0) + cost;
-  S.points = Math.max(0, (S.refCount||0)*POINTS_PER_REFERRAL - (S.pointsSpent||0));
+  S.points = Math.max(0, (S.refCount||0)*5 - S.pointsSpent);
   if(!S.shopOwned) S.shopOwned = [];
   if(!isConsumable && !S.shopOwned.includes(id)) S.shopOwned.push(id);
 
